@@ -1,0 +1,15 @@
+{
+  "name": "vhlab_ArrayTomography",
+  "homepage": "https://github.com/VH-Lab/vhlab_ArrayTomography",
+  "authors": [
+    "[Stephen D. Van Hooser] <[vanhoosr@brandeis.edu]>",
+    "[Aishwarya Bhonsle] <[abhonsle@brandeis.edu]>"
+  ],
+  "description": "Matlab app for analysis of high density imaging data like that from Array Tomography",
+  "main": "",
+  "license": "MIT",
+  "dependencies": {
+	  "vhlab_toolbox": "git://github.com/VH-Lab/vhlab_toolbox.git",
+	  "vhlab_thirdparty": "git://github.com/VH-Lab/vhlab_thirdparty.git"
+  }
+}
