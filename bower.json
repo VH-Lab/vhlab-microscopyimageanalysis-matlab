@@ -1,6 +1,6 @@
 {
-  "name": "vhlab_ArrayTomography",
-  "homepage": "https://github.com/VH-Lab/vhlab_ArrayTomography",
+  "name": "vhlab_mlapp_ArrayTomography",
+  "homepage": "https://github.com/VH-Lab/vhlab_mlapp_ArrayTomography",
   "authors": [
     "[Stephen D. Van Hooser] <[vanhoosr@brandeis.edu]>",
     "[Aishwarya Bhonsle] <[abhonsle@brandeis.edu]>"
@@ -9,7 +9,7 @@
   "main": "",
   "license": "MIT",
   "dependencies": {
-	  "vhlab_toolbox": "git://github.com/VH-Lab/vhlab_toolbox.git",
+	  "vhlab_toolbox": "git://github.com/VH-Lab/vhlab_mltbx_toolbox.git",
 	  "vhlab_thirdparty": "git://github.com/VH-Lab/vhlab_thirdparty.git"
   }
 }
