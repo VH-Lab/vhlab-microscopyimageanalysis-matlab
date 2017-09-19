@@ -14,6 +14,21 @@ This can be used with directories that have the following subfolders:
             labels - labels of these rois
     colocalization/
 
-One neds to initially set up a subfolder called images/named_images
+One needs to initially set up a subfolder called images/named_images
+
+For example, if one has two TIF stacks named 'PSD-channel.tif' and 'YFP-channel.tif',
+one would create the following directories:
+
+
+myexperiment/
+	images/
+		PSD_raw/
+			PSD-channel.tif
+		YFP_raw/
+			YFP-channel.tif
+	
+
+
+
 
 
