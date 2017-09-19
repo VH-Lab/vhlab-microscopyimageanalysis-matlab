@@ -17,7 +17,7 @@ function ad = atdir(pathname)
 %        named_images/
 %            (either single image or individual images of channels)
 %    rois/
-%        named_rois
+%        named_rois/
 %            rois.mat - ROI data structure
 %            L.mat - Labeled image
 %            history.mat - list of actions that led to these rois
