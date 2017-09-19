@@ -20,15 +20,10 @@ For example, if one has two TIF stacks named 'PSD-channel.tif' and 'YFP-channel.
 one would create the following directories:
 
 
-myexperiment/
-	images/
-		PSD_raw/
-			PSD-channel.tif
-		YFP_raw/
-			YFP-channel.tif
-	
-
-
-
-
+	myexperiment/
+		images/
+			PSD_raw/
+				PSD-channel.tif
+			YFP_raw/
+				YFP-channel.tif
 
