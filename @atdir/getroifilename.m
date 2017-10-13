@@ -16,3 +16,7 @@ dnames = cat(1,dnames,d.name);
 if ~isempty(dnames),
 	roifilename = [getpathname(atd) filesep 'ROIs' filesep itemname filesep dnames{1}];
 end;
+
+if isempty(roifilename),
+	errordlg(['Could not locate the ROI file in ' [getpathname(atd) filesep 'ROIs' filesep itemname filesep] '; this directory should be deleted.']);
+end

@@ -22,9 +22,10 @@ elseif nargin==1, % it means it is an image preview call
 	threshold = eval([get(findobj(fig,'tag','ThresholdEdit'),'string') ';']);
 
 	if size(im,3)==1,
-
 		switch class(im),
 			case {'double','uint16'},
+				scale = 255 / (2^15-1);
+			case {'single'},
 				scale = 255 / (2^15-1);
 			case 'uint8',
 				scale = 1;
@@ -42,7 +43,6 @@ elseif nargin==1, % it means it is an image preview call
 	end;
 
 	out = im3;
-
 	return;
 end;
 

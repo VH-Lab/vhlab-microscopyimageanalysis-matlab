@@ -149,6 +149,7 @@ switch lower(command),
 		plothandles_line = findobj(gca,'-regexp','tag','**_line');
 		plothandles_linetags = unique(get(plothandles_line,'tag')),
 
+
 		zdim = image_viewer_gui('IMv','command',['IMv' 'getslice'],'fig',fig);
 		for i=1:length(itemstruct_parameters),
 			if itemstruct_parameters(i).visible,
