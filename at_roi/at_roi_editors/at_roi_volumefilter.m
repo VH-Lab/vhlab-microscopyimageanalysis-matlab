@@ -64,10 +64,16 @@ if ischar(parameters),
 			[counts,bin_centers]=autohistogram(ROI_sizes);
 			bin_distance = bin_centers(2)-bin_centers(1);
 			bin_edges = linspace(bin_centers(1)-bin_distance, bin_centers(end)+bin_distance,3*length(bin_centers));
+			bin_edges = unique(round(bin_edges));
 			counts = histc(ROI_sizes, bin_edges);
 			bin_centers = (bin_edges(1:end-1) + bin_edges(2:end))/2;
 			bar(bin_centers,counts(1:end-1),1);
+			set(gca,'yscale','log','xscale','log');
+			a=axis;
+			axis([1 max(bin_centers) a(3) a(4)]);
 			box off;
+			ylabel('Counts');
+			xlabel('ROI size (pixels)');
 
 			oldaxes = gca;
 			axes(handles.HistogramAxes);
