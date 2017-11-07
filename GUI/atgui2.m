@@ -244,10 +244,13 @@ switch lower(command),
 		axes(currentAxes);
 
 	case lower('ATGUI_DrawColocalizations'), % NEEDS INPUT ARGUMENT theinput.itemstruct_parameters
+		disp(['Got request to draw CLA.']);
+		atgui2(name,'command',[name 'ATGUI_DrawCLAOverlay'],'fig',fig,'theinput',theinput);
+		atgui2(name,'command',[name 'ATGUI_DrawCLALines'],'fig',fig,'theinput',theinput);
+
+	case lower('ATGUI_DrawCLALines'),
                 handles = atgui2(name,'command',[name 'get_handles'],'fig',fig);
 		atd = atdir(ud.pathname);
-		disp(['Got request to draw CLA.']);
-
 		itemstruct_parameters = theinput.itemstruct_parameters;
 
 		% step 1 - get a lost of all the types
@@ -294,6 +297,62 @@ switch lower(command),
 		axes(currentAxes);
 
 		image_viewer_gui('IMv','command',['IMv' 'movetoback'],'fig',fig);
+	case lower('ATGUI_DrawCLAOverlay'),
+
+                handles = atgui2(name,'command',[name 'get_handles'],'fig',fig);
+		atd = atdir(ud.pathname);
+
+		itemstruct_parameters = theinput.itemstruct_parameters;
+
+		imhandles = image_viewer_gui('IMv','command',['IMv' 'get_handles'],'fig',fig);
+		currentAxes = gca;
+
+		axes(imhandles.ImageAxes);
+
+		overlayimage = findobj(gca,'tag','OverlayImage');
+		if ishandle(overlayimage), delete(overlayimage); end;
+		
+		mainimage = findobj(gca,'tag','image');
+		if isempty(mainimage),
+			return;
+		end; % nothing to do 
+
+		mainimagesize = size(get(mainimage,'CData'));
+		overlay_im1 = zeros(mainimagesize(1),mainimagesize(2),1);
+		overlay_im2 = zeros(mainimagesize(1),mainimagesize(2),1);
+		overlay_im3 = zeros(mainimagesize(1),mainimagesize(2),1);
+		alpha = overlay_im1;
+
+		zdim = image_viewer_gui('IMv','command',['IMv' 'getslice'],'fig',fig);
+		didsomething = 0;
+
+		for i=1:length(itemstruct_parameters),
+			if itemstruct_parameters(i).extracb,
+				%disp(['I should do something']);
+				cfile = getcolocalizationfilename(atd,itemstruct_parameters(i).itemname);
+				load(cfile);
+				rois_to_draw = find(colocalization_data.overlap_thresh);
+				roifile = getlabeledroifilename(atd,getparent(atd,'CLAs',itemstruct_parameters(i).itemname));
+				ROI = load([roifile],'-mat');
+				didsomething = 1;
+				BW_indexes = find(ismember(ROI.L(:,:,zdim),rois_to_draw));
+				overlay_im1(BW_indexes) = itemstruct_parameters(i).color(1);
+				overlay_im2(BW_indexes) = itemstruct_parameters(i).color(2);
+				overlay_im3(BW_indexes) = itemstruct_parameters(i).color(3);
+				alpha(BW_indexes) = 1;
+			else,
+				%disp(['doing nothing and I should not do anything']);
+			end;
+		end;
+
+		if didsomething,
+			hold on;
+			h=image(cat(3,overlay_im1,overlay_im2,overlay_im3),'AlphaData',alpha,'tag','OverlayImage');
+
+			image_viewer_gui('IMv','command',['IMv' 'movetoback'],'fig',fig);
+		end
+
+		axes(currentAxes);
 
 	otherwise,
 		disp(['Unknown command to ATGUI2: ' command ', name = ' name ]);
