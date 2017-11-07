@@ -185,6 +185,7 @@ switch lower(command),
 			delete(findobj(gca,'tag',[plothandles_linetags{i}([1:end-4]) 'text' ]));
 		end;
 		
+		image_viewer_gui('IMv','command',['IMv' 'movetoback'],'fig',fig);
 		axes(currentAxes);
 
 	case lower('ATGUI_DrawROIOverlay'),
@@ -197,15 +198,48 @@ switch lower(command),
 
 		imhandles = image_viewer_gui('IMv','command',['IMv' 'get_handles'],'fig',fig);
 		currentAxes = gca;
+
 		axes(imhandles.ImageAxes);
+
+		overlayimage = findobj(gca,'tag','OverlayImage');
+		if ishandle(overlayimage), delete(overlayimage); end;
+		
+		mainimage = findobj(gca,'tag','image');
+		if isempty(mainimage),
+			return;
+		end; % nothing to do 
+
+		mainimagesize = size(get(mainimage,'CData'));
+		overlay_im1 = zeros(mainimagesize(1),mainimagesize(2),1);
+		overlay_im2 = zeros(mainimagesize(1),mainimagesize(2),1);
+		overlay_im3 = zeros(mainimagesize(1),mainimagesize(2),1);
+		alpha = overlay_im1;
+
+		zdim = image_viewer_gui('IMv','command',['IMv' 'getslice'],'fig',fig);
+		didsomething = 0;
 
 		for i=1:length(itemstruct_parameters),
 			if itemstruct_parameters(i).extracb,
-				%disp(['doing nothing but I should do something']);
+				%disp(['I should do something']);
+				didsomething = 1;
+				roifile = getlabeledroifilename(atd,itemstruct_parameters(i).itemname);
+				ROI = load([roifile],'-mat');
+				BW_indexes = find(ROI.L(:,:,zdim)>0);
+				overlay_im1(BW_indexes) = itemstruct_parameters(i).color(1);
+				overlay_im2(BW_indexes) = itemstruct_parameters(i).color(2);
+				overlay_im3(BW_indexes) = itemstruct_parameters(i).color(3);
+				alpha(BW_indexes) = 1;
 			else,
 				%disp(['doing nothing and I should not do anything']);
 			end;
 		end;
+
+		if didsomething,
+			hold on;
+			h=image(cat(3,overlay_im1,overlay_im2,overlay_im3),'AlphaData',alpha,'tag','OverlayImage');
+
+			image_viewer_gui('IMv','command',['IMv' 'movetoback'],'fig',fig);
+		end
 
 		axes(currentAxes);
 
@@ -214,7 +248,7 @@ switch lower(command),
 		atd = atdir(ud.pathname);
 		disp(['Got request to draw CLA.']);
 
-		itemstruct_parameters = theinput.itemstruct_parameters,
+		itemstruct_parameters = theinput.itemstruct_parameters;
 
 		% step 1 - get a lost of all the types
 
