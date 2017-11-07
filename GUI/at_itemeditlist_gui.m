@@ -28,6 +28,7 @@ function out = at_itemeditlist_gui(name,varargin)
 %                                |    settings in 'visible'?
 %   usevisible (1)               | 0/1 Should we give the user the option to set the visibility
 %                                |    and color of each item?
+%   visiblecbstring ('Visible')  | String. The name we should use for the 'Visible' checkbox.
 %   useedit (1)                  | 0/1 Should we keep the edit menu available?
 %   drawaction([])               | Name of a function for the draw action. It provides a structure
 %                                |   as a name/value pair with name 'theinput', and value a structure with fields:
@@ -42,6 +43,9 @@ function out = at_itemeditlist_gui(name,varargin)
 %  edit_items ('')               | The AT_ITEMLIST_GUI name to be used for the item list for edit functions. If empty,
 %                                |   then the current AT_ITEMLIST_GUI is used.
 %  atd ([])                      | ATDIR that manages the data directory
+%  extracbstring (' ')           | String for the optional extra checkbox ui control
+%  useextracb (0)                | 0/1 Should we use the extra checkbox ui control?
+%  extracbcallsdrawaction (1)    | 0/1 Should the extra checkbox ui control call drawaction?
 %   
 %   
 %   One can also query the internal variables by calling
@@ -57,7 +61,7 @@ sizeparams.DefaultHeight = 300;
 sizeparams.DefaultWidth = 450;
 sizeparams.DefaultRowHeight = 30;
 sizeparams.DefaultRowSpace = 35;
-sizeparams.DefaultEdgeSpace = 30;
+sizeparams.DefaultEdgeSpace = 10;
 
 Units = 'pixels';
 LowerLeftPoint = [0 0];
@@ -67,9 +71,10 @@ itemtype = 'images';
 itemtype_singular = 'image';
 itemtype_plural = 'Images';
 itemstruct = [];
-itemstruct_parameters = emptystruct('itemname','info','visible','color');
+itemstruct_parameters = emptystruct('itemname','info','visible','extracb','color');
 viewselectiononly = 0;
 usevisible = 1;
+visiblecbstring = 'Visible';
 useedit = 1;
 drawaction= '';
 drawaction_userinputs = {};
@@ -78,13 +83,16 @@ new_items = '';
 edit_functions = {};
 edit_items = '';
 atd = [];
+extracbstring = ' ';
+useextracb = 0;
+extracbcallsdrawaction = 1;
 
 command = [name 'init']; 
 fig = gcf;
 
 varlist = {'sizeparams','LowerLeftPoint','UpperRightPoint','itemtype','itemtype_singular','itemtype_plural','itemstruct',...
-		'viewselectiononly','itemstruct_parameters','usevisible','useedit',...
-		'drawaction','drawaction_userinputs','new_functions','edit_functions','atd','new_items','edit_items'};
+		'viewselectiononly','itemstruct_parameters','usevisible','visiblecbstring','useedit',...
+		'drawaction','drawaction_userinputs','new_functions','edit_functions','atd','new_items','edit_items','extracbstring','useextracb','extracbcallsdrawaction'};
 
 assign(varargin{:});
 
@@ -127,8 +135,9 @@ switch lower(command),
 
 		listwidth = 150;
 		listheight = 225;
-		uiitemsize = 75;
+		uiitemsize = 100;
 		popupwidth = 125;
+		rgbtextlabelwidth = 50;
 
 		target_rect = rect2rect([ud.LowerLeftPoint ud.UpperRightPoint],'lbrt2lbwh');
 
@@ -158,7 +167,10 @@ switch lower(command),
 			'tag',[name 'NewItemPopup']);
 
 		vis = 'on';
-		if ~ud.useedit, vis = 'off'; end;
+		if ~ud.useedit,
+			vis = 'off';
+		end;
+
 		uicontrol(uidefs.txt,'string',['Edit ' ud.itemtype_singular ':'],...
 			'units','pixels','position',...
 			rescale_subrect([2*ws+listwidth h-ws-3*rs uiitemsize  r],[0 0 w h],target_rect,3),...
@@ -170,21 +182,34 @@ switch lower(command),
 			'tag',[name 'EditItemPopup'],'visible',vis);
 
 		vis = 'on';
-		if ~ud.usevisible, vis = 'off'; end;
-		uicontrol(uidefs.cb,'string',['Visible'],...
+		if ~ud.usevisible,
+			vis = 'off';
+		end;
+
+		uicontrol(uidefs.cb,'string',visiblecbstring,...
 			'units','pixels','position',...
 			rescale_subrect([2*ws+listwidth h-ws-4*rs uiitemsize  r],[0 0 w h],target_rect,3),...
 			'tag',[name 'VisibleCB'],'BackgroundColor',frameBG,'visible',vis);
 
 		uicontrol(uidefs.txt,'string','[R G B]',...
 			'units','pixels','position',...
-			rescale_subrect([3*ws+listwidth+uiitemsize-10 h-ws-4*rs-5 50 r],[0 0 w h],target_rect,3),...
+			rescale_subrect([3*ws+listwidth+uiitemsize h-ws-4*rs rgbtextlabelwidth r],[0 0 w h],target_rect,3),...
 			'tag',[name 'ColorTxt'],'enable','inactive','backgroundColor',frameBG,'visible',vis);
 
 		uicontrol(uidefs.edit,'string','[R G B]',...
 			'units','pixels','position',...
-			rescale_subrect([3*ws+listwidth+uiitemsize+50 h-ws-4*rs uiitemsize r],[0 0 w h],target_rect,3),...
+			rescale_subrect([3*ws+listwidth+uiitemsize+rgbtextlabelwidth h-ws-4*rs uiitemsize r],[0 0 w h],target_rect,3),...
 			'tag',[name 'ColorEdit'],'visible',vis,'callback',uidefs.button.Callback);
+
+		vis = 'on';
+		if ~ud.useextracb,
+			vis = 'off';
+		end;
+
+		uicontrol(uidefs.cb,'string',extracbstring,...
+			'units','pixels','position',...
+			rescale_subrect([2*ws+listwidth h-ws-5*rs uiitemsize  r],[0 0 w h],target_rect,3),...
+			'tag',[name 'ExtraCB'],'BackgroundColor',frameBG,'visible',vis);
 
 		uicontrol(uidefs.button,'string',['Delete'],...
 			'units','pixels','position',...
@@ -211,7 +236,7 @@ switch lower(command),
 		handles = at_itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
 		set(handles.ItemList,'userdata',ud);
 	case 'get_handles',
-		handle_base_names = {'OuterFrame','ItemTitleTxt','ItemList','NewItemTitleTxt','NewItemPopup','InfoList','DeleteBt','ColorEdit','ColorTxt','VisibleCB',...
+		handle_base_names = {'OuterFrame','ItemTitleTxt','ItemList','NewItemTitleTxt','NewItemPopup','InfoList','DeleteBt','ColorEdit','ColorTxt','VisibleCB','ExtraCB',...
 			'EditItemPopup','EditItemTitleTxt'};
 		out = [];
 		for i=1:length(handle_base_names),
@@ -232,7 +257,7 @@ switch lower(command),
 			inds = find(ia);
 			if isempty(inds), % no entry
 				ud.itemstruct_parameters(end+1) = struct('itemname',trimws(liststr{i}),...
-					'info','','visible',0,'color',colorlist(i));
+					'info','','visible',0,'extracb',0,'color',colorlist(i));
 				ud.itemstruct_parameters(end).info = info{i};
 			else,
 				ud.itemstruct_parameters(inds).info = info{i};
@@ -259,6 +284,7 @@ switch lower(command),
 			error(['Found more than one match. Should not happen. item list was ' trimws(liststr{listval(1)}) '.']);
 		else,
 			set(handles.VisibleCB,'value',ud.itemstruct_parameters(inds).visible);
+			set(handles.ExtraCB,'value',ud.itemstruct_parameters(inds).extracb);
 			set(handles.ColorEdit,'string',mat2str(ud.itemstruct_parameters(inds).color));
 			set(handles.InfoList','string',ud.itemstruct_parameters(inds).info);
 		end;
@@ -364,6 +390,23 @@ switch lower(command),
 			ud.itemstruct_parameters(l).visible = get(handles.VisibleCB,'value');
 			at_itemeditlist_gui(name,'command',[name 'Set_Vars'],'ud',ud);
 			at_itemeditlist_gui(name,'command',[name 'drawaction'],'ud',ud);
+		end;
+
+	case 'extracb',
+		handles = at_itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
+		liststr = get(handles.ItemList,'string');
+		listval = get(handles.ItemList,'value');
+		if isempty(listval) | isempty(liststr), return; end;
+		itemname = trimws(liststr{listval});
+		if isempty(itemname), return; end;
+		l = find(ismember({ud.itemstruct_parameters.itemname},itemname));
+		if ~isempty(l),
+			ud.itemstruct_parameters(l).extracb= get(handles.ExtraCB,'value');
+			at_itemeditlist_gui(name,'command',[name 'Set_Vars'],'ud',ud);
+			vars = at_itemeditlist_gui(name,'command',[name 'get_vars'],'fig',fig);
+			if vars.extracbcallsdrawaction,
+				at_itemeditlist_gui(name,'command',[name 'drawaction'],'ud',ud);
+			end;
 		end;
 
 	case 'coloredit',

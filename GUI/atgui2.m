@@ -73,15 +73,17 @@ switch lower(command),
 
 		at_itemeditlist_gui('ROIg','itemtype','ROIs','itemtype_singular','ROI','itemtype_plural','ROIs',...
 				'UpperRightPoint',[450 300],'LowerLeftPoint',[5 5],'new_functions',at_roi_makers_list,'new_items','IMl',...
-				'edit_functions',at_roi_editors_list,'edit_items','ROIg',...
-				'drawaction','atgui2','drawaction_userinputs',{name,'command',[name 'ATGUI_DrawROIs']});
+				'edit_functions',at_roi_editors_list,'edit_items','ROIg','visiblecbstring','Draw lines',...
+				'drawaction','atgui2','drawaction_userinputs',{name,'command',[name 'ATGUI_DrawROIs']},...
+				'extracbstring','Overlay','useextracb',1);
 		at_itemeditlist_gui('IMl','UpperRightPoint',[450 605],'LowerLeftPoint',[5 305],'useedit',0,'usevisible',0,'viewselectiononly',1,...
 				'drawaction','atgui2','drawaction_userinputs',{name,'command',[name 'ATGUI_DrawImage']},...
 				'new_functions',at_image_process_list);
 		at_itemeditlist_gui('COLg','UpperRightPoint',[450+455 300],'LowerLeftPoint',[455 5],...
-				'itemtype','CLAs','itemtype_singular','CLA','itemtype_plural','Colocalization Analyses',...
+				'itemtype','CLAs','itemtype_singular','CLA','itemtype_plural','Colocalization Analyses','visiblecbstring','Draw lines',...
 				'drawaction','atgui2','drawaction_userinputs',{name,'command',[name 'ATGUI_DrawColocalizations']},...
-				'new_functions',at_colocalization_makers_list,'new_items','ROIg');
+				'new_functions',at_colocalization_makers_list,'new_items','ROIg',...
+				'extracbstring','Overlay','useextracb',1);
 
 		image_viewer_gui('IMv','LowerLeftPoint',[455 305],'UpperRightPoint',[455+450 685-5],'showhistogram',0,...
 				'drawcompletionfunc',['atgui2(''' name ''', ''command'', [''' name ''' ''ATGUI_ImageMoved'']);']);
@@ -134,9 +136,15 @@ switch lower(command),
 		image_viewer_gui('IMv','command',['IMv' 'Set_Image'],'imfile',imfile);
 		atgui2(name,'command',[name 'ATGUI_ImageMoved'],'fig',fig);
 	case lower('ATGUI_DrawROIs'), % NEEDS INPUT ARGUMENT theinput.itemstruct_parameters
+		disp(['Got request to draw ROIs.']);
+
+		atgui2(name,'command',[name 'ATGUI_DrawROIOverlay'],'fig',fig,'theinput',theinput);
+		atgui2(name,'command',[name 'ATGUI_DrawROILines'],'fig',fig,'theinput',theinput);
+
+	case lower('ATGUI_DrawROILines'),% NEEDS INPUT ARGUMENT theinput.itemstruct_parameters
+		disp(['Got request to draw ROIs as lines and numbers.']);
                 handles = atgui2(name,'command',[name 'get_handles'],'fig',fig);
 		atd = atdir(ud.pathname);
-		disp(['Got request to draw ROIs.']);
 
 		itemstruct_parameters = theinput.itemstruct_parameters;
 
@@ -147,7 +155,7 @@ switch lower(command),
 		axes(imhandles.ImageAxes);
 
 		plothandles_line = findobj(gca,'-regexp','tag','**_line');
-		plothandles_linetags = unique(get(plothandles_line,'tag')),
+		plothandles_linetags = unique(get(plothandles_line,'tag'));
 
 
 		zdim = image_viewer_gui('IMv','command',['IMv' 'getslice'],'fig',fig);
@@ -179,9 +187,27 @@ switch lower(command),
 		
 		axes(currentAxes);
 
-		image_viewer_gui('IMv','command',['IMv' 'movetoback'],'fig',fig);
+	case lower('ATGUI_DrawROIOverlay'),
+		disp(['Got request to draw ROIs as overlay.']);
 
-		%theinput.itemstruct_parameters
+                handles = atgui2(name,'command',[name 'get_handles'],'fig',fig);
+		atd = atdir(ud.pathname);
+
+		itemstruct_parameters = theinput.itemstruct_parameters;
+
+		imhandles = image_viewer_gui('IMv','command',['IMv' 'get_handles'],'fig',fig);
+		currentAxes = gca;
+		axes(imhandles.ImageAxes);
+
+		for i=1:length(itemstruct_parameters),
+			if itemstruct_parameters(i).extracb,
+				%disp(['doing nothing but I should do something']);
+			else,
+				%disp(['doing nothing and I should not do anything']);
+			end;
+		end;
+
+		axes(currentAxes);
 
 	case lower('ATGUI_DrawColocalizations'), % NEEDS INPUT ARGUMENT theinput.itemstruct_parameters
                 handles = atgui2(name,'command',[name 'get_handles'],'fig',fig);
