@@ -9,6 +9,8 @@ function out = at_image_threshold(atd, input_itemname, output_itemname, paramete
 %  OUT{3} is a list of methods for user-guided selection of these parameters.
 %
  
+image_viewer_name = 'IM';
+
 if nargin==0,
 	out{1} = {'threshold'};
 	out{2} = {'Threshold to apply to image to detect presence of objects (real number)'};
@@ -17,29 +19,29 @@ if nargin==0,
 elseif nargin==1, % it means it is an image preview call
 
 	im = atd;
+	vars = image_viewer_gui(image_viewer_name,'command',[image_viewer_name 'get_vars']);
 
 	fig = gcf;
 	threshold = eval([get(findobj(fig,'tag','ThresholdEdit'),'string') ';']);
 
+	threshold_channels = [];
+
+	above_indexes = [];
+
+	for i=1:size(im,3),
+		threshold_channels(i) = rescale(threshold,...
+					[vars.ImageScaleParams.Min(i) vars.ImageScaleParams.Max(i)], ...
+					[vars.ImageDisplayScaleParams.Min(i) vars.ImageDisplayScaleParams.Max(i)]);
+		above_indexes = cat(1,above_indexes,find(im(:,:,i)>threshold_channels(i)));
+	end;
+
 	if size(im,3)==1,
-		switch class(im),
-			case {'double','uint16'},
-				scale = 255 / (2^15-1);
-			case {'single'},
-				scale = 255 / (2^15-1);
-			case 'uint8',
-				scale = 1;
-		end;
-
-		im = double(im) * scale;
-
-		locs = (im > (threshold * scale));
-		im_above = (255)*double(locs);
-		im_above(logical(1-locs)) = im(logical(1-locs));
-		im3 = cat(3,im_above,im_above,im)/255;
+		im_downscale = rescale(im,[vars.ImageDisplayScaleParams.Min(i) vars.ImageDisplayScaleParams.Max(i)],[0 1]);
+		im_abovedownscale = im_downscale;
+		im_abovedownscale(above_indexes) = 1;
+		im3 = cat(3,im_abovedownscale,im_abovedownscale,im_downscale);
 	else,
-		im3 = zeros(size(im));
-		im3(find(im3>threshold)) = 1;
+		im3 = above;
 	end;
 
 	out = im3;
@@ -79,7 +81,7 @@ if ischar(parameters),
 			uicontrol(uidefs.button,'position',[20 300 45 25],'string','OK', 'tag','OKButton','callback',['set(gcbo,''userdata'',1); uiresume;']);
 			uicontrol(uidefs.button,'position',[20 270 45 25],'string','Cancel','tag','CancelButton','callback',['set(gcbo,''userdata'',1); uiresume;']);
 
-			image_viewer_gui('IM','imfile',imfile,'imagemodifierfunc','at_image_threshold(im);')
+			image_viewer_gui(image_viewer_name,'imfile',imfile,'imagemodifierfunc','at_image_threshold(im);')
 
 			success = 0;
 
@@ -109,7 +111,7 @@ if ischar(parameters),
 					end;
 
 					if threshedit,
-						handles=image_viewer_gui('IM','command','IMget_handles');
+						handles=image_viewer_gui(image_viewer_name,'command',[image_viewer_name 'get_handles']);
 						h = findobj(handles.HistogramAxes,'tag','histline');
 						if ishandle(h), delete(h); end;
 						oldaxes = gca;
@@ -117,9 +119,9 @@ if ischar(parameters),
 						hold on;
 						a = axis;
 						plot([threshold threshold],[a(3) a(4)],'g-','tag','histline');
-						set(handles.HistogramAxes,'tag',['IMHistogramAxes']);
+						set(handles.HistogramAxes,'tag',[image_viewer_name 'HistogramAxes']);
 						axes(oldaxes);
-						image_viewer_gui('IM','command','IMdraw_image');
+						image_viewer_gui(image_viewer_name,'command',[image_viewer_name 'draw_image']);
 						set(findobj(gcf,'tag','ThresholdEdit'),'userdata',0);
 					elseif ok,
 						parameters = struct('threshold',threshold);
