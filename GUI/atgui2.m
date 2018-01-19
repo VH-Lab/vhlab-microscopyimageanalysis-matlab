@@ -129,6 +129,7 @@ switch lower(command),
 		end;
 	case lower('ATGUI_ImageMoved'),
 		at_itemeditlist_gui('ROIg','command',['ROIg' 'drawaction'],'fig',fig);
+		at_itemeditlist_gui('COLg','command',['COLg' 'drawaction'],'fig',fig);
 	case lower('ATGUI_DrawImage'), % NEEDS INPUT ARGUMENT theinput.itemname
                 handles = atgui2(name,'command',[name 'get_handles'],'fig',fig);
 		atd = atdir(ud.pathname);
@@ -137,7 +138,6 @@ switch lower(command),
 		atgui2(name,'command',[name 'ATGUI_ImageMoved'],'fig',fig);
 	case lower('ATGUI_DrawROIs'), % NEEDS INPUT ARGUMENT theinput.itemstruct_parameters
 		disp(['Got request to draw ROIs.']);
-
 		atgui2(name,'command',[name 'ATGUI_DrawROIOverlay'],'fig',fig,'theinput',theinput);
 		atgui2(name,'command',[name 'ATGUI_DrawROILines'],'fig',fig,'theinput',theinput);
 
@@ -156,7 +156,6 @@ switch lower(command),
 
 		plothandles_line = findobj(gca,'-regexp','tag','**_line');
 		plothandles_linetags = unique(get(plothandles_line,'tag'));
-
 
 		zdim = image_viewer_gui('IMv','command',['IMv' 'getslice'],'fig',fig);
 		for i=1:length(itemstruct_parameters),
@@ -249,6 +248,7 @@ switch lower(command),
 		atgui2(name,'command',[name 'ATGUI_DrawCLALines'],'fig',fig,'theinput',theinput);
 
 	case lower('ATGUI_DrawCLALines'),
+		disp(['Got request to draw CLAs as lines and numbers.']);
                 handles = atgui2(name,'command',[name 'get_handles'],'fig',fig);
 		atd = atdir(ud.pathname);
 		itemstruct_parameters = theinput.itemstruct_parameters;
@@ -271,7 +271,7 @@ switch lower(command),
 				else, % need to draw
 					cfile = getcolocalizationfilename(atd,itemstruct_parameters(i).itemname);
 					load(cfile);
-					rois_to_draw = find(colocalization_data.overlap_thresh);
+					[rois_to_draw,dummy] = find(colocalization_data.overlap_thresh);
 					roifile = getroifilename(atd,getparent(atd,'CLAs',itemstruct_parameters(i).itemname));
 					ROI = load([roifile],'-mat');
 					ROI.CC.PixelIdxList = ROI.CC.PixelIdxList(rois_to_draw);
@@ -298,6 +298,7 @@ switch lower(command),
 
 		image_viewer_gui('IMv','command',['IMv' 'movetoback'],'fig',fig);
 	case lower('ATGUI_DrawCLAOverlay'),
+		disp(['Got request to draw CLAs as overlay.']);
 
                 handles = atgui2(name,'command',[name 'get_handles'],'fig',fig);
 		atd = atdir(ud.pathname);
@@ -331,7 +332,7 @@ switch lower(command),
 				%disp(['I should do something']);
 				cfile = getcolocalizationfilename(atd,itemstruct_parameters(i).itemname);
 				load(cfile);
-				rois_to_draw = find(colocalization_data.overlap_thresh);
+				[rois_to_draw,dummy] = find(colocalization_data.overlap_thresh);
 				roifile = getlabeledroifilename(atd,getparent(atd,'CLAs',itemstruct_parameters(i).itemname));
 				ROI = load([roifile],'-mat');
 				didsomething = 1;
