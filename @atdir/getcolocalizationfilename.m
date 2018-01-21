@@ -15,7 +15,7 @@ extensions = {'.mat'};
 
 dnames = {};
 for i=1:length(extensions),
-	d = dir([getpathname(atd) filesep 'CLAs' filesep itemname filesep '*' extensions{i}]);
+	d = dir([getpathname(atd) filesep 'CLAs' filesep itemname filesep '*_CLA' extensions{i}]);
 	dnames = cat(1,dnames,d.name);
 	if ~isempty(dnames), break; end; % if we have a match it is good
 end;

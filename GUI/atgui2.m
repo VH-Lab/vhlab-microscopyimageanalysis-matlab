@@ -332,6 +332,7 @@ switch lower(command),
 				%disp(['I should do something']);
 				cfile = getcolocalizationfilename(atd,itemstruct_parameters(i).itemname);
 				load(cfile);
+
 				[rois_to_draw,dummy] = find(colocalization_data.overlap_thresh);
 				roifile = getlabeledroifilename(atd,getparent(atd,'CLAs',itemstruct_parameters(i).itemname));
 				ROI = load([roifile],'-mat');
