@@ -89,11 +89,7 @@ L_{2} = load(L{2},'-mat');
 
 search_size = size(overlap_ab,3)*size(overlap_ab,4)*size(overlap_ab,5);
 
-for i=1:size(overlap_ab,1),
-	for j=1:size(overlap_ab,2),
-		overlap_thresh(i,j) = overlap_ab(i,j) > parameters.threshold;
-	end;
-end;
+overlap_thresh = overlap_ab > parameters.threshold;
 
 colocalization_data = var2struct('overlap_ab','overlap_ba','overlap_thresh','parameters');
 

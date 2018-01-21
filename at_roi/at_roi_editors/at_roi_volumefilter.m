@@ -86,7 +86,10 @@ if ischar(parameters),
 			maxvoledit = 1;
 
 			while ~success,
-				if ~(minvoledit | maxvoledit), disp('calling uiwait.'); uiwait; end;
+				if ~(minvoledit | maxvoledit),
+					%disp('calling uiwait.');
+					uiwait;
+				end;
 
 				cancel = get(findobj(gcf,'tag','CancelButton'),'userdata');
 				ok = get(findobj(gcf,'tag','OKButton'),'userdata');
@@ -129,7 +132,7 @@ if ischar(parameters),
 						set(findobj(gcf,'tag','MinVolumeEdit'),'userdata',0);
 						set(findobj(gcf,'tag','MaxVolumeEdit'),'userdata',0);
 					elseif ok,
-						disp('here');
+						%disp('here');
 						parameters = struct('volume_minimum',minvol,'volume_maximum',maxvol);
 						out = at_roi_volumefilter(atd,input_itemname,output_itemname,parameters);
 						success = 1;
