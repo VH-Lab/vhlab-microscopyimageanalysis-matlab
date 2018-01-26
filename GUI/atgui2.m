@@ -83,6 +83,7 @@ switch lower(command),
 				'itemtype','CLAs','itemtype_singular','CLA','itemtype_plural','Colocalization Analyses','visiblecbstring','Draw lines',...
 				'drawaction','atgui2','drawaction_userinputs',{name,'command',[name 'ATGUI_DrawColocalizations']},...
 				'new_functions',at_colocalization_makers_list,'new_items','ROIg',...
+				'edit_functions',at_colocalization_editors_list,'edit_items','COLg', ...
 				'extracbstring','Overlay','useextracb',1);
 
 		image_viewer_gui('IMv','LowerLeftPoint',[455 305],'UpperRightPoint',[455+450 685-5],'showhistogram',0,...
@@ -272,7 +273,10 @@ switch lower(command),
 					cfile = getcolocalizationfilename(atd,itemstruct_parameters(i).itemname);
 					load(cfile);
 					[rois_to_draw,dummy] = find(colocalization_data.overlap_thresh);
-					roifile = getroifilename(atd,getparent(atd,'CLAs',itemstruct_parameters(i).itemname));
+					if ~isfield(colocalization_data.parameters,'roi_set_1'),
+						colocalization_data.parameters.roi_set_1 = getparent(atd,'CLAs',itemstruct_parameters(i).itemname);
+					end
+					roifile = getlabeledroifilename(atd,colocalization_data.parameters.roi_set_1);
 					ROI = load([roifile],'-mat');
 					ROI.CC.PixelIdxList = ROI.CC.PixelIdxList(rois_to_draw);
 					ROI.CC.NumObjects = length(rois_to_draw);
@@ -334,7 +338,10 @@ switch lower(command),
 				load(cfile);
 
 				[rois_to_draw,dummy] = find(colocalization_data.overlap_thresh);
-				roifile = getlabeledroifilename(atd,getparent(atd,'CLAs',itemstruct_parameters(i).itemname));
+				if ~isfield(colocalization_data.parameters,'roi_set_1'),
+					colocalization_data.parameters.roi_set_1 = getparent(atd,'CLAs',itemstruct_parameters(i).itemname);
+				end
+				roifile = getlabeledroifilename(atd,colocalization_data.parameters.roi_set_1);
 				ROI = load([roifile],'-mat');
 				didsomething = 1;
 				BW_indexes = find(ismember(ROI.L(:,:,zdim),rois_to_draw));

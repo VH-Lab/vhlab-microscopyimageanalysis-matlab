@@ -89,7 +89,9 @@ L_{2} = load(L{2},'-mat');
 
 search_size = size(overlap_ab,3)*size(overlap_ab,4)*size(overlap_ab,5);
 
-overlap_thresh = overlap_ab > parameters.threshold;
+overlap_thresh = overlap_ab >= parameters.threshold;
+
+parameters.roi_set_1 = input_itemname;
 
 colocalization_data = var2struct('overlap_ab','overlap_ba','overlap_thresh','parameters');
 
