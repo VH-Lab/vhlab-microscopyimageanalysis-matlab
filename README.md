@@ -14,7 +14,7 @@ This can be used with directories that have the following subfolders:
             L.mat - Labeled image
             history.mat - list of actions that led to these rois
             labels - labels of these rois
-    colocalization/
+    CLAs/
 
 One needs to initially set up a subfolder called images/named_images
 
