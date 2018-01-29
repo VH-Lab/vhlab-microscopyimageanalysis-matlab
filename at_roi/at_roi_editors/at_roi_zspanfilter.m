@@ -30,8 +30,8 @@ if ischar(parameters),
 			end;
 		case 'choose_inputdlg',
 			out_p = at_roi_zspanfilter;
-			default_parameters.volume_minimum = 1;
-			default_parameters.volume_maximum = Inf;
+			default_parameters.z_span_minimum = 1;
+			default_parameters.z_span_maximum = Inf;
 			parameters = dlg2struct('Choose parameters',out_p{1},out_p{2},default_parameters);
 			if isempty(parameters),
 				out = [];
