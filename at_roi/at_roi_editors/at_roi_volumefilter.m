@@ -61,20 +61,27 @@ if ischar(parameters),
 			for i=1:length(CC.PixelIdxList),
 				ROI_sizes(end+1) = numel(CC.PixelIdxList{i});
 			end;
-			[counts,bin_centers]=autohistogram(ROI_sizes);
-			bin_distance = bin_centers(2)-bin_centers(1);
-			bin_edges = linspace(bin_centers(1)-bin_distance, bin_centers(end)+bin_distance,3*length(bin_centers));
-			bin_edges = unique(round(bin_edges));
-			counts = histc(ROI_sizes, bin_edges);
-			bin_centers = (bin_edges(1:end-1) + bin_edges(2:end))/2;
-			bar(bin_centers,counts(1:end-1),1);
+			[counts,bin_centers,bin_edges,fullcounts]=autohistogram(ROI_sizes);
+			bar(bin_centers,counts,1);
+			hold on;
+			bin_dx = bin_centers(2) - bin_centers(1);
+			firstbin_start = bin_edges(1);
+			firstbin_stop = bin_centers(1)-bin_dx/2;
+			firstbin_center = mean([firstbin_start firstbin_stop]);
+			firstbin_width = firstbin_stop - firstbin_start;            
+			bar(firstbin_center, fullcounts(1), firstbin_width);
+			lastbin_start = bin_centers(end)+bin_dx/2;
+			lastbin_stop = bin_edges(end);
+			lastbin_center = mean([lastbin_start lastbin_stop]);
+			lastbin_width = lastbin_stop - lastbin_start;            
+			bar(lastbin_center, fullcounts(end-1), lastbin_width);
 			set(gca,'yscale','log','xscale','log');
 			a=axis;
-			axis([1 max(bin_centers) a(3) a(4)]);
+			axis([0.5 max(bin_centers) 0.1 a(4)]);
 			box off;
 			ylabel('Counts');
 			xlabel('ROI size (pixels)');
-
+            
 			oldaxes = gca;
 			axes(handles.HistogramAxes);
 	
