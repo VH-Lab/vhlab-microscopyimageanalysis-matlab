@@ -77,7 +77,7 @@ if ischar(parameters),
 			bar(lastbin_center, fullcounts(end-1), lastbin_width);
 			set(gca,'yscale','log','xscale','log');
 			a=axis;
-			axis([0.5 max(bin_centers) 0.1 a(4)]);
+			axis([firstbin_start lastbin_stop 0.1 a(4)]);
 			box off;
 			ylabel('Counts');
 			xlabel('ROI size (pixels)');
