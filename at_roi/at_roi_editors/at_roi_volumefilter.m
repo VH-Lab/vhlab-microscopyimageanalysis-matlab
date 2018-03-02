@@ -8,7 +8,7 @@ function out = at_roi_volumefilter(atd, input_itemname, output_itemname, paramet
 %  human-readable description of the parameter. 
 %  OUT{3} is a list of methods for user-guided selection of these parameters.
 % 
-
+ 
 if nargin==0,
 	out{1} = {'volume_minimum','volume_maximum'};
 	out{2} = {'Minimum volume of ROI to allow', 'Maximum value of ROI to allow'};
@@ -75,6 +75,8 @@ if ischar(parameters),
 			lastbin_center = mean([lastbin_start lastbin_stop]);
 			lastbin_width = lastbin_stop - lastbin_start;            
 			bar(lastbin_center, fullcounts(end-1), lastbin_width);
+			warning_state = warning;
+			warning off;
 			set(gca,'yscale','log','xscale','log');
 			a=axis;
 			axis([firstbin_start lastbin_stop 0.1 a(4)]);
@@ -148,6 +150,7 @@ if ischar(parameters),
 				minvoledit = 0;
 				maxvoledit = 0;
                         end;
+			warning(warning_state); % return warning state
                         close(gcf);
 
 	end;
@@ -184,7 +187,6 @@ h(end+1) = struct('parent',input_itemname,'operation','at_roi_volumefilter','par
 sethistory(atd,'ROIs',output_itemname,h);
 
 str2text([getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
-
 
 out = 1;
 
