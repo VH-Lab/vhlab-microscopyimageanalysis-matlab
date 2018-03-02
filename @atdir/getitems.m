@@ -24,13 +24,9 @@ dirlist = dirlist_trimdots(dirlist);
 
 for i=1:length(dirlist),
 	n.name = dirlist{i};
-	n.parent = '';
-	pfname = [atd.pathname filesep itemtype filesep n.name filesep 'parent.txt'];
-	if exist(pfname),
-		n.parent = strtrim(textfile2char(pfname));
-	end;
+	n.parent = getparent(atd,itemtype,n.name);
 	n.history = gethistory(atd,itemtype,n.name);
-	itemstruct(end+1) = n;
+	itemstruct(i) = n;
 end;
 
 

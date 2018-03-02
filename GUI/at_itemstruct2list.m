@@ -60,6 +60,7 @@ end;
 
 infostr = {};
 for i=1:length(itemstruct),
+	% EDIT HERE
 	if ~isempty(itemstruct(i).history),
 		infostr{i} = {itemstruct(i).history.description};
 	else,
