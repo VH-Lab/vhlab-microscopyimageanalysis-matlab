@@ -425,7 +425,7 @@ switch lower(command),
 			catch,
 				valid = 0;
 			end;
-			if ((size(rgb,1)~=1) | (size(rgb,2)~=3) | ~isnumeric(rgb) | ~(max(rgb)<=1) | ~(min(rgb)<=0)),
+			if ((size(rgb,1)~=1) | (size(rgb,2)~=3) | ~isnumeric(rgb) | ~(max(rgb)<=1) | ~(min(rgb)>=0)),
 				valid = 0;
 			end;
 

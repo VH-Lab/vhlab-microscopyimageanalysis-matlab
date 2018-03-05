@@ -201,7 +201,7 @@ switch lower(command),
 
 		axes(imhandles.ImageAxes);
 
-		overlayimage = findobj(gca,'tag','OverlayImage');
+		overlayimage = findobj(gca,'tag','ROIOverlayImage');
 		if ishandle(overlayimage), delete(overlayimage); end;
 		
 		mainimage = findobj(gca,'tag','image');
@@ -236,7 +236,7 @@ switch lower(command),
 
 		if didsomething,
 			hold on;
-			h=image(cat(3,overlay_im1,overlay_im2,overlay_im3),'AlphaData',alpha,'tag','OverlayImage');
+			h=image(cat(3,overlay_im1,overlay_im2,overlay_im3),'AlphaData',alpha,'tag','ROIOverlayImage');
 
 			image_viewer_gui('IMv','command',['IMv' 'movetoback'],'fig',fig);
 		end
@@ -314,7 +314,7 @@ switch lower(command),
 
 		axes(imhandles.ImageAxes);
 
-		overlayimage = findobj(gca,'tag','OverlayImage');
+		overlayimage = findobj(gca,'tag','CLAOverlayImage');
 		if ishandle(overlayimage), delete(overlayimage); end;
 		
 		mainimage = findobj(gca,'tag','image');
@@ -356,7 +356,7 @@ switch lower(command),
 
 		if didsomething,
 			hold on;
-			h=image(cat(3,overlay_im1,overlay_im2,overlay_im3),'AlphaData',alpha,'tag','OverlayImage');
+			h=image(cat(3,overlay_im1,overlay_im2,overlay_im3),'AlphaData',alpha,'tag','CLAOverlayImage');
 
 			image_viewer_gui('IMv','command',['IMv' 'movetoback'],'fig',fig);
 		end

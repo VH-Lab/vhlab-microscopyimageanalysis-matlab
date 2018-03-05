@@ -59,12 +59,16 @@ for i=1:length(itemstruct),
 end;
 
 infostr = {};
-for i=1:length(itemstruct),
-	% EDIT HERE
-	if ~isempty(itemstruct(i).history),
-		infostr{i} = {itemstruct(i).history.description};
+for l=1:numel(liststr),
+	loc = find(strcmp(strtrim(liststr{l}),item_names));
+	if numel(loc)~=1,
+		error('Found two items with the same name. How can this happen?');
+	end
+	
+	if ~isempty(itemstruct(loc).history),
+		infostr{l} = {itemstruct(loc).history.description};
 	else,
-		infostr{i} = {''};
+		infostr{l} = {''};
 	end;
 end;
 
