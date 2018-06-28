@@ -61,7 +61,7 @@ colocalization_data.parameters.threshold = parameters.threshold;
 colocalization_data.overlap_thresh = colocalization_data.overlap_ab >= parameters.threshold;
 
 % Emma edited here
-all_cla = load(colocalization_data.overlap_thresh);
+all_cla = find(colocalization_data.overlap_thresh>0);
 [C,ia,ic] = ~unique(all_cla(:,2),'rows');
 overlapped_objects = all_cla(ia,:);
 
