@@ -60,7 +60,12 @@ end;
 colocalization_data.parameters.threshold = parameters.threshold;
 colocalization_data.overlap_thresh = colocalization_data.overlap_ab >= parameters.threshold;
 
-overlapped_objects = sum(colocalization_data.overlap_thresh(:));
+% Emma edited here
+all_cla = load(colocalization_data.overlap_thresh);
+[C,ia,ic] = ~unique(all_cla(:,2),'rows');
+overlapped_objects = all_cla(ia,:);
+
+%overlapped_objects = sum(colocalization_data.overlap_thresh(:));
 
 colocalization_out_file = [getpathname(atd) filesep 'CLAs' filesep output_itemname filesep output_itemname '_CLA' '.mat'];
 
