@@ -57,8 +57,19 @@ if ~isfield(colocalization_data.parameters,'roi_set_1') & ~isempty(intersect(par
 	colocalization_data.parameters.roi_set_1 = parent;
 end;
 
-colocalization_data.parameters.threshold = parameters.threshold;
-colocalization_data.overlap_thresh = colocalization_data.overlap_ab >= parameters.threshold;
+[I,J] = find(colocalization_data.overlap_thresh>0);
+multi_count = [];
+
+for i = 1:max(I)
+    [a,b] = find(I == i);
+    if numel(a) >= parameters.number_neighbors
+        multi_count = [multi_count numel(a)]; 
+    else
+        colocalization_data.overlap_thresh(I(a),:) = 0;
+    end
+end
+figure
+histogram(multi_count)
 
 overlapped_objects = sum(colocalization_data.overlap_thresh(:));
 
