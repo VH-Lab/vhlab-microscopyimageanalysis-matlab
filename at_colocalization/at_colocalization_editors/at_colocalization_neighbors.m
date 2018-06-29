@@ -7,7 +7,7 @@ function out = at_colocalization_neighbors(atd, input_itemname, output_itemname,
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
 %  human-readable description of the parameter. 
 %  OUT{3} is a list of methods for user-guided selection of these parameters.
-%        
+%          
 
 if nargin==0,
 	out{1} = {'number_neighbors'};
