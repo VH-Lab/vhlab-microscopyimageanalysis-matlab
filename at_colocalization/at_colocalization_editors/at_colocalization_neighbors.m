@@ -57,8 +57,27 @@ if ~isfield(colocalization_data.parameters,'roi_set_1') & ~isempty(intersect(par
 	colocalization_data.parameters.roi_set_1 = parent;
 end;
 
-colocalization_data.parameters.threshold = parameters.threshold;
-colocalization_data.overlap_thresh = colocalization_data.overlap_ab >= parameters.threshold;
+[I,J] = find(colocalization_data.overlap_thresh>0);
+multi_count = [];
+
+all_cla = [I,J];
+for i = 1:max(I)
+    [a,b] = find(I == i);
+    if numel(a) >= parameters.number_neighbors
+        multi_count = [multi_count numel(a)]; 
+    end
+end
+figure
+histogram(multi_count)
+
+[C,ia,ic] = unique(all_cla(:,1),'rows');
+for i = 1:length(ia)
+    for j = 1:length(all_cla)
+        if ia(i) ~= j
+            colocalization_data.overlap_thresh(:,j) = 0;
+        end
+    end
+end
 
 overlapped_objects = sum(colocalization_data.overlap_thresh(:));
 
@@ -69,7 +88,7 @@ save(colocalization_out_file,'colocalization_data','-mat');
 
 h = gethistory(atd,'CLAs',input_itemname),
 h(end+1) = struct('parent',input_itemname,'operation','at_colocalization_neighbors','parameters',parameters,...
-	'description',['Rethresholded with new threshold ' num2str(parameters.threshold) '. Found ' int2str(overlapped_objects) ' CLs.' ]);
+	'description',['Rethresholded with new threshold ' num2str(parameters.number_neighbors) '. Found ' int2str(overlapped_objects) ' CLs.' ]);
 sethistory(atd,'CLAs',output_itemname,h);
 
 str2text([getpathname(atd) filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
