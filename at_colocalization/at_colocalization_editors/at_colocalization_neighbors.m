@@ -70,14 +70,14 @@ for z = 1:length(unique_I)
     if neighbors_here >= parameters.number_neighbors
         multi_count = [multi_count neighbors_here]; 
     else
-        colocalization_data.overlap_thresh(I(z),:) = 0;
+        colocalization_data.overlap_thresh(unique_I(z),:) = 0;
     end
 end
 figure
 histogram(multi_count)
 
 
-overlapped_objects = sum(colocalization_data.overlap_thresh(:));
+overlapped_objects = numel(multi_count);
 
 colocalization_out_file = [getpathname(atd) filesep 'CLAs' filesep output_itemname filesep output_itemname '_CLA' '.mat'];
 
