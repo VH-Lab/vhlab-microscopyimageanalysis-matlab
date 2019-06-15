@@ -100,7 +100,7 @@ for i=1:length(input_finfo)
         im(:,:,i) = newim;
 end;
 
-[CC,L] = ROI_resegment_all(CC, L, im, 'resegment_namevaluepairs', nvp);
+[CC,L] = ROI_resegment_all(CC, L, im, 'resegment_namevaluepairs', nvp,'UseProgressBar',1);
 newobjects = CC.NumObjects;
 
 L_out_file = [getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_L' '.mat'];
