@@ -10,8 +10,8 @@ function out = at_roi_volumefilter(atd, input_itemname, output_itemname, paramet
 % 
  
 if nargin==0,
-	out{1} = {'volume_minimum','volume_maximum'};
-	out{2} = {'Minimum volume of ROI to allow', 'Maximum value of ROI to allow'};
+	out{1} = {'volume_minimum','volume_maximum','pixel_size_xyz'};
+	out{2} = {'Minimum volume of ROI to allow', 'Maximum value of ROI to allow','Pixel sizes [x y z]'};
 	out{3} = {'choose_inputdlg','choose_graphical'};
 	return;
 end;
@@ -32,6 +32,7 @@ if ischar(parameters),
 			out_p = at_roi_volumefilter;
 			default_parameters.volume_minimum = 1;
 			default_parameters.volume_maximum = Inf;
+			default_parameters.pixel_size_xyz = [ 1 1 1 ];
 			parameters = dlg2struct('Choose parameters',out_p{1},out_p{2},default_parameters);
 			if isempty(parameters),
 				out = [];
@@ -44,14 +45,23 @@ if ischar(parameters),
 			set(f,'position',[pos([1 2]) 500 500]);
 			uidefs = basicuitools_defs;
 			uicontrol(uidefs.txt,'position',   [20 400 100 25],'string','Minimum Volume:');
-			uicontrol(uidefs.edit,'position',  [20 375 100 25],'string','1','tag','MinVolumeEdit','userdata',1,'callback',['set(gcbo,''userdata'',1); uiresume;']);
+			uicontrol(uidefs.edit,'position',  [20 375 100 25],'string','1','tag','MinVolumeEdit',...
+				'userdata',1,'callback',['set(gcbo,''userdata'',1); uiresume;']);
 			uicontrol(uidefs.txt,'position',   [20 350 100 25],'string','Maximum Volume:');
-			uicontrol(uidefs.edit,'position',  [20 325 100 25],'string','Inf','tag','MaxVolumeEdit','userdata',1,'callback',['set(gcbo,''userdata'',1); uiresume;']);
-			uicontrol(uidefs.button,'position',[20 300 100  25],'string','OK', 'tag','OKButton','callback',['set(gcbo,''userdata'',1); uiresume;']);
-			uicontrol(uidefs.button,'position',[20 270 100 25],'string','Cancel','tag','CancelButton','callback',['set(gcbo,''userdata'',1); uiresume;']);
+			uicontrol(uidefs.edit,'position',  [20 325 100 25],'string','Inf','tag','MaxVolumeEdit',...
+				'userdata',1,'callback',['set(gcbo,''userdata'',1); uiresume;']);
+			uicontrol(uidefs.txt,'position',   [20 325-25 100 25],'string','Pixel sizes [x y z]:');
+			uicontrol(uidefs.edit,'position',  [20 325-2*25 100 25],'string','[1 1 1]','tag','PixelSizeEdit',...
+				'userdata',1,'callback',['set(gcbo,''userdata'',1); uiresume;']);
+			uicontrol(uidefs.button,'position',[20 300-25*2 100  25],'string','OK', 'tag','OKButton',...
+				'callback',['set(gcbo,''userdata'',1); uiresume;']);
+			uicontrol(uidefs.button,'position',[20 270-25*2 100 25],'string','Cancel',...
+				'tag','CancelButton','callback',['set(gcbo,''userdata'',1); uiresume;']);
 
 			handles.HistogramAxes = axes('units','pixels','position',[150 150 300 200],'tag','HistogramAxes');
 
+			pixel_size_xyz = [1 1 1];
+			
 			% plot histogram
 			L_in_file = getlabeledroifilename(atd,input_itemname);
 			roi_in_file = getroifilename(atd,input_itemname);
@@ -59,7 +69,7 @@ if ischar(parameters),
 
 			ROI_sizes = [];
 			for i=1:length(CC.PixelIdxList),
-				ROI_sizes(end+1) = numel(CC.PixelIdxList{i});
+				ROI_sizes(end+1) = prod(pixel_size_xyz)*numel(CC.PixelIdxList{i}); % this is wrong
 			end;
 			[counts,bin_centers,bin_edges,fullcounts]=autohistogram(ROI_sizes);
 			bar(bin_centers,counts,1);
@@ -93,6 +103,7 @@ if ischar(parameters),
 
 			minvoledit = 1;
 			maxvoledit = 1;
+			pixelsizeedit = 1;
 
 			while ~success,
 				if ~(minvoledit | maxvoledit),
@@ -104,11 +115,12 @@ if ischar(parameters),
 				ok = get(findobj(gcf,'tag','OKButton'),'userdata');
 				minvoledit = get(findobj(gcf,'tag','MinVolumeEdit'),'userdata');
 				maxvoledit = get(findobj(gcf,'tag','MaxVolumeEdit'),'userdata');
+				pixel_size_xyz = get(findobj(gcf,'tag','PixelSizeEdit'),'userdata');
 
 				if cancel,
 					success = 1;
 					out = [];
-				elseif minvoledit | maxvoledit | ok,
+				elseif minvoledit | maxvoledit | pixelsizeedit | ok,
 					try,
 						minvolstring = get(findobj(gcf,'tag','MinVolumeEdit'),'string');
 						minvol = eval([minvolstring ';']);
@@ -120,11 +132,17 @@ if ischar(parameters),
 						if isempty(maxvol) | ~isnumeric(maxvol),
 							error(['Syntax error in maximum volume: empty or not a number.']);
 						end;
+						pixel_size_xyz_string = get(findobj(gcf,'tag','PixelSizeEdit'),'string');
+						ps = eval([pixel_size_xyz_string]);
+						if isempty(ps) | ~isnumeric(ps) | numel(ps)~=3,
+							error(['Syntax error in PixelSize: empty, not a number, or not 3 elements.']);
+						end;
 					catch,
-						errordlg(['Error in setting minimum or maximum volume constraint: ' lasterr]);
+						errordlg(['Error in setting minimum or maximum volume constraint or PixelSize: ' lasterr]);
 						set(findobj(gcf,'tag','OKButton'),'userdata',0);
 						set(findobj(gcf,'tag','MinVolumeEdit'),'userdata',0);
 						set(findobj(gcf,'tag','MaxVolumeEdit'),'userdata',0);
+						set(findobj(gcf,'tag','PixelSizeEdit'),'userdata',0);
 					end;
 
 					if minvoledit | maxvoledit,
@@ -142,13 +160,14 @@ if ischar(parameters),
 						set(findobj(gcf,'tag','MaxVolumeEdit'),'userdata',0);
 					elseif ok,
 						%disp('here');
-						parameters = struct('volume_minimum',minvol,'volume_maximum',maxvol);
+						parameters = struct('volume_minimum',minvol,'volume_maximum',maxvol,'pixel_size_xyz',ps);
 						out = at_roi_volumefilter(atd,input_itemname,output_itemname,parameters);
 						success = 1;
                                         end;
                                 end;
 				minvoledit = 0;
 				maxvoledit = 0;
+				pixelsizeedit = 0;
                         end;
 			warning(warning_state); % return warning state
                         close(gcf);
@@ -159,13 +178,17 @@ end;
 
  % edit this part
 
+if ~isfield(parameters.pixel_size_xyz), % because of old versions
+	parameters.pixel_size_xyz = [ 1 1 1 ] ;
+end;
+
 L_in_file = getlabeledroifilename(atd,input_itemname);
 roi_in_file = getroifilename(atd,input_itemname);
 load(roi_in_file,'CC','-mat');
 
 ROI_sizes = [];
 for i=1:length(CC.PixelIdxList),
-	ROI_sizes(end+1) = numel(CC.PixelIdxList{i});
+	ROI_sizes(end+1) = numel(CC.PixelIdxList{i}) * prod(parameters.pixel_size_xyz);
 end;
 
 good_indexes = find( (ROI_sizes >= parameters.volume_minimum) & (ROI_sizes <= parameters.volume_maximum) );
@@ -183,7 +206,7 @@ save(L_out_file,'L','-mat');
 
 h = gethistory(atd,'ROIs',input_itemname),
 h(end+1) = struct('parent',input_itemname,'operation','at_roi_volumefilter','parameters',parameters,...
-	'description',['Filtered all but ' int2str(CC.NumObjects) ' ROIs between ' num2str(parameters.volume_minimum) ' and ' num2str(parameters.volume_maximum) ' of ROIS ' input_itemname '.']);
+	'description',['Filtered all but ' int2str(CC.NumObjects) ' ROIs between ' num2str(parameters.volume_minimum) ' and ' num2str(parameters.volume_maximum) ' of ROIS ' input_itemname ' with pixel size ' num2str(parameters.pixel_size_xyz)  ' .']);
 sethistory(atd,'ROIs',output_itemname,h);
 
 str2text([getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
