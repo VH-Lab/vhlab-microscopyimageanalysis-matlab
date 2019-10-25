@@ -1,7 +1,9 @@
 # vhlab_mlapp_ArrayTomography
 Matlab app for analysis of high density imaging data like that from Array Tomography
 
-Requires http://www.github.com/VH-Lab/vhlab_mltbx_toolbox
+Requires http://www.github.com/VH-Lab/vhlab-toolbox-matlab
+
+Requires: Matlab 2017b or later
 
 This can be used with directories that have the following subfolders:
 
