@@ -15,7 +15,7 @@ function out = at_roi_resegment(atd, input_itemname, output_itemname, parameters
 if nargin==0,
 	out{1} = {'resegment_algorithm','connectivity','values_outside_roi','use_bwdist','imagename'};
 	out{2} = {'Algorithm to be used','connectivity (0 for default)', 'use values outside roi? 0/1', ...
-			'use thresholded image instead of raw (0/1)?','Image name to use (leave blank to choose' };
+			'use thresholded image instead of raw (0/1)?','Image name to use (leave blank to use default in history' };
 	out{3} = {'choose_inputdlg'};
 	return;
 end;
@@ -68,6 +68,9 @@ end;
 nvp = struct2namevaluepair(rmfield(parameters,'imagename'));
 
 if isempty(parameters.imagename), % choose it 
+	h = gethistory(atd,'ROIs',input_itemname);
+	parameters.imagename = h(1).parent;
+elseif 0, % ask the user to choose it
 	itemliststruct = getitems(atd,'images');
 	if ~isempty(itemliststruct),
 		itemlist_names = {itemliststruct.name};
@@ -106,7 +109,10 @@ newobjects = CC.NumObjects;
 L_out_file = [getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_L' '.mat'];
 roi_out_file = [getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_ROI' '.mat'];
 
-try, mkdir([getpathname(atd) filesep 'ROIs' filesep output_itemname]); end;
+try,
+	mkdir([getpathname(atd) filesep 'ROIs' filesep output_itemname]);
+end;
+
 save(roi_out_file,'CC','-mat');
 save(L_out_file,'L','-mat');
 
@@ -116,6 +122,8 @@ h(end+1) = struct('parent',input_itemname,'operation','at_roi_resegment','parame
 sethistory(atd,'ROIs',output_itemname,h);
 
 str2text([getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
+
+at_roi_parameters(atd,roi_out_file);
 
 out = 1;
 

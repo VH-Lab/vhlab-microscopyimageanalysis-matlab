@@ -169,24 +169,11 @@ for i=1:length(CC.PixelIdxList),
 end;
 
 good_indexes = find( (ROI_sizes >= parameters.volume_minimum) & (ROI_sizes <= parameters.volume_maximum) );
-
-CC.NumObjects = length(good_indexes);
-CC.PixelIdxList = CC.PixelIdxList(good_indexes);
-L = labelmatrix(CC);
-
-L_out_file = [getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_L' '.mat'];
-roi_out_file = [getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_ROI' '.mat'];
-
-try, mkdir([getpathname(atd) filesep 'ROIs' filesep output_itemname]); end;
-save(roi_out_file,'CC','-mat');
-save(L_out_file,'L','-mat');
-
 h = gethistory(atd,'ROIs',input_itemname),
 h(end+1) = struct('parent',input_itemname,'operation','at_roi_volumefilter','parameters',parameters,...
-	'description',['Filtered all but ' int2str(CC.NumObjects) ' ROIs between ' num2str(parameters.volume_minimum) ' and ' num2str(parameters.volume_maximum) ' of ROIS ' input_itemname '.']);
-sethistory(atd,'ROIs',output_itemname,h);
+	'description',['Filtered all but ' int2str(numel(good_indexes)) ' ROIs between ' num2str(parameters.volume_minimum) ' and ' num2str(parameters.volume_maximum) ' of ROIS ' input_itemname '.']);
 
-str2text([getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
+at_roi_savesubset(atd,input_itemname, good_indexes, output_itemname, h);
 
 out = 1;
 
