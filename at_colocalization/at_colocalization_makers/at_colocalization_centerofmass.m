@@ -76,11 +76,23 @@ if parameters.show_graphical_progress, progressbar('Setting up for ROI overlap c
 
 rois{1} = getroifilename(atd,input_itemname);
 L{1} = getlabeledroifilename(atd,input_itemname);
+try,
+	roipfilename{1} = getroiparametersfilename(atd, input_itemname);
+catch,
+	at_roi_parameters(atd,rois{1});
+	roipfilename{1} = getroiparametersfilename(atd, input_itemname);
+end;
 
 if parameters.show_graphical_progress, progressbar(0.2); end;
 
 rois{2} = getroifilename(atd,parameters.roi_set_2);
 L{2} = getlabeledroifilename(atd,parameters.roi_set_2);
+try,
+	roipfilename{2} = getroiparametersfilename(atd, parameters.roi_set_2)
+catch,
+	at_roi_parameters(atd,rois{2});
+	roipfilename{1} = getroiparametersfilename(atd, parameters.roi_set_2);
+end
 
 if parameters.show_graphical_progress, progressbar(0.4); end;
 
@@ -88,68 +100,22 @@ rois_{1} = load(rois{1},'-mat');
 L_{1} = load(L{1},'-mat');
 rois_{2} = load(rois{2},'-mat');
 L_{2} = load(L{2},'-mat');
+ROIp{1} = load(roipfilename{1},'-mat');
+ROIp{2} = load(roipfilename{2},'-mat');
 
 if parameters.show_graphical_progress, progressbar(0.6); end;
 
- %   Step 1B:
- %    need the RAW data files for the 2 channels
-
- % TODO: READ HERE
-
-h{1} = gethistory(atd,'ROIs',input_itemname);
-h{2} = gethistory(atd,'ROIs',parameters.roi_set_2);
-
-
-for j=1:2,
-	im_filename{j} = getimagefilename(atd, h{j}(1).parent);
-	image_info{j} = imfinfo(im_filename{j});
-	IM{j} = [];
-	for i=1:numel(image_info{j}),
-		IM{j} = cat(3,IM{j},at_image_read(im_filename{j},i,'iminfo',image_info{j}));
-	end;
-	if j==1&parameters.show_graphical_progress, progressbar(0.8); end;
-end;
-
 if parameters.show_graphical_progress, progressbar(0.9); end;
-
- % Step 2: compute 
-
- %   compute center-of-mass for all ROIs
-
- % TODO: WRITETHIS
-
-com_a = regionprops(rois_{1}.CC, IM{1},'WeightedCentroid'); 
-com_b = regionprops(rois_{2}.CC, IM{2}, 'WeightedCentroid');
-
-com_a2 = cat(1,com_a.WeightedCentroid);
-com_b2 = cat(1,com_b.WeightedCentroid);
-
 
 if parameters.show_graphical_progress, progressbar(1); end;
 
-if 0,
-tic
 stepsize = 1;
 
-
-Is = [];
-Js = [];
-Vs = [];
-
-for i=1:stepsize:size(com_a2,1),
-	if mod(i,1000)==0, i, toc, end;
-	distances_here = 0.1+sqrt(sum((repmat(com_a2(i,:)',1, size(com_b2,1)) - com_b2').^2));
-	[justright_j] = find(distances_here<parameters.distance_infinity);
-	Is = [Is; repmat(i,numel(justright_j),1)];
-	Js = [Js; justright_j(:)];
-	Vs = [Vs;colvec(distances_here(justright_j))];
-end;
-
-distances = sparse(Is,Js,Vs);
-end;
-
 tic,
-[distances,Is,Js,Vs] = ROI_centerofmassdistance(com_a2, L_{1}.L, com_b2, L_{2}.L, parameters.distance_infinity, 0.1,'ShowGraphicalProgress',parameters.show_graphical_progress);
+[distances,Is,Js,Vs] = ROI_centerofmassdistance(cat(1,ROIp{1}.ROIparameters.params3d.WeightedCentroid) , L_{1}.L, ...
+		cat(1,ROIp{2}.ROIparameters.params3d.WeightedCentroid), L_{2}.L, parameters.distance_infinity, ...
+		0.1,'ShowGraphicalProgress',parameters.show_graphical_progress);
+
 if parameters.show_graphical_progress,
 	toc,
 end;
@@ -160,10 +126,7 @@ overlap_thresh = sparse(Is(overlaps),Js(overlaps),Vs(overlaps));
 
 parameters.roi_set_1 = input_itemname;
 
-com_a = com_a2;
-com_b = com_b2;
-
-colocalization_data = var2struct('distances','overlap_thresh','parameters','com_a','com_b');
+colocalization_data = var2struct('distances','overlap_thresh','parameters');
 
  % step 3: save and add history
 

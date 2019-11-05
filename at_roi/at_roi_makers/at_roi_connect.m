@@ -70,6 +70,7 @@ sethistory(atd,'ROIs',output_itemname,h);
 
 str2text([getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
+at_roi_parameters(atd,roi_out_file);
 
 out = 1;
 
