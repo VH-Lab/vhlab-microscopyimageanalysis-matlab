@@ -7,7 +7,7 @@ function cfilename = getcolocalizationfilename(atd, itemname)
 %  ITEMNAME.
 %
 %  Returns empty string ('') if none.
-% 
+%
 
 cfilename = '';
 

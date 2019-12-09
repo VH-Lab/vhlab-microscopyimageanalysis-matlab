@@ -78,6 +78,7 @@ rois{1} = getroifilename(atd,input_itemname);
 L{1} = getlabeledroifilename(atd,input_itemname);
 try,
 	roipfilename{1} = getroiparametersfilename(atd, input_itemname);
+	if isempty(roipfilename{1}), error('filename is empty.'); end;
 catch,
 	at_roi_parameters(atd,rois{1});
 	roipfilename{1} = getroiparametersfilename(atd, input_itemname);
@@ -88,10 +89,10 @@ if parameters.show_graphical_progress, progressbar(0.2); end;
 rois{2} = getroifilename(atd,parameters.roi_set_2);
 L{2} = getlabeledroifilename(atd,parameters.roi_set_2);
 try,
-	roipfilename{2} = getroiparametersfilename(atd, parameters.roi_set_2)
+	roipfilename{2} = getroiparametersfilename(atd, parameters.roi_set_2);
 catch,
 	at_roi_parameters(atd,rois{2});
-	roipfilename{1} = getroiparametersfilename(atd, parameters.roi_set_2);
+	roipfilename{2} = getroiparametersfilename(atd, parameters.roi_set_2);
 end
 
 if parameters.show_graphical_progress, progressbar(0.4); end;
