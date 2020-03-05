@@ -17,6 +17,9 @@ function at_roiimagemask(original_filename, roimask_filename, new_filename, vara
 % --------------------------------------------------------------------------------------------
 % mask_channel (1)            | Which channel of ROIMASK_FILENAME has the the mask information?
 %                             |   (typically red is 1, green is 2, blue is 3)
+% all_others_must_be_zero (1) | Use this option if the other channels must be 0 while the mask_channel
+%                             |   is 1.
+% channels ([1 2 3])          | The channels available here.
 %
 % Examples:
 %     at_roiimagemask('myoriginalfile.tif','mymaskfile.tif','mymaskedfile.tif')
@@ -24,6 +27,8 @@ function at_roiimagemask(original_filename, roimask_filename, new_filename, vara
 % 
 
 mask_channel = 1;
+all_others_must_be_zero = 1;
+channels = [1 2 3];
 
 assign(varargin{:});
 
@@ -33,7 +38,16 @@ for i=1:numel(imf),
 	im_frame_here = imread(original_filename,i);
 	im_mask_here = imread(roimask_filename,i);
 
-	inds_to_zero = find(im_mask_here(:,:,mask_channel)==0);
+	masked_pts = im_mask_here(:,:,mask_channel) = 1;
+	if all_others_must_be_zero,
+		for c=1:numel(channels),
+			if ~ismember(channels,mask_channel),
+				masked_pts = masked_pts .& [im_mask_here(:,:,channels(c)==0];
+			end;
+		end;
+	end;
+
+	inds_to_zero = find(~masked_pts);
 
 	im_frame_here(inds_to_zero) = 0;
 
