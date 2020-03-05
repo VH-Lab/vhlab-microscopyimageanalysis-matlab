@@ -38,11 +38,11 @@ for i=1:numel(imf),
 	im_frame_here = imread(original_filename,i);
 	im_mask_here = imread(roimask_filename,i);
 
-	masked_pts = im_mask_here(:,:,mask_channel) = 1;
+	masked_pts = im_mask_here(:,:,mask_channel) >= 1;
 	if all_others_must_be_zero,
 		for c=1:numel(channels),
-			if ~ismember(channels,mask_channel),
-				masked_pts = masked_pts .& [im_mask_here(:,:,channels(c)==0];
+			if c~=mask_channel,
+				masked_pts = masked_pts & [im_mask_here(:,:,channels(c))==0];
 			end;
 		end;
 	end;
