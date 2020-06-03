@@ -24,7 +24,7 @@ function [parameters] = wise_pipeline1(atd, startImageName, outname, varargin)
 %
 % Example:
 %    atd = at_dir([MYEXPERIMENTPATH]);
-%    wise_pipelin1(atd, 'PSD95chan', 'threshold', 1275);
+%    wise_pipelin1(atd, 'PSD95chan', 'PSDwise1275', 'threshold', 1275);
 %
 
 
