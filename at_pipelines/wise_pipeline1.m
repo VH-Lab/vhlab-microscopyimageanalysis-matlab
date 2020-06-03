@@ -1,7 +1,7 @@
-function [parameters] = wise_pipeline1(atd, startImageName, varargin)
+function [parameters] = wise_pipeline1(atd, startImageName, outname, varargin)
 % WISE_PIPELINE1 - Derek Wise pipeline 1 / Nelson lab - Van Hooser lab
 %
-% WISE_PIPELINE1(ATD, STARTIMAGENAME, ...)
+% WISE_PIPELINE1(ATD, STARTIMAGENAME, OUTNAME, ...)
 % 
 % Runs the Wise (version 1) pipeline on an image with STARTIMAGENAME in the
 % AT_DIR object ATD.
@@ -10,7 +10,7 @@ function [parameters] = wise_pipeline1(atd, startImageName, varargin)
 % For Step 3, make the ROIs.
 % For Step 4, apply a volume filter (use 0, Inf to do nothing)
 % For Step 5, apply the watershed resegmentation 
-%  The output will be named [startImageName '_wp1_roivfres'].
+%  The output will be named [startImageName '_' outname '_wp1_roivfres'].
 %
 % 
 % Several parameters can be altered by name/value pairs (see help NAMEVALUEPAIR).
@@ -45,20 +45,20 @@ Step1_output_image_name = startImageName;
  % Step 2: threshold
 clear p;
 p.threshold = threshold;
-Step2_output_image_name = [Step1_output_image_name '_wp1_threshold'];
+Step2_output_image_name = [Step1_output_image_name '_' outname '_wp1_threshold'];
 at_image_threshold(atd, Step1_output_image_name, Step2_output_image_name,p);
 
  % Step 3: Make rois
 clear p;
 p.connectivity = 26;
-Step3_output_roi_name = ['startImageName' _wp1_roisraw'];
+Step3_output_roi_name = [startImageName '_' outname '_wp1_roisraw'];
 at_roi_connect(atd, Step2_output_image_name, Step3_output_roi_name, p);
 
  % Step 4: Volume filter
 clear p;
 p.volume_minumum = volume_filter_low;
 p.volume_maximum = volume_filter_high;
-Step4_output_roi_name = [ startImageName '_wp1_roivf' ];
+Step4_output_roi_name = [ startImageName '_' outname '_wp1_roivf' ];
 at_roi_volumefilter(atd, Step3_output_roi_name, Step4_output_roi_name, p);
 
  % Step 5: Watershed
@@ -68,7 +68,7 @@ p.connectivity = 0;
 p.values_outside_roi = 0;
 p.use_bwdist = 0;
 p.imagename = startImageName; % reset to scaled image name
-Step5_output_roi_name = [ startImageName '_wp1_roivfres'];
+Step5_output_roi_name = [ startImageName '_' outname '_wp1_roivfres'];
 at_roi_resegment(atd,Step4_output_roi_name, Step5_output_roi_name, p);
 
 
