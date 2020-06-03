@@ -34,7 +34,7 @@ volume_filter_high = Inf;
 
 assign(varargin{:});
 
-parameters = var2struct;
+parameters = workspace2struct;
 
  % Step 1: perform AryScan 3
  %    Derek insert code here, result should be saved in at_dir as a new image
