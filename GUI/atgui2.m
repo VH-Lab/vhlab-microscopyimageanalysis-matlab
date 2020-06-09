@@ -155,14 +155,18 @@ switch lower(command),
 		currentAxes = gca;
 		axes(imhandles.ImageAxes);
 
-		plothandles_line = findobj(gca,'-regexp','tag','**_line');
-		plothandles_linetags = unique(get(plothandles_line,'tag'));
+		plothandles_line = findobj(gca,'-regexp','tag','(.*)_line');
+		plothandles_linetags = get(plothandles_line,'tag');
+		if ~isempty(plothandles_linetags) & ~iscell(plothandles_linetags), % make sure we are a cell
+			plothandles_linetags = {plothandles_linetags}; 
+		end;
+		plothandles_linetags = unique(plothandles_linetags);
 
 		zdim = image_viewer_gui('IMv','command',['IMv' 'getslice'],'fig',fig);
 		for i=1:length(itemstruct_parameters),
 			if itemstruct_parameters(i).visible,
 				z=find(ismember(plothandles_linetags,[itemstruct_parameters(i).itemname '_' int2str(zdim) '_line']));
-				if ~isempty(z), % already there, leave it alone
+				if ~isempty(z), % it is already here, leave it alone
 					plothandles_linetags = plothandles_linetags([1:z-1 z+1:end]);
 				else, % need to draw
 					roifile = getroifilename(atd,itemstruct_parameters(i).itemname);
@@ -261,7 +265,11 @@ switch lower(command),
 		axes(imhandles.ImageAxes);
 
 		plothandles_claline = findobj(gca,'-regexp','tag','**_claline');
-		plothandles_clalinetags = unique(get(plothandles_claline,'tag'));
+		plothandles_clalinetags = get(plothandles_claline,'tag');
+		if ~isempty(plothandles_clalinetags) & ~iscell(plothandles_clalinetags), % make sure we are a cell
+			plothandles_clalinetags = {plothandles_clalinetags};
+		end;
+		plothandles_clalinetags = unique(plothandles_clalinetags);
 
 		zdim = image_viewer_gui('IMv','command',['IMv' 'getslice'],'fig',fig);
 		for i=1:length(itemstruct_parameters),
@@ -276,7 +284,7 @@ switch lower(command),
 					if ~isfield(colocalization_data.parameters,'roi_set_1'),
 						colocalization_data.parameters.roi_set_1 = getparent(atd,'CLAs',itemstruct_parameters(i).itemname);
 					end
-					roifile = getlabeledroifilename(atd,colocalization_data.parameters.roi_set_1);
+					roifile = getroifilename(atd,colocalization_data.parameters.roi_set_1);
 					ROI = load([roifile],'-mat');
 					ROI.CC.PixelIdxList = ROI.CC.PixelIdxList(rois_to_draw);
 					ROI.CC.NumObjects = length(rois_to_draw);
