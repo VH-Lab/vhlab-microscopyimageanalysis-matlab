@@ -13,9 +13,11 @@ function out = at_roi_resegment(atd, input_itemname, output_itemname, parameters
 % 
 
 if nargin==0,
-	out{1} = {'resegment_algorithm','connectivity','values_outside_roi','use_bwdist','imagename'};
+	out{1} = {'resegment_algorithm','connectivity','values_outside_roi','use_bwdist','imagename','assignborders'};
 	out{2} = {'Algorithm to be used','connectivity (0 for default)', 'use values outside roi? 0/1', ...
-			'use thresholded image instead of raw (0/1)?','Image name to use (leave blank to use default in history' };
+			'use thresholded image instead of raw (0/1)?',...
+			'Image name to use (leave blank to use default in history',...
+			'assign dividing pixels to border ROIs? (0/1)' };
 	out{3} = {'choose_inputdlg'};
 	return;
 end;
@@ -39,6 +41,7 @@ if ischar(parameters),
 			defaultparameters.values_outside_roi = 0;
 			defaultparameters.use_bwdist = 0;
 			defaultparameters.imagename = '';
+			defaultparameters.assignborders= 1;
 			parameters = dlg2struct('Choose parameters', out_p{1}, out_p{2}, defaultparameters);
 			if isempty(parameters),
 				out = [];
@@ -64,6 +67,13 @@ end;
 if ischar(parameters.use_bwdist),
 	parameters.use_bwdist = eval(parameters.use_bwdist);
 end; 
+
+if ~isfield(parameters,'assignborders'),
+	parameters.assign_neighbors_to_roi = 1;
+else,
+	parameters.assign_neighbors_to_roi = parameters.assignborders;
+	parameters = rmfield(parameters,'assignborders');  % use the parameter name of ROI_resegment()
+end;
 
 nvp = struct2namevaluepair(rmfield(parameters,'imagename'));
 
