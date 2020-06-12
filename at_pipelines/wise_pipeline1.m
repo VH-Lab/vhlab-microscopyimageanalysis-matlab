@@ -61,14 +61,17 @@ p.volume_maximum = volume_filter_high;
 Step4_output_roi_name = [ startImageName '_' outname '_wp1_roivf' ];
 at_roi_volumefilter(atd, Step3_output_roi_name, Step4_output_roi_name, p);
 
- % Step 5: Watershed
+ % Step 5: Watershed, with and without assigning borders
 clear p;
 p.resegment_algorithm = 'watershed';
 p.connectivity = 0;
 p.values_outside_roi = 0;
 p.use_bwdist = 0;
 p.imagename = startImageName; % reset to scaled image name
+p.assignborders = 1;
 Step5_output_roi_name = [ startImageName '_' outname '_wp1_roivfres'];
 at_roi_resegment(atd,Step4_output_roi_name, Step5_output_roi_name, p);
-
+p.assignborders = 0;
+Step5_output_roi_name_alt = [ startImageName '_' outname '_wp1_roivfres_noborder'];
+at_roi_resegment(atd,Step4_output_roi_name, Step5_output_roi_name_alt, p);
 
