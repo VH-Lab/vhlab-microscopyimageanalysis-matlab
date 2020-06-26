@@ -85,6 +85,10 @@ end;
  % now you have the colocalization name and your parameters
 
  % Step 1: load the colocalization data and filter
+cfile = getcolocalizationfilename(atd,colocalization_name);
+load(cfile,'colocalization_data','-mat');
+
+ % examine overlaps_ab, overlaps_ba, 
 
 % edit: im_in_file = getimagefilename(atd,parameters.imagename);
 % edit: [dummy,image_raw_filename,ext]=fileparts(im_in_file);
