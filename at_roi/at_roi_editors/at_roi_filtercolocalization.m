@@ -92,7 +92,9 @@ L = labelmatrix(CC);
 newobjects = CC.NumObjects;
 
 elseif include_overlaps == 0,
-[A B] = find(colocalization_data.overlap_thresh == 0);
+[A B] = find(colocalization_data.overlap_thresh);
+comp = [1:CC.NumObjects];
+A = setdiff(comp,A)';
 CC.NumObjects = size(A,1); 
 CC.PixelIdxList = CC.PixelIdxList(A);
 L = labelmatrix(CC);
