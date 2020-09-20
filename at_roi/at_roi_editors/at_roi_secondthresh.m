@@ -14,12 +14,11 @@ function out = at_roi_secondthresh (atd, input_itemname, output_itemname, parame
 % (default 5);
 % parameters.CV_thresh (default 0.01).
 
-
 %% Give users options to input parameters, set defaults if not
 if nargin==0,
 	out{1} = {'secthresh','dist_cardinal','CV_binsize','CV_thresh','imagename'};
-	out{2} = {'Second threshold (ratio of peak height)','Distace to scan for local background (0 for default)', 'Number of pixels considered for coeffvar for local background (0 for default)', ...
-			'Coeffvar threshold for local background (0 for default)',...
+	out{2} = {'Second threshold (ratio of peak height)','Distace to scan for local background (default shown)', 'Number of pixels considered for coeffvar for local background (default shown)', ...
+			'Coeffvar threshold for local background (default shown)',...
 			'Image name to use (leave blank to use default in history'};
 	out{3} = {'choose_inputdlg'};
 	return;
@@ -49,20 +48,20 @@ if ischar(parameters),
 			if isempty(parameters),
 				out = [];
 			else,
-				out = at_roi_resegment(atd,input_itemname,output_itemname,parameters);
+				out = at_roi_secondthresh(atd,input_itemname,output_itemname,parameters);
 			end
 	end; % switch
 	return;
 end;
 
 %% Load or generate local background values & peak values
-ROIname = getlabeledroifilename(atd,input_itemname);
+ROIname = getroifilename(atd,input_itemname);
 foldername = fileparts(ROIname);
 if exist([foldername filesep input_itemname '_roiintparam.mat']) == 2    
     load([foldername filesep input_itemname '_roiintparam.mat'])
 else
 disp(['Cannot find local background value, recalculating with default settings!'])
-[local_bg,highest_pixel] = at_roi_locbacgr(atd,ROIname);
+[local_bg,highest_pixel] = at_roi_locbacgr(atd,ROIname,parameters);
 end
 
 %% Load the ROIs in the set (both L and CC files from ATGUI code)
@@ -74,7 +73,7 @@ oldobjects = CC.NumObjects;
 
 %% Load the original image
 if isempty(parameters.imagename), % choose it 
-    [dummy,im_fname] = at_roi_underlying_image(atd,itemname);
+    [dummy,im_fname] = at_roi_underlying_image(atd,input_itemname);
     parameters.imagename = im_fname;
 end
 
