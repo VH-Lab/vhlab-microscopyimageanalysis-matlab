@@ -61,10 +61,12 @@ end;
 %% Load or generate local background values & peak values
 ROIname = getroifilename(atd,input_itemname);
 foldername = fileparts(ROIname);
-if exist([foldername filesep input_itemname '_roiintparam.mat']) == 2    
-    load([foldername filesep input_itemname '_roiintparsam.mat'])
+if exist([foldername filesep input_itemname '_ROI_roiintparam.mat']) == 2    
+   load([foldername filesep input_itemname '_ROI_roiintparam.mat'])
+   local_bg = ROIintparam.local_bg; highest_int = ROIintparam.highest_int;
+disp(['Found local background value, loaded in!'])
 else
-disp(['Cannot find local background value, recalculating with default settings!'])
+disp(['Cannot find local background value, recalculating with provided settings!'])
 [local_bg,highest_pixel] = at_roi_locbacgr(atd,ROIname,parameters);
 end
 

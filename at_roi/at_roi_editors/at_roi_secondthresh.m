@@ -60,11 +60,12 @@ end;
 ROIname = getroifilename(atd,input_itemname);
 foldername = fileparts(ROIname);
 if exist([foldername filesep input_itemname '_ROI_roiintparam.mat']) == 2    
-   load([foldername filesep input_itemname '_ROI_roiintparam.mat'])
-   local_bg = ROIintparam.local_bg; highest_int = ROIintparam.highest_int;
+    load([foldername filesep input_itemname '_ROI_roiintparam.mat'])
+    local_bg = ROIintparam.local_bg; highest_int = ROIintparam.highest_int;
+    disp(['Found local background value, loaded in!'])
 else
-disp(['Cannot find local background value, recalculating with default settings!'])
-[local_bg,highest_pixel] = at_roi_locbacgr(atd,ROIname,parameters);
+    disp(['Cannot find local background value, recalculating with provided! settings!'])
+    [local_bg,highest_pixel] = at_roi_locbacgr(atd,ROIname,parameters);
 end
 
 %% Load the ROIs in the set (both L and CC files from ATGUI code)
@@ -85,9 +86,8 @@ end
 %% Change ROI format from indexes to y x z (ind2sub)
 [puncta_info] = at_puncta_info(img_stack,CC);
 
-for punctum = 1: size(puncta_info,1),
-    
 %% Find the location, intensity, and frame of the peak pixel
+for punctum = 1: size(puncta_info,1),
 intensities = cell2mat(puncta_info(punctum,3));
 pixel_locs = cell2mat(puncta_info(punctum,2));
 [highest_pixel(punctum) brightest_pixel_loc] = max(intensities);
@@ -100,6 +100,10 @@ new_puncta_info{punctum,1} = punctum; %puncta number
 new_puncta_info{punctum,2} = loc_abv; %locations, note this is [y x z]
 new_puncta_info{punctum,3} = int_abv; %intensities
 end
+
+%% Delete emtpy cells if necessary
+real_cells = find(~cellfun(@isempty,new_puncta_info(:,3)));
+new_puncta_info = new_puncta_info(real_cells,:);
 
 %% Restore ROI format from y x z to indexes (sub2ind) & reconstruct CC file
 sz_matrix = [size(img_stack,1) size(img_stack,2) size(img_stack,3)];
@@ -134,7 +138,6 @@ h(end+1) = struct('parent',input_itemname,'operation','at_roi_resegment','parame
 sethistory(atd,'ROIs',output_itemname,h);
 
 str2text([getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
-keyboard
 at_roi_parameters(atd,roi_out_file);
 
 out = 1;
