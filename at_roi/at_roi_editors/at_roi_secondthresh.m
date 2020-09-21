@@ -55,10 +55,13 @@ if ischar(parameters),
 end;
 
 %% Load or generate local background values & peak values
+% will gather these from the input image - they won't be saved in the new ROI
+% folder
 ROIname = getroifilename(atd,input_itemname);
 foldername = fileparts(ROIname);
-if exist([foldername filesep input_itemname '_roiintparam.mat']) == 2    
-    load([foldername filesep input_itemname '_roiintparam.mat'])
+if exist([foldername filesep input_itemname '_ROI_roiintparam.mat']) == 2    
+   load([foldername filesep input_itemname '_ROI_roiintparam.mat'])
+   local_bg = ROIintparam.local_bg; highest_int = ROIintparam.highest_int;
 else
 disp(['Cannot find local background value, recalculating with default settings!'])
 [local_bg,highest_pixel] = at_roi_locbacgr(atd,ROIname,parameters);
@@ -131,7 +134,7 @@ h(end+1) = struct('parent',input_itemname,'operation','at_roi_resegment','parame
 sethistory(atd,'ROIs',output_itemname,h);
 
 str2text([getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
-
+keyboard
 at_roi_parameters(atd,roi_out_file);
 
 out = 1;
