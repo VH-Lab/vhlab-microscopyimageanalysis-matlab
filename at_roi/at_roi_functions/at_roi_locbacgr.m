@@ -55,6 +55,7 @@ pixel_locs = cell2mat(puncta_info(punctum,2));
 highest_zframe(punctum) = pixel_locs(brightest_pixel_loc,3);
 peak_loc = pixel_locs(brightest_pixel_loc,:);
 
+if punctum > 1, clear lines; end
 % Now draw lines out from the peak, find local background in each direction
 % NOTE: peak_loc is set up so it's [y x z], and +y = down, +x = right
 %% NORTH
@@ -67,6 +68,10 @@ else %1000x1000, if we're too close to get 50, we'll get what we can
         lines.northline(pix) = img_stack(peak_loc(1,1)-pix,peak_loc(1,2),peak_loc(1,3));
     end
 end
+
+if exist('linetest'), clear linetest; end
+try linetest = lines.northline; end
+if exist('linetest'),
 for scan = 1:size(lines.northline,2)-binsi % get coeff of variation for each pixel, with w/ next 5
     scandata =  lines.northline(scan:scan+(binsi-1));
     coeffvar(scan) = std(scandata)/mean(scandata);
@@ -86,6 +91,9 @@ if exist('start_bg') == 1 & size(lines.northline,2) > binsi,% if the coeffvar wa
 else % if it never reaches a static, then just return an empty
     north_bg = [];
 end
+else
+    north_bg = [];
+end
 
 %% SOUTH
 if peak_loc(1,1) < size(img_stack,2) - (parameters.dist_cardinal + 1) %1000x1000, and we're drawing 50 pixels out
@@ -97,6 +105,9 @@ else %1000x1000, if we're too close to get 50, we'll get what we can
         lines.southline(pix) = img_stack(peak_loc(1,1)+pix,peak_loc(1,2),peak_loc(1,3));
     end
 end
+if exist('linetest'), clear linetest; end
+try linetest = lines.southline; end
+if exist('linetest'),
 for scan = 1:size(lines.southline,2)-binsi % get coeff of variation for each pixel, with w/ next 5
     scandata =  lines.southline(scan:scan+(binsi-1));
     coeffvar(scan) = std(scandata)/mean(scandata);
@@ -114,6 +125,9 @@ if exist('start_bg') == 1 & size(lines.southline,2) > binsi,% if the coeffvar wa
 else % if it never reaches a static, then just return an empty
     south_bg = [];
 end
+else
+    south_bg = [];
+end
 
 %% EAST
 if peak_loc(1,2) < size(img_stack,1) - (parameters.dist_cardinal + 1) %1000x1000, and we're drawing 50 pixels out
@@ -125,6 +139,9 @@ else %1000x1000, if we're too close to get 50, we'll get what we can
         lines.eastline(pix) = img_stack(peak_loc(1,1),peak_loc(1,2)+pix,peak_loc(1,3));
     end
 end
+if exist('linetest'), clear linetest; end
+try linetest = lines.eastline; end
+if exist('linetest'),
 for scan = 1:size(lines.eastline,2)-binsi % get coeff of variation for each pixel, with w/ next 5
     scandata =  lines.eastline(scan:scan+(binsi-1));
     coeffvar(scan) = std(scandata)/mean(scandata);
@@ -142,6 +159,9 @@ if exist('start_bg') == 1 & size(lines.eastline,2) > binsi, % if the coeffvar wa
 else % if it never reaches a static, then just return an empty
     east_bg = [];
 end
+else
+    east_bg = [];
+end
 
 %% WEST
 if peak_loc(1,2) > parameters.dist_cardinal + 1 %1000x1000, and we're drawing 50 pixels out
@@ -153,6 +173,9 @@ else %1000x1000, if we're too close to get 50, we'll get what we can
         lines.westline(pix) = img_stack(peak_loc(1,1),peak_loc(1,2)-pix,peak_loc(1,3));
     end
 end
+if exist('linetest'), clear linetest; end
+try linetest = lines.westline; end
+if exist('linetest'),
 for scan = 1:size(lines.westline,2)-binsi % get coeff of variation for each pixel, with w/ next 5
     scandata =  lines.westline(scan:scan+(binsi-1));
     coeffvar(scan) = std(scandata)/mean(scandata);
@@ -170,8 +193,15 @@ if exist('start_bg') == 1 & size(lines.westline,2) > binsi,% if the coeffvar was
 else % if it never reaches a static, then just return an empty
     west_bg = [];
 end
+else
+    west_bg = [];
+end
+try
+    local_bg(punctum) = mean([north_bg,south_bg,east_bg,west_bg]);
+catch
+    disp(['Unable to find local background for punctum #' num2str(punctum)])
+end
 
-local_bg(punctum) = mean([north_bg,south_bg,east_bg,west_bg]);
 
 %% Plot summary of local background
 % PLOT SPECIFIC RESULTS FOR ONE PUNCTUM
