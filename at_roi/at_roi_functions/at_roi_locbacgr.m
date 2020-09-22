@@ -202,32 +202,8 @@ catch
     disp(['Unable to find local background for punctum #' num2str(punctum)])
 end
 
-
-%% Plot summary of local background
-% PLOT SPECIFIC RESULTS FOR ONE PUNCTUM
-figure('Name',['Cardinal lines from peak and local BG for punctum #' num2str(punctum)])
-hold on
-plot(lines.northline,'k')
-plot(lines.southline,'b')
-plot(lines.eastline,'r')
-plot(lines.westline,'g')
-% plot([1 50],[local_bg(punctum) local_bg(punctum)],'m-') %derived background as a line
-ylabel('Intensity')
-xlabel('Distance from peak (pixels)')
-legend('North','South','East','West')
-close(gcf)
-
-pct =  round(punctum/size(puncta_info,1)*100);
-waitbar(pct/100,h,sprintf('%d%% finished calculating local background!',pct))
 end % end of calculating local background for each punctum
 close(h)
-
-%% Plot general results for all puncta
-figure('Name','Local background for each punctum')
-plot(local_bg,'ko')
-ylabel('Intensity')
-xlabel('Punctum Identifier #')
-close(gcf)
 
 %% Save file
 ROIintparam.local_bg = local_bg;
