@@ -86,7 +86,7 @@ if exist('start_bg') == 1 & size(lines.northline,2) > binsi,% if the coeffvar wa
     if size(lines.northline,2) >= (start_bg+(binsi-1)),
     north_bg = mean(lines.northline(start_bg:start_bg+(binsi-1)));
     else
-    north_bg = lines.northline(start_bg);
+    north_bg = [];
     end 
 else % if it never reaches a static, then just return an empty
     north_bg = [];
@@ -120,7 +120,7 @@ if exist('start_bg') == 1 & size(lines.southline,2) > binsi,% if the coeffvar wa
     if size(lines.southline,2) >= (start_bg+(binsi-1)),
     south_bg = mean(lines.southline(start_bg:start_bg+(binsi-1)));
     else
-    south_bg = lines.southline(start_bg);
+    south_bg = [];
     end 
 else % if it never reaches a static, then just return an empty
     south_bg = [];
@@ -154,7 +154,7 @@ if exist('start_bg') == 1 & size(lines.eastline,2) > binsi, % if the coeffvar wa
     if size(lines.eastline,2) >= (start_bg+(binsi-1)),
     east_bg = mean(lines.eastline(start_bg:start_bg+(binsi-1)));
     else
-    east_bg = lines.eastline(start_bg);
+    east_bg = [];
     end
 else % if it never reaches a static, then just return an empty
     east_bg = [];
@@ -188,7 +188,7 @@ if exist('start_bg') == 1 & size(lines.westline,2) > binsi,% if the coeffvar was
     if size(lines.westline,2) >= (start_bg+(binsi-1)),
     west_bg = mean(lines.westline(start_bg:start_bg+(binsi-1)));
     else
-    west_bg = lines.westline(start_bg);
+    west_bg = [];
     end
 else % if it never reaches a static, then just return an empty
     west_bg = [];

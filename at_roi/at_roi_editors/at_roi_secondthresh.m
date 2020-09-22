@@ -94,10 +94,19 @@ pixel_locs = cell2mat(puncta_info(punctum,2));
 highest_zframe(punctum) = pixel_locs(brightest_pixel_loc,3);
 
 %% Narrow our selections to the second threshold
-int_abv = find(intensities >=  local_bg(punctum) + ((1 - parameters.secthresh) * (highest_pixel(punctum) - local_bg(punctum))));
-loc_abv = pixel_locs(int_abv,:);
+which_zframes = unique(pixel_locs(:,3));
+loc_abv = [];
+for frame = which_zframes(1):which_zframes(end),
+    locs_this_frame = find(pixel_locs(:,3) == frame);
+    int_this_frame = intensities(locs_this_frame);
+    max_this_frame = max(int_this_frame);
+    loc_add = locs_this_frame(find(intensities(locs_this_frame) >=  local_bg(punctum) + ((1 - parameters.secthresh) * (max_this_frame - local_bg(punctum)))));
+    loc_abv = [loc_abv,loc_add'];
+end
+int_abv = intensities(loc_abv)';
+
 new_puncta_info{punctum,1} = punctum; %puncta number
-new_puncta_info{punctum,2} = loc_abv; %locations, note this is [y x z]
+new_puncta_info{punctum,2} = pixel_locs(loc_abv,:); %locations, note this is [y x z]
 new_puncta_info{punctum,3} = int_abv; %intensities
 end
 
