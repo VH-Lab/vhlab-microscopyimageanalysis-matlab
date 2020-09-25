@@ -64,7 +64,7 @@ if exist([foldername filesep input_itemname '_ROI_roiintparam.mat']) == 2
     local_bg = ROIintparam.local_bg; highest_int = ROIintparam.highest_int;
     disp(['Found local background value, loaded in!'])
 else
-    disp(['Cannot find local background value, recalculating with provided! settings!'])
+    disp(['Cannot find local background value, recalculating with provided settings!'])
     [local_bg,highest_pixel] = at_roi_locbacgr(atd,ROIname,parameters);
 end
 
