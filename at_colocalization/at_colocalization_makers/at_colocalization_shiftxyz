@@ -36,7 +36,7 @@ if ischar(parameters),
 			out_p = at_colocalization_shiftxyz;
 			default_parameters.shiftsX= -2:2;
 			default_parameters.shiftsY= -2:2;
-			default_parameters.shiftsZ= -2:2;
+			default_parameters.shiftsZ=  0;
 			default_parameters.threshold = 0.33;
 			default_parameters.roi_set_2 = '';
 			parameters = dlg2struct('Choose parameters',out_p{1},out_p{2},default_parameters);
