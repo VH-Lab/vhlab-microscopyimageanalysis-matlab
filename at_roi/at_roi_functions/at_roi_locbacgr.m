@@ -71,10 +71,13 @@ end
 
 if exist('linetest'), clear linetest; end
 try linetest = lines.northline; end
-if exist('linetest'),
+if exist('linetest')
 for scan = 1:size(lines.northline,2)-binsi % get coeff of variation for each pixel, with w/ next 5
     scandata =  lines.northline(scan:scan+(binsi-1));
     coeffvar(scan) = std(scandata)/mean(scandata);
+end
+if exist('coeffvar') == 0
+    coeffvar = [];
 end
 % CHECK
 % figure
@@ -112,6 +115,9 @@ for scan = 1:size(lines.southline,2)-binsi % get coeff of variation for each pix
     scandata =  lines.southline(scan:scan+(binsi-1));
     coeffvar(scan) = std(scandata)/mean(scandata);
 end
+if exist('coeffvar') == 0
+    coeffvar = [];
+end
 % CHECK
 % figure
 % plot(coeffvar)
@@ -146,6 +152,9 @@ for scan = 1:size(lines.eastline,2)-binsi % get coeff of variation for each pixe
     scandata =  lines.eastline(scan:scan+(binsi-1));
     coeffvar(scan) = std(scandata)/mean(scandata);
 end
+if exist('coeffvar') == 0
+    coeffvar = [];
+end
 % CHECK
 % figure
 % plot(coeffvar)
@@ -179,6 +188,9 @@ if exist('linetest'),
 for scan = 1:size(lines.westline,2)-binsi % get coeff of variation for each pixel, with w/ next 5
     scandata =  lines.westline(scan:scan+(binsi-1));
     coeffvar(scan) = std(scandata)/mean(scandata);
+end
+if exist('coeffvar') == 0
+    coeffvar = [];
 end
 % CHECK
 % figure

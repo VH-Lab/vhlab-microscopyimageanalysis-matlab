@@ -77,5 +77,6 @@ ROIparameters.params2d = params2d;
 
 roipfilename = fullfile(filepath,[fname '_roiparameters.mat']);
 
+beep
 save(roipfilename, 'ROIparameters');
 
