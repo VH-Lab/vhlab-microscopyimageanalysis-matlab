@@ -16,9 +16,8 @@ function out = at_roi_secondthresh (atd, input_itemname, output_itemname, parame
 
 %% Give users options to input parameters, set defaults if not
 if nargin==0,
-	out{1} = {'secthresh','dist_cardinal','CV_binsize','CV_thresh','imagename'};
+	out{1} = {'secthresh','dist_cardinal','CV_binsize','imagename'};
 	out{2} = {'Second threshold (ratio of peak height)','Distace to scan for local background (default shown)', 'Number of pixels considered for coeffvar for local background (default shown)', ...
-			'Coeffvar threshold for local background (default shown)',...
 			'Image name to use (leave blank to use default in history'};
 	out{3} = {'choose_inputdlg'};
 	return;
@@ -42,7 +41,6 @@ if ischar(parameters),
 			defaultparameters.secthresh = 0.20;
 			defaultparameters.dist_cardinal = 50;
 			defaultparameters.CV_binsize = 5;
-			defaultparameters.CV_thresh = 0.01;
 			defaultparameters.imagename = '';
 			parameters = dlg2struct('Choose parameters', out_p{1}, out_p{2}, defaultparameters);
 			if isempty(parameters),
@@ -90,8 +88,6 @@ end
 for punctum = 1: size(puncta_info,1),
 intensities = cell2mat(puncta_info(punctum,3));
 pixel_locs = cell2mat(puncta_info(punctum,2));
-[highest_pixel(punctum) brightest_pixel_loc] = max(intensities);
-highest_zframe(punctum) = pixel_locs(brightest_pixel_loc,3);
 
 %% Narrow our selections to the second threshold
 which_zframes = unique(pixel_locs(:,3));

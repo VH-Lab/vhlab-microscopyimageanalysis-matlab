@@ -21,9 +21,8 @@ function out = at_roi_prominencyfilter (atd, input_itemname, output_itemname, pa
 
 %% Give users options to input parameters, set defaults if not
 if nargin==0,
-	out{1} = {'prom_thresh','dist_cardinal','CV_binsize','CV_thresh','imagename'};
+	out{1} = {'prom_thresh','dist_cardinal','CV_binsize','imagename'};
 	out{2} = {'Reject puncta if their peak is less than this value higher than local background','Distace to scan for local background (default shown)', 'Number of pixels considered for coeffvar for local background (default shown)', ...
-			'Coeffvar threshold for local background (default shown)',...
 			'Image name to use (leave blank to use default in history'};
 	out{3} = {'choose_inputdlg'};
 	return;
@@ -46,7 +45,6 @@ if ischar(parameters),
 			defaultparameters.prom_thresh = 100;
 			defaultparameters.dist_cardinal = 50;
 			defaultparameters.CV_binsize = 5;
-			defaultparameters.CV_thresh = 0.01;
 			defaultparameters.imagename = '';
 			parameters = dlg2struct('Choose parameters', out_p{1}, out_p{2}, defaultparameters);
 			if isempty(parameters),
@@ -63,7 +61,7 @@ ROIname = getroifilename(atd,input_itemname);
 foldername = fileparts(ROIname);
 if exist([foldername filesep input_itemname '_ROI_roiintparam.mat']) == 2    
    load([foldername filesep input_itemname '_ROI_roiintparam.mat'])
-   local_bg = ROIintparam.local_bg; highest_int = ROIintparam.highest_int;
+   local_bg = ROIintparam.local_bg; highest_pixel = ROIintparam.highest_int;
 disp(['Found local background value, loaded in!'])
 else
 disp(['Cannot find local background value, recalculating with provided settings!'])
