@@ -116,37 +116,21 @@ end
 
 %% Remove any ROIs with lower prominence than chosen threshold
 prominence = highest_pixel-local_bg;
-abv_prom_thresh = find(prominence >= parameters.prom_thresh);
-new_idx_list = CC.PixelIdxList(1,abv_prom_thresh)
-
-NewCC.Connectivity = CC.Connectivity;
-NewCC.ImageSize = CC.ImageSize;
-NewCC.NumObjects = size(new_idx_list,2);
-NewCC.PixelIdxList = new_idx_list;
-CC = NewCC;
-L = labelmatrix(CC);
+good_indexes = find(prominence >= parameters.prom_thresh);
 
 %% Save the new CC, L and parameter files
-newobjects = CC.NumObjects;
-
-L_out_file = [getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_L' '.mat'];
-roi_out_file = [getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_ROI' '.mat'];
+newobjects = size(good_indexes,2);
 
 try,
 	mkdir([getpathname(atd) filesep 'ROIs' filesep output_itemname]);
 end;
-
-save(roi_out_file,'CC','-mat');
-save(L_out_file,'L','-mat');
 
 h = gethistory(atd,'ROIs',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','at_roi_resegment','parameters',parameters,...
 	'description',['ROIs were pared down from ' int2str(oldobjects) ' to ' int2str(newobjects) ', rejecting non-prominent members from ' input_itemname '.']);
 sethistory(atd,'ROIs',output_itemname,h);
 
-str2text([getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
-
-at_roi_parameters(atd,roi_out_file);
+at_roi_savesubset(atd,input_itemname, good_indexes, output_itemname, h);
 
 out = 1;
 end
