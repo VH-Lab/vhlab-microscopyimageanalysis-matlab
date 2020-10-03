@@ -22,7 +22,7 @@ function out = at_roi_prominencyfilter (atd, input_itemname, output_itemname, pa
 %% Give users options to input parameters, set defaults if not
 if nargin==0,
 	out{1} = {'prom_thresh','dist_cardinal','CV_binsize','imagename'};
-	out{2} = {'Reject puncta if their peak is less than this value higher than local background','Distace to scan for local background (default shown)', 'Number of pixels considered for coeffvar for local background (default shown)', ...
+	out{2} = {'Reject puncta if their peak is less than this value higher than local background (0 to calculate best guess)','Distace to scan for local background (default shown)', 'Number of pixels considered for coeffvar for local background (default shown)', ...
 			'Image name to use (leave blank to use default in history'};
 	out{3} = {'choose_inputdlg'};
 	return;
@@ -42,7 +42,7 @@ if ischar(parameters),
 			end;
 		case 'choose_inputdlg',
 			out_p = at_roi_prominencyfilter;
-			defaultparameters.prom_thresh = 100;
+			defaultparameters.prom_thresh = 0;
 			defaultparameters.dist_cardinal = 50;
 			defaultparameters.CV_binsize = 5;
 			defaultparameters.imagename = '';
@@ -86,6 +86,34 @@ end
 %% Change ROI format from indexes to y x z (ind2sub)
 [puncta_info] = at_puncta_info(img_stack,CC);
 
+%% Calculate Best Guess for Prominency Filter (if not disabled in settings)
+if parameters.prom_thresh == 0,
+data_2D = img_stack(:,:,1); data = data_2D(:)';
+figure
+g = oghist(data,[min(data)-0.1 : 10 : max(data)],'Visible','off'); % better bins?
+xBinEdge = g.BinEdges;
+for i = 1:(size(xBinEdge,2)-1)
+    xdata(i) = (xBinEdge(i)+xBinEdge(i+1))/2;
+end
+ydata = g.BinCounts;
+
+realydata = find(ydata ~= 0);
+ydata = ydata(realydata);
+xdata = xdata(realydata);
+
+[thisfit,gof2] = fit(xdata',ydata','gauss1');
+fit_ydata = thisfit(xdata);
+
+[hm_val,hm_loc] = max(fit_ydata); 
+hist_max =  xdata(hm_loc);
+hh = hm_val/2;
+th_hi= xdata(hm_loc+find(ydata(hm_loc:end)<hh,1));
+th_lo = xdata(find(ydata(1:hm_loc)>hh,1));
+whh = th_hi-th_lo;
+parameters.prom_thresh = whh;
+close(gcf)
+end
+
 %% Remove any ROIs with lower prominence than chosen threshold
 prominence = highest_pixel-local_bg;
 abv_prom_thresh = find(prominence >= parameters.prom_thresh);
@@ -93,7 +121,7 @@ new_idx_list = CC.PixelIdxList(1,abv_prom_thresh)
 
 NewCC.Connectivity = CC.Connectivity;
 NewCC.ImageSize = CC.ImageSize;
-NewCC.NumObjects = size(new_idx_list,2)
+NewCC.NumObjects = size(new_idx_list,2);
 NewCC.PixelIdxList = new_idx_list;
 CC = NewCC;
 L = labelmatrix(CC);
