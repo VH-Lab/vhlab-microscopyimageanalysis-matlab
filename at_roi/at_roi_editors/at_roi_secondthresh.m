@@ -98,8 +98,9 @@ end
 for frame = which_zframes(1):which_zframes(end),
     locs_this_frame = find(pixel_locs(:,3) == frame);
     int_this_frame = intensities(locs_this_frame);
-    max_this_frame = max(int_this_frame);
+    max_this_frame = max(int_this_frame); % can use max per frame, but in retrospect I think this is unwise
     loc_add = locs_this_frame(find(intensities(locs_this_frame) >=  local_bg(punctum) + ((1 - parameters.secthresh) * (max_this_frame - local_bg(punctum)))));
+%     loc_add = locs_this_frame(find(intensities(locs_this_frame) >=  local_bg(punctum) + ((1 - parameters.secthresh) * (highest_pixel(punctum) - local_bg(punctum)))));
     loc_abv = [loc_abv,loc_add'];
 end
 int_abv = intensities(loc_abv)';

@@ -208,7 +208,7 @@ end
 
 %% COMBINE LINES
 try
-    local_bg(punctum) = mean([north_bg,south_bg,east_bg,west_bg]);
+    local_bg(punctum) = min([north_bg,south_bg,east_bg,west_bg]);
 catch
     disp(['Unable to find local background for punctum #' num2str(punctum)])
 end
