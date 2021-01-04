@@ -92,9 +92,15 @@ pixel_locs = cell2mat(puncta_info(punctum,2));
 %% Narrow our selections to the second threshold
 which_zframes = unique(pixel_locs(:,3));
 loc_abv = [];
+
+if size(local_bg,2) < size(puncta_info,1)
+    local_bg(size(local_bg,2)+1:size(puncta_info,1)) = 0;
+end
+
 if isnan(local_bg(punctum)),
     local_bg(punctum) = 1000;
 end
+
 for frame = which_zframes(1):which_zframes(end),
     locs_this_frame = find(pixel_locs(:,3) == frame);
     int_this_frame = intensities(locs_this_frame);
