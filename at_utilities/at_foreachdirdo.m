@@ -14,11 +14,11 @@ function at_foreachdirdo(dirlist, script2call)
 
 for i=1:numel(dirlist),
 	atd = atdir(dirlist{i});
-	disp(['>>> Working on directory ' int2str(i) ' of ' intstr(numel(dirlist)) '...']);
+	disp(['>>> Working on directory ' int2str(i) ' of ' int2str(numel(dirlist)) '...']);
 	if ~isempty(script2call),
 		eval(script2call);
 	end;
-	disp(['>>> Finished directory ' int2str(i) ' of ' intstr(numel(dirlist)) '...']);
+	disp(['>>> Finished directory ' int2str(i) ' of ' int2str(numel(dirlist)) '...']);
 end;
 
 
