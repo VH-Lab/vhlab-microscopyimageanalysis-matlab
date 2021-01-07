@@ -1,7 +1,7 @@
 function [parameters] = vh_pipepiece1(atd, startImageName, outname, varargin)
-% WISE_PIPELINE1 - Derek Wise pipeline 1 / Nelson lab - Van Hooser lab
+% VH_PIPEPIECE1 - Steve's first pipeline piece / Nelson lab - Van Hooser lab
 %
-% WISE_PIPELINE1(ATD, STARTIMAGENAME, OUTNAME, ...)
+% VH_PIPELINE1(ATD, STARTIMAGENAME, OUTNAME, ...)
 % 
 % Runs a sub pipeline (VH version 1) pipeline on an image with STARTIMAGENAME in the
 % AT_DIR object ATD.
@@ -14,7 +14,6 @@ function [parameters] = vh_pipepiece1(atd, startImageName, outname, varargin)
 % Step 4: Volume filter (use 0, Inf to do nothing)
 %
 %  The output will be named [outname '_*'].
-%
 % 
 % Several parameters can be altered by name/value pairs (see help NAMEVALUEPAIR).
 % Parameter (default)       | Description
@@ -23,7 +22,8 @@ function [parameters] = vh_pipepiece1(atd, startImageName, outname, varargin)
 % connectivity (26)         | Connectivity for ROIs
 % volume_filter_low (0)     | Low setting for volume filter
 % volume_filter_high (Inf)  | High setting for volume filter
-% 
+% delete_old_output (1)     | Delete any old output before we start
+%                           |  (uses AT_CLEAN_PIPELINE)
 %
 % Example:
 %    atd = at_dir([MYEXPERIMENTPATH]);
@@ -31,22 +31,29 @@ function [parameters] = vh_pipepiece1(atd, startImageName, outname, varargin)
 %
 
 
+
+
 plotthresholdestimate = 0;
 volume_filter_low = 1;
 volume_filter_high = Inf;
 connectivity = 26;
+delete_old_output = 1;
 
 assign(varargin{:});
 
 parameters = workspace2struct;
 
-disp(['Working on new directory: ' ])
+disp(['Working on new directory: ' getpathname(atd)])
 
-atd,
+if delete_old_output,
+	disp(['Cleaning pipeline as requested (deleting previous pipeline items): ' outname '.']);
+	at_clean_pipeline(atd,outname);
+end;
 
 Step0_output_image_name = startImageName;
-im_in_file = getimagefilename(atd,Step0_output_image_name);
-if isempty(im_in_file),
+try,
+	im = at_readimage(atd,Step0_output_image_name);
+catch,
 	disp(['No image ' Step0_output_image_name ' found, skipping...']);
 	return;
 end;
@@ -57,12 +64,6 @@ end;
  % Step 1: threshold
 disp(['Step 1: threshold']);
    % first, estimate thresholds
-input_finfo = imfinfo(im_in_file);
-im = [];
-for i=1:numel(input_finfo),
-	im_here = imread(im_in_file,'index',i,'info',input_finfo);
-	im = cat(3,im,im_here);
-end;
 [th,out] = at_estimatethresholds(double(im),'plotit',plotthresholdestimate);
 
  % Step 1b, actually apply the threshold

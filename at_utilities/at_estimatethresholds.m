@@ -50,7 +50,17 @@ vlt.data.assign(varargin{:});
 t = [];
 out = [];
 
-[out.counts,out.bin_centers, out.bin_edges] = autohistogram(im(:));
+im = double(im); % in case it is not already
+
+MX = max(im(:));
+
+out.bin_edges = [-0.5:1:MX+0.5];
+out.bin_centers = 0.5+out.bin_edges;
+out.counts = histc(im(:),out.bin_edges);
+out.counts = out.counts(:)';
+
+  % don't do it this way anymore; produces sub pixel bins that have 0 entries
+  % [out.counts,out.bin_centers, out.bin_edges] = autohistogram(im(:));
 
 noiseCutOff = prctile(im(:),noisePrctile);
 
@@ -94,7 +104,7 @@ if plotit,
 	end;
 
 	subplot(2,1,1);
-	bar(out.bin_centers, out.counts);
+	bar(out.bin_centers, out.counts,1);
 	hold on;
 	plot(out.bin_centers,out.noise_fit,'r','linewidth',2);
 	box off;
