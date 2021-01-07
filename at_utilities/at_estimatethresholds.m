@@ -36,6 +36,7 @@ function [t, out] = at_estimatethresholds(im, varargin)
 %                                |   Values below this percentile will be considered noise.
 % plotit (0)                     | 0/1 Should we plot our model and histograms?
 % plotinnewfigure (1)            | 0/1 If we plot, should we do it in a new figure?
+% medfilterwindow (10)            | Window for median filter (1 for none)
 %
 %
 % See also: vlt.fit.skewgauss
@@ -44,6 +45,7 @@ function [t, out] = at_estimatethresholds(im, varargin)
 noisePrctile = 75;
 plotit = 0;
 plotinnewfigure = 1;
+medfilterwindow = 10;
 
 vlt.data.assign(varargin{:});
  
@@ -80,6 +82,9 @@ valid_pts = ~isinf(percent_signal_to_noise) & ~isnan(percent_signal_to_noise);
 percent_signal_to_noise = percent_signal_to_noise(valid_pts);
 valid_bin_centers = out.bin_centers(valid_pts);
 
+percent_signal_to_noise_orig = percent_signal_to_noise;
+percent_signal_to_noise = medfilt1(percent_signal_to_noise,medfilterwindow);
+
 signal_95 = 1+find(percent_signal_to_noise(1:end-1)<95&percent_signal_to_noise(2:end)>=95);
 signal_80 = 1+find(percent_signal_to_noise(1:end-1)<80 & percent_signal_to_noise(2:end)>=80);
 signal_30 = 1+find(percent_signal_to_noise(1:end-1)<30 & percent_signal_to_noise(2:end)>=30);
@@ -88,6 +93,7 @@ signal_30 = 1+find(percent_signal_to_noise(1:end-1)<30 & percent_signal_to_noise
 signal_95 = signal_95(end);
 signal_80 = signal_80(end); % the last time it happens and doesn't drop below
 signal_30 = signal_30(end);
+
 
 out.signal_y = [30 80 95]';
 out.signal_x = [valid_bin_centers([signal_30 signal_80 signal_95])]';
@@ -98,27 +104,63 @@ warning(w);
 out.detection_quality = 0:95;
 out.threshold_signal_to_noise = offset + slope * out.detection_quality;
 
+threshold_locs = [81 31];
+
+t = out.threshold_signal_to_noise(threshold_locs);
+
 if plotit,
 	if plotinnewfigure, 
 		figure;
 	end;
 
-	subplot(2,1,1);
-	bar(out.bin_centers, out.counts,1);
-	hold on;
-	plot(out.bin_centers,out.noise_fit,'r','linewidth',2);
-	box off;
-	ylabel('Counts');
-	xlabel('Brightness bins');
+	if 0,
+		subplot(2,1,1);
+		bar(out.bin_centers, out.counts,1);
+		hold on;
+		plot(out.bin_centers,out.noise_fit,'r','linewidth',2);
+		box off;
+		ylabel('Counts');
+		xlabel('Brightness bins');
 
-	subplot(2,1,2);
-	plot(valid_bin_centers,percent_signal_to_noise);
-	hold on;
-	plot(valid_bin_centers([signal_30 signal_80 signal_95]),[30 80 95],'ko');
-	plot(out.threshold_signal_to_noise, out.detection_quality, 'k-');
-	box off;
-	ylabel('Signal better than noise likelihood (%)');
-	xlabel('Brightness bins');
+		subplot(2,1,2);
+		plot(valid_bin_centers,percent_signal_to_noise);
+		hold on;
+		plot(valid_bin_centers([signal_30 signal_80 signal_95]),[30 80 95],'ko');
+		plot(out.threshold_signal_to_noise, out.detection_quality, 'k-');
+		box off;
+		ylabel('Signal better than noise likelihood (%)');
+		xlabel('Brightness bins');
+	end;
+
+	if 1,
+		yyaxis left
+		bar(out.bin_centers,out.counts,1);
+		hold on;
+		plot(out.bin_centers,out.noise_fit,'g-','linewidth',2);
+		set(gca,'ylim',[0 max(out.counts(:))]);
+		ylabel('Counts');
+
+		yyaxis right
+		plot(valid_bin_centers,percent_signal_to_noise_orig,'r');
+		hold on;
+		plot(valid_bin_centers,percent_signal_to_noise,'m');
+		plot(valid_bin_centers([signal_30 signal_80 signal_95]),[30 80 95],'ko');
+		plot(out.threshold_signal_to_noise, out.detection_quality, 'k-','linewidth',1);
+
+		for i=1:numel(threshold_locs),
+			plot(out.threshold_signal_to_noise(threshold_locs(i))*[1 1],[0 100],'k--');
+		end;
+
+		ylabel('Signal : noise likelihood (%)');
+		xlabel('Brightness bins');
+		box off;
+
+		ind = min(find(out.counts(:)>10));
+		dx = valid_bin_centers(signal_95) - out.bin_centers(ind);
+
+		set(gca,'ylim',[0 101]);
+		set(gca,'xlim',[out.bin_centers(ind) valid_bin_centers(signal_95)+0.5*dx]);
+	end;
 end;
 
-t = out.threshold_signal_to_noise([81 31]);
+
