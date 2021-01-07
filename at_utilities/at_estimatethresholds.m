@@ -36,7 +36,8 @@ function [t, out] = at_estimatethresholds(im, varargin)
 %                                |   Values below this percentile will be considered noise.
 % plotit (0)                     | 0/1 Should we plot our model and histograms?
 % plotinnewfigure (1)            | 0/1 If we plot, should we do it in a new figure?
-% medfilterwindow (10)            | Window for median filter (1 for none)
+% medfilterwindow (10)           | Window for median filter (1 for none)
+% t_levels ([80 30])             | Threshold levels to use
 %
 %
 % See also: vlt.fit.skewgauss
@@ -46,9 +47,10 @@ noisePrctile = 75;
 plotit = 0;
 plotinnewfigure = 1;
 medfilterwindow = 10;
+t_levels = [80 30];
 
 vlt.data.assign(varargin{:});
- 
+
 t = [];
 out = [];
 
@@ -104,9 +106,15 @@ warning(w);
 out.detection_quality = 0:95;
 out.threshold_signal_to_noise = offset + slope * out.detection_quality;
 
-threshold_locs = [81 31];
+threshold_locs = [];
+for i=1:numel(t_levels),
+	ind = vlt.data.findclosest(out.detection_quality,t_levels(i));
+	threshold_locs(i) = ind;
+end;
 
 t = out.threshold_signal_to_noise(threshold_locs);
+
+out.t_levels = t_levels;
 
 if plotit,
 	if plotinnewfigure, 

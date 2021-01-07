@@ -22,6 +22,7 @@ function [parameters] = vh_pipepiece1(atd, startImageName, outname, varargin)
 % connectivity (26)         | Connectivity for ROIs
 % volume_filter_low (0)     | Low setting for volume filter
 % volume_filter_high (Inf)  | High setting for volume filter
+% t_levels ([80 30])        | Threshold levels for autothresholder
 % delete_old_output (1)     | Delete any old output before we start
 %                           |  (uses AT_CLEAN_PIPELINE)
 %
@@ -38,6 +39,7 @@ volume_filter_low = 1;
 volume_filter_high = Inf;
 connectivity = 26;
 delete_old_output = 1;
+t_levels = [80 30];
 
 assign(varargin{:});
 
@@ -64,7 +66,8 @@ end;
  % Step 1: threshold
 disp(['Step 1: threshold']);
    % first, estimate thresholds
-[th,out] = at_estimatethresholds(double(im),'plotit',plotthresholdestimate);
+[th,out] = at_estimatethresholds(double(im),'t_levels',t_levels,...
+	'plotit',plotthresholdestimate);
 
  % Step 1b, actually apply the threshold
 clear p;

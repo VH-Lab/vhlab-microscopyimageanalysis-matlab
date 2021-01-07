@@ -9,6 +9,7 @@ function [parameters] = vh_autothreshold_plot(atd, startImageName, varargin)
 % Parameter (default)       | Description
 % --------------------------------------------------------------------
 % connectivity (26)         | Connectivity for ROIs
+% t_levels ([80 30])        | Threshold levels for at_estimatethreshold
 %
 % Example:
 %    atd = at_dir([MYEXPERIMENTPATH]);
@@ -16,8 +17,9 @@ function [parameters] = vh_autothreshold_plot(atd, startImageName, varargin)
 %
 
 connectivity = 26;
+t_levels = [80 30];
 
-assign(varargin{:});
+vlt.data.assign(varargin{:});
 
 parameters = workspace2struct;
 
@@ -30,5 +32,7 @@ catch,
 end;
 
    % estimate thresholds
-[th,out] = at_estimatethresholds(double(im),'plotit',1,'plotinnewfigure',0);
+[th,out] = at_estimatethresholds(double(im),...
+	'plotit',1,'plotinnewfigure',0,...
+	't_levels',t_levels);
 
