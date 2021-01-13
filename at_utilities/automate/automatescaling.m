@@ -6,7 +6,7 @@ filenames = dir(fname);
 for i=1:numel(filenames),
     [starts,stops] = regexp(filenames(i).name,'^[C](\d+)[-]','forceCellOutput');
     if ~isempty(starts{1})
-    airyscaler3([fname filesep filenames(i).name])
+    airyscaler3overnight([fname filesep filenames(i).name])
 end, end
 
 end

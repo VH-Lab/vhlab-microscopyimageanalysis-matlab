@@ -12,7 +12,7 @@ function airyscaler = airyscaler3(fname,varargin)
 % from the exponential decay over depth.
 
 %% INITIALIZE
-info = imfinfo(fname); num_images = numel(info); tic; close all; assignin(varargin{:});
+info = imfinfo(fname); num_images = numel(info); tic; close all; assign(varargin{:});
 
 %% LOAD IMAGES, GET INTENSITY HISTOGRAM DATA
 % Loads an AiryScan tiffstack then fits a curve to the intensity histogram
@@ -165,6 +165,8 @@ plot(xdata,ydata,'k');
 plot(xdata,fit_ydata,'b')
 xlabel('Z Frame (0.2 um/frame)'); ylabel('Intensity');
 legend('Data','Fit')
+disp('Displaying fit; press "continue" to see the final histogram!')
+keyboard
 % close gcf
 end
 

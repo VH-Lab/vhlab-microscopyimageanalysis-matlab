@@ -37,7 +37,7 @@ if ischar(parameters),
 			default_parameters.shiftsX= -2:2;
 			default_parameters.shiftsY= -2:2;
 			default_parameters.shiftsZ=  0;
-			default_parameters.threshold = 0.01;
+			default_parameters.threshold = 0.33;
 			default_parameters.roi_set_2 = '';
 			parameters = dlg2struct('Choose parameters',out_p{1},out_p{2},default_parameters);
 			if isempty(parameters),
@@ -74,7 +74,7 @@ end;
  % now actually do it
 
  % step 1: load the data
- 
+
 rois{1} = getroifilename(atd,input_itemname);
 L{1} = getlabeledroifilename(atd,input_itemname);
 
@@ -99,11 +99,6 @@ parameters.roi_set_1 = input_itemname;
 
 colocalization_data = var2struct('overlap_ab','overlap_ba','overlap_thresh','parameters');
 
-% DLW adds an additional output
-[I,J] = find(overlap_thresh);
-firstontosecond = unique(I);
-secondontofirst = unique(J);
-
  % step 3: save and add history
 
 colocalizationdata_out_file = [getpathname(atd) filesep 'CLAs' filesep output_itemname filesep output_itemname '_CLA' '.mat'];
@@ -115,11 +110,10 @@ overlapped_objects = sum(overlap_thresh(:));
 
 h = gethistory(atd,'images',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','at_colocalization_shiftxyz','parameters',parameters,...
-	'description',['Found ' int2str(overlapped_objects) ' CLs with threshold = ' num2str(parameters.threshold) ' of ROI ' input_itemname ' onto ROI ' parameters.roi_set_2 '.' num2str(length(firstontosecond)) ' of ROI set 1 are colocalized and ' num2str(length(secondontofirst)) ' of set 2.']);
+	'description',['Found ' int2str(overlapped_objects) ' CLs with threshold = ' num2str(parameters.threshold) ' of ROI ' input_itemname ' onto ROI ' parameters.roi_set_2 '.']);
 
 sethistory(atd,'CLAs',output_itemname,h);
 
 str2text([getpathname(atd) filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
-beep
 
 out = 1;
