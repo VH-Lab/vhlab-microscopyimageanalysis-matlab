@@ -89,6 +89,13 @@ switch lower(command),
 		image_viewer_gui('IMv','LowerLeftPoint',[455 305],'UpperRightPoint',[455+450 685-5],'showhistogram',0,...
 				'drawcompletionfunc',['atgui2(''' name ''', ''command'', [''' name ''' ''ATGUI_ImageMoved'']);']);
 
+		ch = get(fig,'children');
+		set(ch,'units','normalized');
+
+		if ~isempty(ud.pathname), 
+			atgui2(name,'command',[name 'ATGUI_PathUpdateButton'],'fig',fig);
+		end;
+
         case 'get_vars',
                 handles = atgui2(name,'command',[name 'get_handles'],'fig',fig);
                 out = get(handles.ATGUI_Title,'userdata');

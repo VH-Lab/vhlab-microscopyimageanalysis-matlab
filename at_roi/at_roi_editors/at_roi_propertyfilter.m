@@ -11,8 +11,8 @@ function out = at_roi_propertyfilter(atd, input_itemname, output_itemname, param
  
 if nargin==0,
 	out{1} = {'property_name','min_property','max_property'};
-	out{2} = {'property name (can be solidity3, solidity2, area2, volume3, eccentricity2)', 'Minimum value of property to allow', 'Maximum value to allow'};
-	out{3} = {'choose_inputdlg','choose_graphical'};
+	out{2} = {'property name (can be solidity3, solidity2, area2, volume3, eccentricity2, MaxIntensity3)', 'Minimum value of property to allow', 'Maximum value to allow'};
+	out{3} = {'choose_inputdlg'}; %,'choose_graphical'};
 	return;
 end;
 
@@ -30,8 +30,8 @@ if ischar(parameters),
 			end;
 		case 'choose_inputdlg',
 			out_p = at_roi_propertyfilter;
-			default_parameters.volume_minimum = 1;
-			default_parameters.volume_maximum = Inf;
+			default_parameters.min_property = -Inf;
+			default_parameters.max_property  = Inf;
 			parameters = dlg2struct('Choose parameters',out_p{1},out_p{2},default_parameters);
 			if isempty(parameters),
 				out = [];
@@ -39,6 +39,8 @@ if ischar(parameters),
 				out = at_roi_propertyfilter(atd,input_itemname,output_itemname,parameters);
 			end;
 		case 'choose_graphical',
+			% needs to be done
+			
 			f = figure;
 			pos = get(f,'position');
 			set(f,'position',[pos([1 2]) 500 500]);
@@ -169,36 +171,20 @@ end;
 
  % edit this part
 
-L_in_file = getlabeledroifilename(atd,input_itemname);
 roi_in_file = getroifilename(atd,input_itemname);
 load(roi_in_file,'CC','-mat');
+roi_properties_file = getroiparametersfilename(atd, input_itemname);
+load(roi_properties_file,'-mat');
 
- % TODO
+eval(['ROI_property = [ROIparameters.params' parameters.property_name(end) 'd.' parameters.property_name(1:end-1) '];']);
+keyboard
+good_indexes = find( (ROI_property >= parameters.min_property) & (ROI_property <= parameters.max_property) );
 
-ROI_sizes = [];
-for i=1:length(CC.PixelIdxList),
-	ROI_sizes(end+1) = numel(CC.PixelIdxList{i});
-end;
-
-good_indexes = find( (ROI_sizes >= parameters.volume_minimum) & (ROI_sizes <= parameters.volume_maximum) );
-
-CC.NumObjects = length(good_indexes);
-CC.PixelIdxList = CC.PixelIdxList(good_indexes);
-L = labelmatrix(CC);
-
-L_out_file = [getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_L' '.mat'];
-roi_out_file = [getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_ROI' '.mat'];
-
-try, mkdir([getpathname(atd) filesep 'ROIs' filesep output_itemname]); end;
-save(roi_out_file,'CC','-mat');
-save(L_out_file,'L','-mat');
-
-h = gethistory(atd,'ROIs',input_itemname),
+h = gethistory(atd,'ROIs',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','at_roi_propertyfilter','parameters',parameters,...
-	'description',['Filtered all but ' int2str(CC.NumObjects) ' ROIs between ' num2str(parameters.volume_minimum) ' and ' num2str(parameters.volume_maximum) ' of ROIS ' input_itemname '.']);
-sethistory(atd,'ROIs',output_itemname,h);
+	'description',['Filtered all but ' int2str(CC.NumObjects) ' ROIs with property ' parameters.property_name ' between ' num2str(parameters.min_property) ' and ' num2str(parameters.max_property) ' of ROIS ' input_itemname '.']);
 
-str2text([getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
+at_roi_savesubset(atd,input_itemname, good_indexes, output_itemname, h);
 
 out = 1;
 
