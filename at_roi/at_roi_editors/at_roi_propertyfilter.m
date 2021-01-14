@@ -177,12 +177,11 @@ roi_properties_file = getroiparametersfilename(atd, input_itemname);
 load(roi_properties_file,'-mat');
 
 eval(['ROI_property = [ROIparameters.params' parameters.property_name(end) 'd.' parameters.property_name(1:end-1) '];']);
-keyboard
 good_indexes = find( (ROI_property >= parameters.min_property) & (ROI_property <= parameters.max_property) );
 
 h = gethistory(atd,'ROIs',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','at_roi_propertyfilter','parameters',parameters,...
-	'description',['Filtered all but ' int2str(CC.NumObjects) ' ROIs with property ' parameters.property_name ' between ' num2str(parameters.min_property) ' and ' num2str(parameters.max_property) ' of ROIS ' input_itemname '.']);
+	'description',['Filtered all but ' int2str(numel(good_indexes)) ' ROIs with property ' parameters.property_name ' between ' num2str(parameters.min_property) ' and ' num2str(parameters.max_property) ' of ROIS ' input_itemname '.']);
 
 at_roi_savesubset(atd,input_itemname, good_indexes, output_itemname, h);
 
