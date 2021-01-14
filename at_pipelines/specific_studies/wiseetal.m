@@ -6,7 +6,7 @@ at_foreachdirdo(d([7:11]),'vh_pipepiece1(atd, ''BASDEC'', ''BASDECsv1'',''plotth
 
 
 at_foreachdirdo(d(6:15), ['vh_coloc1(atd,''PSDDECsv2_vf'',''spines_over64'',''PSDDECsv2_ON_SPINE'',''overlap_threshold'',0.33);'])
-at_foreachdirdo(d(6:15),['vh_coloc1(atd,''PSDDECsv2_vf'',''VGDECsv1_vf'',''PSDDECsv1_ON_VGDECsv1'');'])
+at_foreachdirdo(d(6:15),['vh_coloc1(atd,''PSDDECsv2_vf'',''VGDECsv2_vf'',''PSDDECsv2_ON_VGDECsv2'');'])
 at_foreachdirdo(d(6:9), ['vh_coloc1(atd,''PSDDECsv1_roires'',''spines_over64'',''PSDDECsv1_ON_SPINE'',''overlap_threshold'',0.33);'])
 
 at_foreachdirdo(d(6:9),['vh_coloc1(atd,''PSDDECsv1_roires'',''BASDECsv1_roires'',''PSDDECsv1_ON_BASDECsv1'');'])

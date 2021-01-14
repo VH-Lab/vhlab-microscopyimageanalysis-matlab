@@ -28,7 +28,7 @@ save(L_out_file,'L','-mat');
 sethistory(atd,'ROIs',output_itemname,history);
 str2text([getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
-roi_properties_input_file = [getpathname(atd) filesep 'ROIs' filesep input_itemname filesep input_itemname 'ROI_roiparameters' '.mat'];
+roi_properties_input_file = getroiparametersfilename(atd,input_itemnam);
 roi_properties_output_file = [getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname 'ROI_roiparameters' '.mat'];
 
 if exist(roi_properties_input_file,'file'),
