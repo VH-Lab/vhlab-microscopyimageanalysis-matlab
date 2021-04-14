@@ -70,5 +70,10 @@ for i=1:numel(indexes),
 	p.threshold = overlap_threshold;
 	p.roi_set_2 = roisetB;
 	at_colocalization_shiftxyz(atd,roisetA,outname,p);
+	for j=i+1:numel(indexes), % compare all others
+		p.roi_set_2 = roilist(indexes(j)).name;
+		outname = [ roisetA '_x_' p.roi_set_2 '_CLA' ];
+		at_colocalization_shiftxyz(atd,roisetA,outname,p);
+	end;
 end;
 

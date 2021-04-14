@@ -6,6 +6,10 @@ at_foreachdirdo(d([1]),'vh_roicomparepipe(atd, ''spine_ROI_'', ''VGsv1_roiresvf'
 
 at_foreachdirdo(d([1]),'vh_roicomparepipe(atd, ''VG_ROI_'', ''VGsv1_roiresvf'');')
 
+at_foreachdirdo(d([1]),'vh_pipepiece1(atd, ''PSD_DEC'', ''PSD_DECsv1'',''plotthresholdestimate'',1,''t_levels'',[80 30]);')
+at_foreachdirdo(d([1]),'vh_pipepiece1(atd, ''VG_DEC'', ''VG_DECsv1'',''plotthresholdestimate'',1,''t_levels'',[80 30]);')
+
+
 at_foreachdirdo(d(1),'vh_imageroi2roiroi(atd);')
 
 
