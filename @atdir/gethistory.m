@@ -29,5 +29,7 @@ try,
 	h = load([atd.pathname filesep itemtype filesep ...
 			itemname filesep 'history.mat']);
 	h = h.history;
+catch,
+	% warning(['History loading error: ' lasterr]);
 end;
 

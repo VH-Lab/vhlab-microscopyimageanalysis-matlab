@@ -26,7 +26,7 @@ if isempty(itemnamecutoff),
 end;
 
 
-itemname = itemfilename(1:itemnamecutoff(1)-1);
+itemname = itemfilename(1:itemnamecutoff(end)-1);
 
 [dummy,im_filename] = at_roi_underlying_image(atd,itemname);
 

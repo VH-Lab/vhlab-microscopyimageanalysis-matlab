@@ -7,6 +7,9 @@ function [image_name,imagefilename] = at_roi_underlying_image(atd,roi_name)
 %
 
 h = gethistory(atd,'ROIs',roi_name);
+if isempty(h),
+    error(['No history found.']);
+end;
 image_name = h(1).parent;
 imagefilename = getimagefilename(atd,h(1).parent);
 

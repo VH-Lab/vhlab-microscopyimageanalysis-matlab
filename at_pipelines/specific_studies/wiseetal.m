@@ -1,4 +1,16 @@
 
+at_foreachdirdo(d([1]),'vh_roicomparepipe(atd, ''PSD_ROI_'', ''PSDsv1_roiresvf'');')
+at_foreachdirdo(d([1]),'vh_roicomparepipe(atd, ''VG_ROI_'', ''VGsv1_roiresvf'');')
+at_foreachdirdo(d([1]),'vh_roicomparepipe(atd, ''spine_ROI_'', ''PSDsv1_roiresvf'',''useRes'',0);')
+at_foreachdirdo(d([1]),'vh_roicomparepipe(atd, ''spine_ROI_'', ''VGsv1_roiresvf'',''useRes'',0);')
+
+at_foreachdirdo(d([1]),'vh_roicomparepipe(atd, ''VG_ROI_'', ''VGsv1_roiresvf'');')
+
+at_foreachdirdo(d(1),'vh_imageroi2roiroi(atd);')
+
+
+at_foreachdirdo(d([1]),'vh_pipepiece1(atd, ''PSD'', ''PSDsv1'',''plotthresholdestimate'',1,''t_levels'',[80 30]);')
+at_foreachdirdo(d([1]),'vh_pipepiece1(atd, ''VG'', ''VGsv1'',''plotthresholdestimate'',1,''t_levels'',[80 30]);')
 
 at_foreachdirdo(d([7:11]),'vh_pipepiece1(atd, ''PSDDEC'', ''PSDDECsv1'',''plotthresholdestimate'',1,''t_levels'',[80 30]);')
 at_foreachdirdo(d([7:11]),'vh_pipepiece1(atd, ''VGDEC'', ''VGDECsv1'',''plotthresholdestimate'',1,''t_levels'',[80 30]);')
