@@ -15,13 +15,6 @@ at_foreachdirdo(d_here,'vh_groundtruthcompare(atd,''PSD_DECsv1_roiresvf'',''spin
 at_foreachdirdo(d_here,'vh_groundtruthcompare(atd,''VG_DECsv1_roiresvf'',''spine_ROI_DLW_ROI'',''VG_ROI_'');');
 
 
-at_foreachdirdo(d_here,'vh_groundtruthcompare(atd,''PSDsv1_roiresvf'',''spine_ROI_DLW_ROI'',''PSD_ROI_'');');
-at_foreachdirdo(d_here,'vh_groundtruthcompare(atd,''VG_DECsv1_roiresvf'',''spine_ROI_DLW_ROI'',''VG_ROI_'');');
-
-at_foreachdirdo(d_here,'vh_roicomparepipe(atd, ''PSD_ROI_'', ''PSDsv1_roiresvf'');')
-
-
-
  
 % image2roi - 1:6, 13:23,  errors in 7:12
 % PSD_DECsv1 - 1:6, 13:23 in progress 
