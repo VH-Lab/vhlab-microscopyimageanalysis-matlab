@@ -18,3 +18,6 @@ at_foreachdirdo(d_here,'vh_groundtruthcompare(atd,''VG_DECsv1_roiresvf'',''spine
  
 % image2roi - 1:6, 13:23,  errors in 7:12
 % PSD_DECsv1 - 1:6, 13:23 in progress 
+
+at_foreachdirdo(d_here,'vh_filter2tbrightness(atd,''PSD_DECsv1_roires'',''PSD_DECsv1_roiresbf'');');
+at_foreachdirdo(d_here,'vh_filter2tbrightness(atd,''VG_DECsv1_roires'',''VG_DECsv1_roiresbf'');');
