@@ -26,7 +26,7 @@ for i=1:numel(s),
 			psd_falsepositives(end+1,1) = n;
 			psd_truepositives(end+1,1) = n;
 			for v=1:numel(volume_low_filters),
-				good_roi_gt = find(h(k).vol_gt>volume_low_filters(v));
+				good_roi_gt = find(h(k).vol_gt>volume_low_filters(v)&h(k).maxbright_gt>=h(k).thresholds(1));
 				good_roi_cs = find(h(k).vol_comp_substantial>volume_low_filters(v));
 				psd_falsepositives(end,1+v) = sum(h(k).N_overlaps_comp_substantial_onto_gt(good_roi_cs,false_positive_overlap_threshold_index)==0)/numel(good_roi_cs);
 				psd_truepositives(end,1+v) = sum(h(k).N_overlaps_gt_onto_comp(good_roi_gt,true_positive_overlap_threshold_index)>0)/numel(good_roi_gt);
@@ -46,7 +46,7 @@ for i=1:numel(s),
 			vg_falsepositives(end+1,1) = n;
 			vg_truepositives(end+1,1) = n;
 			for v=1:numel(volume_low_filters),
-				good_roi_gt = find(h(k).vol_gt>volume_low_filters(v));
+				good_roi_gt = find(h(k).vol_gt>volume_low_filters(v)&h(k).maxbright_gt>=h(k).thresholds(1));
 				good_roi_cs = find(h(k).vol_comp_substantial>volume_low_filters(v));
 				vg_falsepositives(end,1+v) = sum(h(k).N_overlaps_comp_substantial_onto_gt(good_roi_cs,false_positive_overlap_threshold_index)==0)/numel(good_roi_cs);
 				vg_truepositives(end,1+v) = sum(h(k).N_overlaps_gt_onto_comp(good_roi_gt,true_positive_overlap_threshold_index)>0)/numel(good_roi_gt);
@@ -54,6 +54,5 @@ for i=1:numel(s),
 		end;
 	end;
 end;
-
 
 out = workspace2struct();
