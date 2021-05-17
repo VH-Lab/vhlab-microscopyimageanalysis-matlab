@@ -20,15 +20,20 @@ function [t, out] = at_estimatethresholds(im, varargin)
 %      counts - count of data in each
 %      p_noise - parameters of the noise model for vlt.fit.skewgaussian
 %      noise_fit - fit of the noise distribution (bin_centers as x values)
-%      signal_y - [30 80 95]
+%      signal_y - [30 80 95 99 99.9 99.99]
 %      signal_x - conservative estimates of the values of IM that stand out
-%                   beyond the noise signal at the 30th, 80th, and 95th percentile
+%                   beyond the noise signal at the 30th, 80th, 95th 99th, 99.9th, 99.99th percentile
 %      detection_quality - [0:95], detection quality reference
 %      threshold_signal_to_noise - same size as detection_quality; the ith value indicates
 %                                  the value of IM that stands out beyond noise at the ith
 %                                  percentile; estimated linearly based on conservative estimates
 %                                  for the range 30-80
-%
+%      detection_quality_better - [ 30:99 99.01:99.99 99.991:0.001:99.999 ]
+%      threshold_signal_to_noise_better - same size as detection_quality;_better the ith value indicates
+%                                  the value of IM that stands out beyond noise at the ith
+%                                  percentile; estimated based on conservative estimates
+%                                  for the range 30-99.9999
+
 % This function also takes names/value pairs that modify its behavior:
 % Parameter (default)            | Description
 % ---------------------------------------------------------------------
@@ -91,14 +96,22 @@ signal_95 = 1+find(percent_signal_to_noise(1:end-1)<95&percent_signal_to_noise(2
 signal_80 = 1+find(percent_signal_to_noise(1:end-1)<80 & percent_signal_to_noise(2:end)>=80);
 signal_30 = 1+find(percent_signal_to_noise(1:end-1)<30 & percent_signal_to_noise(2:end)>=30);
 
+signal_99 = 1+find(percent_signal_to_noise(1:end-1)<99 & percent_signal_to_noise(2:end)>=99);
+signal_999 = 1+find(percent_signal_to_noise(1:end-1)<99.9 & percent_signal_to_noise(2:end)>=99.9);
+signal_9999 = 1+find(percent_signal_to_noise(1:end-1)<99.99 & percent_signal_to_noise(2:end)>=99.99);
+
  % find the last time it goes above those thresholds and doesn't drop below ever again, moving up
 signal_95 = signal_95(end);
 signal_80 = signal_80(end); % the last time it happens and doesn't drop below
 signal_30 = signal_30(end);
 
+signal_99 = signal_99(end);
+signal_999 = signal_999(end);
+signal_9999 = signal_9999(end);
 
-out.signal_y = [30 80 95]';
-out.signal_x = [valid_bin_centers([signal_30 signal_80 signal_95])]';
+
+out.signal_y = [30 80 95 99 99.9 99.99]';
+out.signal_x = [valid_bin_centers([signal_30 signal_80 signal_95 signal_99 signal_999 signal_9999])]';
 w = warning; % get the warning state
 warning('off');
 [slope,offset] = vlt.stats.quickregression(percent_signal_to_noise(signal_30:signal_80)', valid_bin_centers([signal_30:signal_80])', 0.05);
@@ -112,7 +125,20 @@ for i=1:numel(t_levels),
 	threshold_locs(i) = ind;
 end;
 
-t = out.threshold_signal_to_noise(threshold_locs);
+out.detection_quality_better = colvec([ 30:99 99.01:99.99 99.991:0.001:99.999 ]);
+
+signal_nn = [];
+for i=1:numel(out.detection_quality_better),
+	signal_nnn = 1+find(percent_signal_to_noise(1:end-1)<out.detection_quality_better(i) &...
+		percent_signal_to_noise(2:end)>=out.detection_quality_better(i));
+	if isempty(signal_nnn), disp('empty here'); i, end;
+	signal_nn(end+1) = signal_nnn(end);
+end;
+
+out.threshold_signal_to_noise_better = valid_bin_centers(signal_nn(:));
+
+%t = out.threshold_signal_to_noise(threshold_locs);
+t = interp1(out.detection_quality_better(:),out.threshold_signal_to_noise_better(:),t_levels(:),'linear');
 
 out.t_levels = t_levels;
 

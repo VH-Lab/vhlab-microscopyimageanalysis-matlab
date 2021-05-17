@@ -55,6 +55,7 @@ function [stats] = at_groundtruthcorrespondence(atd, computer_rois, maskregion_r
 % | maxbright_comp_substantial     | Max brightness of computer ROIs that   |
 % |                                |   have substantial overlap with mask   |
 % | thresholds                     | Thresholds used for comp ROIs          |
+% | thresholdinfo                  | Threshold estimation info              |
 % ---------------------------------------------------------------------------
 % 
 %
@@ -110,8 +111,14 @@ if isempty(cla_comp_gt_fname),
 end;
 
 hist = gethistory(atd,'ROIs',computer_rois);
+
 thresholds = [];
 if ~isempty(hist),
+
+	doublethreshname = hist(2).parent;
+	hh = gethistory(atd,'images',doublethreshname);
+	thresholdinfo = hh(end).parameters.thresholdinfo;
+
 	if isfield(hist(1).parameters,'threshold1'),
 		thresholds(end+1) = hist(1).parameters.threshold1;
 	end;
@@ -178,7 +185,20 @@ true_positives = sum(N_overlaps_gt_onto_comp > 0);
 comp_positives = N_comp_rois_substantial;
 false_positives = sum(N_overlaps_comp_substantial_onto_gt == 0);
 
+
+ % non-resegmented ROIs
+nonres_roi_gt_params_file = getroiparametersfilename(atd,cla_comp_gt.colocalization_data.parameters.roi_set_1(1:end-3));
+nonres_roi_gt_params = load(nonres_roi_gt_params_file,'-mat');
+nonres_vol_gt = [nonres_roi_gt_params.ROIparameters.params3d(:).Volume];
+nonres_maxbright_gt = [nonres_roi_gt_params.ROIparameters.params3d(:).MaxIntensity];
+
+
+
 stats = vlt.data.var2struct('N_overlaps_comp_onto_gt','N_overlaps_gt_onto_comp','N_overlaps_comp_substantial_onto_gt',...
 	'vol_gt', 'volorder_gt','vol_comp_substantial','volorder_comp_substantial','vol_comp','volorder_comp',...
 	'true_positives','false_positives','gt_positives','comp_positives','maxbright_comp','maxbright_gt','maxbright_comp_substantial',...
-	'thresholds');
+	'thresholds','thresholdinfo','nonres_vol_gt','nonres_maxbright_gt');
+
+
+
+
