@@ -21,3 +21,15 @@ at_foreachdirdo(d_here,'vh_groundtruthcompare(atd,''VG_DECsv1_roiresvf'',''spine
 
 at_foreachdirdo(d_here,'vh_filter2tbrightness(atd,''PSD_DECsv1_roires'',''PSD_DECsv1_roiresbf'');');
 at_foreachdirdo(d_here,'vh_filter2tbrightness(atd,''VG_DECsv1_roires'',''VG_DECsv1_roiresbf'');');
+
+
+at_foreachdirdo(d_here,'vh_roicomparepipe(atd, ''PSD_ROI_'', ''PSD_DECsv1_roiresbf'');')
+at_foreachdirdo(d_here,'vh_roicomparepipe(atd, ''VG_ROI_'', ''VG_DECsv1_roiresbf'');')
+at_foreachdirdo(d_here,'vh_roicomparepipe(atd, ''spine_ROI_'', ''PSD_DECsv1_roiresbf'',''useRes'',0);')
+at_foreachdirdo(d_here,'vh_roicomparepipe(atd, ''spine_ROI_'', ''VG_DECsv1_roiresbf'',''useRes'',0);')
+
+at_foreachdirdo(d_here,'vh_groundtruthcompare(atd,''PSD_DECsv1_roiresbf'',''spine_ROI_DLW_ROI'',''PSD_ROI_'');');
+at_foreachdirdo(d_here,'vh_groundtruthcompare(atd,''VG_DECsv1_roiresbf'',''spine_ROI_DLW_ROI'',''VG_ROI_'');');
+
+
+
