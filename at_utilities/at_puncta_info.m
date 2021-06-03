@@ -1,4 +1,3 @@
-%% Ind2Sub
 function [puncta_info] = at_puncta_info(img_stack,CC)
 % FIND THE INTENSITY VALUES FOR EACH ROI
 sz_matrix = [size(img_stack,1) size(img_stack,2) size(img_stack,3)];

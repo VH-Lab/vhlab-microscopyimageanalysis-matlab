@@ -49,6 +49,13 @@ function [stats] = at_groundtruthcorrespondence(atd, computer_rois, maskregion_r
 % | vol_comp_substantial           | The volume of computer ROIs that have  |
 % |                                |   substantial overlap with mask.       |
 % | volorder_comp_substantial      | The sort order of vol_comp_substantial |
+% | maxbright_gt                   | Maximum brightness of each GT ROI      |
+% | maxbright_comp                 | Max brightness of computer ROIs that   |
+% |                                |   have some minimal overlap with mask  |
+% | maxbright_comp_substantial     | Max brightness of computer ROIs that   |
+% |                                |   have substantial overlap with mask   |
+% | thresholds                     | Thresholds used for comp ROIs          |
+% | thresholdinfo                  | Threshold estimation info              |
 % ---------------------------------------------------------------------------
 % 
 %
@@ -88,7 +95,7 @@ function [stats] = at_groundtruthcorrespondence(atd, computer_rois, maskregion_r
 %    
 
 overlap_threshold_mask = 0.0;
-overlap_threshold_substantially_in_mask = 0.5; 
+overlap_threshold_substantially_in_mask = 0.75; 
 
 vlt.data.assign(varargin{:});
 
@@ -101,6 +108,23 @@ end;
 cla_comp_gt_fname = getcolocalizationfilename(atd, [groundtruth_rois '_x_' computer_rois '_CLA']);
 if isempty(cla_comp_gt_fname),
 	error(['No colocalization analysis ' [groundtruth_rois '_x_' computer_rois '_CLA'] ' found. It needs to be computed before running this function.']);
+end;
+
+hist = gethistory(atd,'ROIs',computer_rois);
+
+thresholds = [];
+if ~isempty(hist),
+
+	doublethreshname = hist(2).parent;
+	hh = gethistory(atd,'images',doublethreshname);
+	thresholdinfo = hh(end).parameters.thresholdinfo;
+
+	if isfield(hist(1).parameters,'threshold1'),
+		thresholds(end+1) = hist(1).parameters.threshold1;
+	end;
+	if isfield(hist(1).parameters,'threshold2'),
+		thresholds(end+1) = hist(1).parameters.threshold2;
+	end;
 end;
 
 cla_comp_mask = load(cla_comp_mask_fname,'-mat');
@@ -140,6 +164,11 @@ vol_comp = [roi_comp_params.ROIparameters.params3d(comp_rois_with_some_mask).Vol
 vol_gt = [roi_gt_params.ROIparameters.params3d(:).Volume];
 vol_comp_substantial = [roi_comp_params.ROIparameters.params3d(comp_rois_substantially_in_mask).Volume];
 
+maxbright_comp = [roi_comp_params.ROIparameters.params3d(comp_rois_with_some_mask).MaxIntensity];
+maxbright_gt = [roi_gt_params.ROIparameters.params3d(:).MaxIntensity];
+maxbright_comp_substantial = [roi_comp_params.ROIparameters.params3d(comp_rois_substantially_in_mask).MaxIntensity];
+
+
 [dummy,volorder_comp] = sort(vol_comp);
 [dummy,volorder_comp_substantial] = sort(vol_comp_substantial);
 [dummy,volorder_gt] = sort(vol_gt);
@@ -156,5 +185,20 @@ true_positives = sum(N_overlaps_gt_onto_comp > 0);
 comp_positives = N_comp_rois_substantial;
 false_positives = sum(N_overlaps_comp_substantial_onto_gt == 0);
 
+
+ % non-resegmented ROIs
+nonres_roi_gt_params_file = getroiparametersfilename(atd,cla_comp_gt.colocalization_data.parameters.roi_set_1(1:end-3));
+nonres_roi_gt_params = load(nonres_roi_gt_params_file,'-mat');
+nonres_vol_gt = [nonres_roi_gt_params.ROIparameters.params3d(:).Volume];
+nonres_maxbright_gt = [nonres_roi_gt_params.ROIparameters.params3d(:).MaxIntensity];
+
+
+
 stats = vlt.data.var2struct('N_overlaps_comp_onto_gt','N_overlaps_gt_onto_comp','N_overlaps_comp_substantial_onto_gt',...
-	'vol_gt', 'volorder_gt','vol_comp_substantial','volorder_comp_substantial','vol_comp','volorder_comp','true_positives','false_positives','gt_positives','comp_positives');
+	'vol_gt', 'volorder_gt','vol_comp_substantial','volorder_comp_substantial','vol_comp','volorder_comp',...
+	'true_positives','false_positives','gt_positives','comp_positives','maxbright_comp','maxbright_gt','maxbright_comp_substantial',...
+	'thresholds','thresholdinfo','nonres_vol_gt','nonres_maxbright_gt');
+
+
+
+
