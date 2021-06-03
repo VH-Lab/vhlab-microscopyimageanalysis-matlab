@@ -168,6 +168,8 @@ maxbright_comp = [roi_comp_params.ROIparameters.params3d(comp_rois_with_some_mas
 maxbright_gt = [roi_gt_params.ROIparameters.params3d(:).MaxIntensity];
 maxbright_comp_substantial = [roi_comp_params.ROIparameters.params3d(comp_rois_substantially_in_mask).MaxIntensity];
 
+full_parameters_gt = roi_gt_params;
+full_parameters_comp = roi_gt_params;
 
 [dummy,volorder_comp] = sort(vol_comp);
 [dummy,volorder_comp_substantial] = sort(vol_comp_substantial);
@@ -192,13 +194,11 @@ nonres_roi_gt_params = load(nonres_roi_gt_params_file,'-mat');
 nonres_vol_gt = [nonres_roi_gt_params.ROIparameters.params3d(:).Volume];
 nonres_maxbright_gt = [nonres_roi_gt_params.ROIparameters.params3d(:).MaxIntensity];
 
-
-
 stats = vlt.data.var2struct('N_overlaps_comp_onto_gt','N_overlaps_gt_onto_comp','N_overlaps_comp_substantial_onto_gt',...
 	'vol_gt', 'volorder_gt','vol_comp_substantial','volorder_comp_substantial','vol_comp','volorder_comp',...
 	'true_positives','false_positives','gt_positives','comp_positives','maxbright_comp','maxbright_gt','maxbright_comp_substantial',...
-	'thresholds','thresholdinfo','nonres_vol_gt','nonres_maxbright_gt');
-
-
-
+	'thresholds','thresholdinfo','nonres_vol_gt','nonres_maxbright_gt',...
+	'full_parameters_gt','full_parameters_comp', ...
+	'comp_rois_with_some_mask','comp_rois_substantially_in_mask',...
+	'nonres_roi_gt_params');
 
