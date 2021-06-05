@@ -1,6 +1,6 @@
 function [brightstats] = wiseetal_plotstatisticalbrightness(s)
 
-brightstats = vlt.data.emptystruct('experindex','rawbright','pbright');
+brightstats = vlt.data.emptystruct('experindex','rawbright','pbright','gt_rawbright','gt_pbright','gt_vol','gt_');
 
 figure;
 
@@ -18,6 +18,8 @@ for i=1:numel(s),
 			pbright(end+1) = ti.detection_quality_better(Gi);
 		end;
 		brightstats(end+1) = struct('experindex',i,'rawbright',rawbright','pbright',pbright);
+
+		
 
 		
 
