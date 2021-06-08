@@ -1,44 +1,35 @@
-function [brightstats] = wiseetal_plotstatisticalbrightness(s)
+function [stats] = wiseetal_plotstatisticalmore(s, analysiscode, vol_threshold)
 
-brightstats = vlt.data.emptystruct('experindex','rawbright','pbright','gt_rawbright','gt_pbright','gt_vol','gt_');
-
-figure;
-
-subplot(2,2,1);
-
-lumped = [];
+stats = vlt.data.emptystruct('ROI_properties_true_positives','ROI_properties_false_positives','experindex');
 
 for i=1:numel(s),
-	for j=1:numel(s(i).groundtruth_analysis.PSD.PSDv101),
-		rawbright = s(i).groundtruth_analysis.PSD.PSDv101(j).nonres_maxbright_gt;
-		ti = s(i).groundtruth_analysis.PSD.PSDv101(j).thresholdinfo;
-		pbright = [];
-		for k=1:numel(rawbright),
-			Gi = findclosest(double(ti.threshold_signal_to_noise_better(:)), double(rawbright(k)));
-			pbright(end+1) = ti.detection_quality_better(Gi);
-		end;
-		brightstats(end+1) = struct('experindex',i,'rawbright',rawbright','pbright',pbright);
+	gt_struct = getfield(s(i).groundtruth_analysis.PSD,['PSDv' analysiscode]);
+	for j=1:numel(gt_struct)
+		[indexes,good_gt] = wiseetal_gt_truepositive_matches(gt_struct(j));
+		indexes_with_match = find(~isnan(indexes));
+		indexes = indexes(indexes_with_match);
+		good_gt = good_gt(indexes_with_match);
+		stats_here.ROI_properties_true_positives = gt_struct(j).full_parameters_comp.ROIparameters;
+		stats_here.ROI_properties_true_positives.params2d = stats_here.ROI_properties_true_positives.params2d(indexes);
+		stats_here.ROI_properties_true_positives.params3d = stats_here.ROI_properties_true_positives.params3d(indexes);
 
+		vol_good = find([stats_here.ROI_properties_true_positives.param3d.Volume]>=vol_threshold);
+		stats_here.ROI_properties_true_positives.params2d = stats_here.ROI_properties_true_positives.params2d(vol_good);
+		stats_here.ROI_properties_true_positives.params3d = stats_here.ROI_properties_true_positives.params3d(vol_good);
 		
+		[I,good_fp] = wiseetal_gt_falsepositive_matches(gt_struct(j));
+		stats_here.ROI_properties_false_positives = gt_struct(j).full_parameters_comp.ROIparameters;
+		stats_here.ROI_properties_false_positives.params2d = stats_here.ROI_properties_false_positives.params2d(good_fp);
+		stats_here.ROI_properties_false_positives.params3d = stats_here.ROI_properties_false_positives.params3d(good_fp);
 
+		vol_good = find([stats_here.ROI_properties_false_positives.param3d.Volume]>=vol_threshold);
+		stats_here.ROI_properties_false_positives.params2d = stats_here.ROI_properties_false_positives.params2d(vol_good);
+		stats_here.ROI_properties_false_positives.params3d = stats_here.ROI_properties_false_positives.params3d(vol_good);
 		
+		stats_here.experindex = i;
 
-		plot(brightstats(end).rawbright,brightstats(end).pbright,'ko');	
-		hold on;
-		lumped = cat(1,lumped,brightstats(end).pbright(:));
+		stats(end+1) = stats_here;
 	end;
 end;
 
 
-subplot(2,2,2);
-
-edges = [30:1:101]-0.5;
-N = histc(lumped,edges);
-
-bin_centers = (edges(1:end-1) + edges(2:end))/2;
-
-N = 100* N/sum(N);
-
-bar(bin_centers,N(1:end-1));
-
-[colvec(bin_centers) colvec(cumsum(N(1:end-1)))]

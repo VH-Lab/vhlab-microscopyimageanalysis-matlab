@@ -31,6 +31,7 @@ for i=1:numel(s),
 				psd_falsepositives(end,1+v) = sum(h(k).N_overlaps_comp_substantial_onto_gt(good_roi_cs,false_positive_overlap_threshold_index)==0)/numel(good_roi_cs);
 				psd_truepositives(end,1+v) = sum(h(k).N_overlaps_gt_onto_comp(good_roi_gt,true_positive_overlap_threshold_index)>0)/numel(good_roi_gt);
 			end;
+			
 		end;
 	end;
 	if isstruct(s(i).groundtruth_analysis.VG),
