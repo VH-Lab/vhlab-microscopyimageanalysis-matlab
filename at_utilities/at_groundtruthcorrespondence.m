@@ -168,8 +168,8 @@ maxbright_comp = [roi_comp_params.ROIparameters.params3d(comp_rois_with_some_mas
 maxbright_gt = [roi_gt_params.ROIparameters.params3d(:).MaxIntensity];
 maxbright_comp_substantial = [roi_comp_params.ROIparameters.params3d(comp_rois_substantially_in_mask).MaxIntensity];
 
-full_parameters_gt = roi_gt_params;
-full_parameters_comp = roi_comp_params;
+full_parameters_gt = roi_gt_params_file;
+full_parameters_comp = roi_comp_params_file;
 
 [dummy,volorder_comp] = sort(vol_comp);
 [dummy,volorder_comp_substantial] = sort(vol_comp_substantial);
