@@ -1,7 +1,7 @@
 function out = wiseetal_plotgtanalysis(s)
 
 
-volume_low_filters = [0 20 50 75];
+volume_low_filters = [0 20 50 75 100 125];
 false_positive_overlap_threshold_index = 2;
 true_positive_overlap_threshold_index = 4;
 
