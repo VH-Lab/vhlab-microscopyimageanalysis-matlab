@@ -214,4 +214,47 @@ at_foreachdirdo(d_here([1:10 12]),'vh_groundtruthcompare(atd,''VG_DECsv9_roiresb
 at_foreachdirdo(d_here([11 13:16]),'vh_groundtruthcompare(atd,''VG_DECsv9_roiresbf'',''spine_ROI_SG_ROI'',''VG_ROI_'');');
 at_foreachdirdo(d_here([17 18]),'vh_groundtruthcompare(atd,''VG_DECsv9_roiresbf'',''spine_ROI_KC_ROI'',''VG_ROI_'');');
 
+% algorithm 110 
+at_foreachdirdo(d_here,'vh_pipepiece1(atd, ''PSD_DEC'', ''PSD_DECsv10'',''plotthresholdestimate'',1,''t_levels'',[99.999 98]);')
+at_foreachdirdo(d_here,'vh_pipepiece1(atd, ''VG_DEC'', ''VG_DECsv10'',''plotthresholdestimate'',1,''t_levels'',[99.999 98]);')
+
+
+at_foreachdirdo(d_here,'vh_filter2tbrightness(atd,''PSD_DECsv10_roires'',''PSD_DECsv10_roiresbf'');');
+at_foreachdirdo(d_here,'vh_filter2tbrightness(atd,''VG_DECsv10_roires'',''VG_DECsv10_roiresbf'');');
+
+
+at_foreachdirdo(d_here,'vh_roicomparepipe(atd, ''PSD_ROI_'', ''PSD_DECsv10_roiresbf'');')
+at_foreachdirdo(d_here,'vh_roicomparepipe(atd, ''spine_ROI_'', ''PSD_DECsv10_roiresbf'',''useRes'',0);')
+at_foreachdirdo(d_here,'vh_roicomparepipe(atd, ''VG_ROI_'', ''VG_DECsv10_roiresbf'');')
+at_foreachdirdo(d_here,'vh_roicomparepipe(atd, ''spine_ROI_'', ''VG_DECsv10_roiresbf'',''useRes'',0);')
+
+at_foreachdirdo(d_here([1:10 12]),'vh_groundtruthcompare(atd,''PSD_DECsv10_roiresbf'',''spine_ROI_DLW_ROI'',''PSD_ROI_'');');
+at_foreachdirdo(d_here([11 13:16]),'vh_groundtruthcompare(atd,''PSD_DECsv10_roiresbf'',''spine_ROI_SG_ROI'',''PSD_ROI_'');');
+at_foreachdirdo(d_here([17:18]),'vh_groundtruthcompare(atd,''PSD_DECsv10_roiresbf'',''spine_ROI_KC_ROI'',''PSD_ROI_'');');
+at_foreachdirdo(d_here([1:10 12]),'vh_groundtruthcompare(atd,''VG_DECsv10_roiresbf'',''spine_ROI_DLW_ROI'',''VG_ROI_'');');
+at_foreachdirdo(d_here([11 13:16]),'vh_groundtruthcompare(atd,''VG_DECsv10_roiresbf'',''spine_ROI_SG_ROI'',''VG_ROI_'');');
+at_foreachdirdo(d_here([17 18]),'vh_groundtruthcompare(atd,''VG_DECsv10_roiresbf'',''spine_ROI_KC_ROI'',''VG_ROI_'');');
+
+
+% algorithm 111 
+at_foreachdirdo(d_here,'vh_pipepiece1(atd, ''PSD_DEC'', ''PSD_DECsv11'',''plotthresholdestimate'',1,''t_levels'',[99.999 99.9]);')
+at_foreachdirdo(d_here,'vh_pipepiece1(atd, ''VG_DEC'', ''VG_DECsv11'',''plotthresholdestimate'',1,''t_levels'',[99.999 99.9]);')
+
+
+at_foreachdirdo(d_here,'vh_filter2tbrightness(atd,''PSD_DECsv11_roires'',''PSD_DECsv11_roiresbf'');');
+at_foreachdirdo(d_here,'vh_filter2tbrightness(atd,''VG_DECsv11_roires'',''VG_DECsv11_roiresbf'');');
+
+
+at_foreachdirdo(d_here,'vh_roicomparepipe(atd, ''PSD_ROI_'', ''PSD_DECsv11_roiresbf'');')
+at_foreachdirdo(d_here,'vh_roicomparepipe(atd, ''spine_ROI_'', ''PSD_DECsv11_roiresbf'',''useRes'',0);')
+at_foreachdirdo(d_here,'vh_roicomparepipe(atd, ''VG_ROI_'', ''VG_DECsv11_roiresbf'');')
+at_foreachdirdo(d_here,'vh_roicomparepipe(atd, ''spine_ROI_'', ''VG_DECsv11_roiresbf'',''useRes'',0);')
+
+at_foreachdirdo(d_here([1:10 12]),'vh_groundtruthcompare(atd,''PSD_DECsv11_roiresbf'',''spine_ROI_DLW_ROI'',''PSD_ROI_'');');
+at_foreachdirdo(d_here([11 13:16]),'vh_groundtruthcompare(atd,''PSD_DECsv11_roiresbf'',''spine_ROI_SG_ROI'',''PSD_ROI_'');');
+at_foreachdirdo(d_here([17:18]),'vh_groundtruthcompare(atd,''PSD_DECsv11_roiresbf'',''spine_ROI_KC_ROI'',''PSD_ROI_'');');
+at_foreachdirdo(d_here([1:10 12]),'vh_groundtruthcompare(atd,''VG_DECsv11_roiresbf'',''spine_ROI_DLW_ROI'',''VG_ROI_'');');
+at_foreachdirdo(d_here([11 13:16]),'vh_groundtruthcompare(atd,''VG_DECsv11_roiresbf'',''spine_ROI_SG_ROI'',''VG_ROI_'');');
+at_foreachdirdo(d_here([17 18]),'vh_groundtruthcompare(atd,''VG_DECsv11_roiresbf'',''spine_ROI_KC_ROI'',''VG_ROI_'');');
+
 

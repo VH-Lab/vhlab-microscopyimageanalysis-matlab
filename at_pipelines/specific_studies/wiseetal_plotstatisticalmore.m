@@ -1,8 +1,11 @@
 function [stats] = wiseetal_plotstatisticalmore(s, analysiscode, vol_threshold)
 
-stats = vlt.data.emptystruct('ROI_properties_true_positives','ROI_properties_false_positives','experindex', 'true_pbright','false_pbright','true_positive_rate','false_positive_rate');
+roiname = ['PSD_DECsv' int2str(str2num(analysiscode)-100) '_roiresbf']
+
+stats = vlt.data.emptystruct('ROI_properties_true_positives','ROI_properties_false_positives','experindex', 'true_pbright','false_pbright','true_positive_rate','false_positive_rate','true_numabovethreshold','false_numabovethreshold','threshold1','threshold2');
 
 for i=1:numel(s),
+	atd = atdir(s(i).dirname);
 	disp(['On ' int2str(i) ' of ' int2str(numel(s)) '...']);
 	gt_struct = getfield(s(i).groundtruth_analysis.PSD,['PSDv' analysiscode]);
 	for j=1:numel(gt_struct)
@@ -22,12 +25,17 @@ for i=1:numel(s),
 
                 ti = gt_struct(j).thresholdinfo;
 		true_pbright = [];
+		true_numabovethreshold = [];
 		for k=1:numel(stats_here.ROI_properties_true_positives.params3d),
 			Gi = findclosest(double(ti.threshold_signal_to_noise_better(:)), double(stats_here.ROI_properties_true_positives.params3d(k).MaxIntensity));
 			true_pbright(end+1) = ti.detection_quality_better(Gi);
+			true_numabovethreshold(end+1) = sum(stats_here.ROI_properties_true_positives.params3d(k).VoxelValues >= gt_struct(j).thresholds(1));
 		end;
 		stats_here.true_pbright = true_pbright;
 		stats_here.true_positive_rate = (numel(vol_good)-missing) / numel(vol_good);
+		stats_here.true_numabovethreshold = true_numabovethreshold;
+		stats_here.threshold1 = gt_struct(j).thresholds(1);
+		stats_here.threshold2 = gt_struct(j).thresholds(2);
 	
 		[I,good_fp] = wiseetal_gt_falsepositive_matches(gt_struct(j));
 		
@@ -39,16 +47,24 @@ for i=1:numel(s),
 		stats_here.ROI_properties_false_positives.params2d = stats_here.ROI_properties_false_positives.params2d(vol_good);
 		stats_here.ROI_properties_false_positives.params3d = stats_here.ROI_properties_false_positives.params3d(vol_good);
 
+		h = gethistory(atd,'ROIs',roiname);
+		h(end+1) = struct('parent',roiname,'operation','candidate_false_positives','parameters',[],'description',['Candidate false positive filtered all but ' int2str(numel(good_fp(vol_good))) ' ROIs']);
+		at_roi_savesubset(atd, roiname, good_fp(vol_good), [roiname '_FPC'], h);
+
                 ti = gt_struct(j).thresholdinfo;
 		false_pbright = [];
+		false_numabovethreshold = [];
                 for k=1:numel(stats_here.ROI_properties_false_positives.params3d),
 			Gi = findclosest(double(ti.threshold_signal_to_noise_better(:)), double(stats_here.ROI_properties_false_positives.params3d(k).MaxIntensity));
 			false_pbright(end+1) = ti.detection_quality_better(Gi);
+			false_numabovethreshold(end+1) = sum(stats_here.ROI_properties_false_positives.params3d(k).VoxelValues >= gt_struct(j).thresholds(1));
 		end;
 
 		stats_here.false_pbright = false_pbright;
 
-		stats_here.false_positive_rate = numel(good_fp) / numel(gt_struct(j).comp_rois_substantially_in_mask);
+		stats_here.false_positive_rate = numel(good_fp(vol_good)) / numel(gt_struct(j).comp_rois_substantially_in_mask);
+
+		stats_here.false_numabovethreshold = false_numabovethreshold;
 		
 		stats_here.experindex = i;
 

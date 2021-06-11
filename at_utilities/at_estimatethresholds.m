@@ -125,7 +125,7 @@ for i=1:numel(t_levels),
 	threshold_locs(i) = ind;
 end;
 
-out.detection_quality_better = colvec([ 30:99 99.01:99.99 99.991:0.001:99.999 ]);
+out.detection_quality_better = colvec([ 30:99 99.01:99.99 99.991:0.001:99.999 99.9991:0.0001:99.9999 99.99991:0.00001:99.99999]);
 
 signal_nn = [];
 for i=1:numel(out.detection_quality_better),

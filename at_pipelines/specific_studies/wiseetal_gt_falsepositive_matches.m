@@ -1,6 +1,6 @@
 function [indexes, good_fp] = wiseetal_gt_falsepositive_matches(gt_struct)
 
-overlap_fraction_false_positive = 0.2;
+overlap_fraction_false_positive = 0.01;
 
 
  % Condition 1: the nearest ROIs must match by overlap_fraction_true_positive
