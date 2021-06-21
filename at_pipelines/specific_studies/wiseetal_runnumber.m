@@ -17,6 +17,9 @@ label{106} = 'sv6';
 label{107} = 'sv7';
 label{108} = 'sv8';
 label{109} = 'sv9';
+label{110} = 'sv10';
+label{111} = 'sv11';
+label{112} = 'sv12';
 
 tlevels = {};
 tlevels{101} = [80 30];
@@ -28,6 +31,9 @@ tlevels{106} = [97.5 80];
 tlevels{107} = [99 80];
 tlevels{108} = [99.9 80];
 tlevels{109} = [99.99 97];
+tlevels{110} = [99.999 98];
+tlevels{111} = [99.999 99.9];
+tlevels{112} = [99.999 98];
 
 vlt.data.assign(varargin);
 
