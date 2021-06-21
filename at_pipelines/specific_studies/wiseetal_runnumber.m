@@ -43,8 +43,13 @@ n = intersect(n,N);
 for c=1:numel(channels),
 	for ni=1:numel(n),
 		if doROIfinding,
-			evalstr = ['vh_pipepiece1(atd, ''' channels{c} '_DEC'', ''' channels{c} '_DEC' label{n(ni)} ...
-				''',''plotthresholdestimate'',1,''t_levels'',' mat2str(tlevels{n(ni)}) ');'],
+			if n~=112,
+				evalstr = ['vh_pipepiece1(atd, ''' channels{c} '_DEC'', ''' channels{c} '_DEC' label{n(ni)} ...
+					''',''plotthresholdestimate'',1,''t_levels'',' mat2str(tlevels{n(ni)}) ');'],
+			else,
+				evalstr = ['vh_pipepiece2(atd, ''' channels{c} '_DEC'', ''' channels{c} '_DEC' label{n(ni)} ...
+					''',''plotthresholdestimate'',1,''t_levels'',' mat2str(tlevels{n(ni)}) ');'],
+			end;
 			if doit, at_foreachdirdo(d,evalstr); end;
 		end
 
