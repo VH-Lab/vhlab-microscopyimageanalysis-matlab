@@ -54,7 +54,8 @@ for c=1:numel(channels),
 		end
 
 		% filter by the 1st threshold brightness
-		evalstr = ['vh_filter2tbrightness(atd,''' channels{c} '_DEC' label{n(ni)} '_roires'',''' channels{c} '_DEC' label{n(ni)} '_roiresbf'');'],
+        if n==112, str = 'vf'; else, str = ''; end;
+		evalstr = ['vh_filter2tbrightness(atd,''' channels{c} '_DEC' label{n(ni)} '_roires' str ''',''' channels{c} '_DEC' label{n(ni)} '_roiresbf'');'],
 		if doit, at_foreachdirdo(d,evalstr); end;
 
 		evalstr = ['vh_roicomparepipe(atd, ''' channels{c} '_ROI_'', ''' channels{c} '_DEC' label{n(ni)} '_roiresbf'');'],
