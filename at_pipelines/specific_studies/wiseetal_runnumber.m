@@ -7,6 +7,8 @@ channels = {'PSD','VG'};
 doROIfinding = 0;
 doit = 0;
 
+do_groundtruthanalysis = 0;
+
 label = {};
 label{101} = 'sv1';
 label{102} = 'sv2';
@@ -54,21 +56,23 @@ for c=1:numel(channels),
 		end
 
 		% filter by the 1st threshold brightness
-        if n==112, str = 'vf'; else, str = ''; end;
+		if n==112, str = 'vf'; else, str = ''; end;
 		evalstr = ['vh_filter2tbrightness(atd,''' channels{c} '_DEC' label{n(ni)} '_roires' str ''',''' channels{c} '_DEC' label{n(ni)} '_roiresbf'');'],
 		if doit, at_foreachdirdo(d,evalstr); end;
 
-		evalstr = ['vh_roicomparepipe(atd, ''' channels{c} '_ROI_'', ''' channels{c} '_DEC' label{n(ni)} '_roiresbf'');'],
-		if doit, at_foreachdirdo(d,evalstr); end;
-		evalstr = ['vh_roicomparepipe(atd, ''spine_ROI_'', ''' channels{c} '_DEC' label{n(ni)} '_roiresbf'',''useRes'',0);'],
-		if doit, at_foreachdirdo(d,evalstr); end;
+		if do_groundtruthanalysis,
+			evalstr = ['vh_roicomparepipe(atd, ''' channels{c} '_ROI_'', ''' channels{c} '_DEC' label{n(ni)} '_roiresbf'');'],
+			if doit, at_foreachdirdo(d,evalstr); end;
+			evalstr = ['vh_roicomparepipe(atd, ''spine_ROI_'', ''' channels{c} '_DEC' label{n(ni)} '_roiresbf'',''useRes'',0);'],
+			if doit, at_foreachdirdo(d,evalstr); end;
 
-		evalstr = ['vh_groundtruthcompare(atd,''' channels{c} '_DEC' label{n(ni)} '_roiresbf'',''spine_ROI_DLW_ROI'',''' channels{c} '_ROI_'');']
-		if doit, at_foreachdirdo(d([1:10 12]),evalstr); end;
-		evalstr = ['vh_groundtruthcompare(atd,''' channels{c} '_DEC' label{n(ni)} '_roiresbf'',''spine_ROI_SG_ROI'',''' channels{c} '_ROI_'');']
-		if doit, at_foreachdirdo(d([11 13:16]),evalstr); end;
-		evalstr = ['vh_groundtruthcompare(atd,''' channels{c} '_DEC' label{n(ni)} '_roiresbf'',''spine_ROI_KC_ROI'',''' channels{c} '_ROI_'');']
-		if doit, at_foreachdirdo(d([17:18]),evalstr); end;
+			evalstr = ['vh_groundtruthcompare(atd,''' channels{c} '_DEC' label{n(ni)} '_roiresbf'',''spine_ROI_DLW_ROI'',''' channels{c} '_ROI_'');']
+			if doit, at_foreachdirdo(d([1:10 12]),evalstr); end;
+			evalstr = ['vh_groundtruthcompare(atd,''' channels{c} '_DEC' label{n(ni)} '_roiresbf'',''spine_ROI_SG_ROI'',''' channels{c} '_ROI_'');']
+			if doit, at_foreachdirdo(d([11 13:16]),evalstr); end;
+			evalstr = ['vh_groundtruthcompare(atd,''' channels{c} '_DEC' label{n(ni)} '_roiresbf'',''spine_ROI_KC_ROI'',''' channels{c} '_ROI_'');']
+			if doit, at_foreachdirdo(d([17:18]),evalstr); end;
+		end;
 	end;
 end
 
