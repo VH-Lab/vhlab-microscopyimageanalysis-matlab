@@ -1,13 +1,44 @@
 function wisetal_runnumber(d, N, varargin)
-
+% WISEETAL_RUNNUMBER - run a pipeline algorithm for Wise et al
+%
+% WISEETAL_RUNNUMBER(D, N, ...)
+%
+% D is a cell array of directory names of experiments
+% N is the algorithm number to use. For example, 109
+% 
+% The function takes name/value pairs that modify its behavior:
+% ------------------------------------------------------------|
+% | Parameter (default)     | Description                     |
+% |-------------------------|---------------------------------|
+% |doit (0)                 | Should we run the pipelines (1) |
+% |                         |  or just print the commands we  |
+% |                         |  would run (0)?                 |
+% |doROIfinding (0)         | Should we discover ROIs (1)?    |
+% |do_groundtruthanalysis(0)| Should we run ground truth      |
+% |                         |  validation analysis?           |
+% |spacer ('_')             | Are the images named 'PSD_DEC'  |
+% |                         |  or PSDDEC? spacer is the       |
+% |                         |  character in between. Use ''   |
+% |                         |  for none.                      |
+% |channels ({'PSD','VG'})  | Channels to run                 |
+% |-------------------------|---------------------------------|
+%
+% Example:
+%    d = {'/Volumes/van-hooser-lab/Users/Derek/Synaptic Imaging/Cell fills/Full dataset/11-12-20 DLW/CTRL 1/analysis'}
+%    % or d = at_findalldirs('/Volumes/van-hooser-lab/Users/Derek/Synaptic Imaging/Cell fills/Full dataset')
+%    % use this to check it
+%    wiseetal_runnumber(d,109,'doit',0,'doROIfinding',1,'channels',{'PSD','VG','BAS'},'spacer','')
+%    % use this to run it!
+%    wiseetal_runnumber(d,109,'doit',0,'doROIfinding',1,'channels',{'PSD','VG','BAS'},'spacer','')
+%
 
 
 
 channels = {'PSD','VG'};
 doROIfinding = 0;
 doit = 0;
-
 do_groundtruthanalysis = 0;
+spacer = '_';
 
 label = {};
 label{101} = 'sv1';
@@ -46,10 +77,10 @@ for c=1:numel(channels),
 	for ni=1:numel(n),
 		if doROIfinding,
 			if n~=112,
-				evalstr = ['vh_pipepiece1(atd, ''' channels{c} '_DEC'', ''' channels{c} '_DEC' label{n(ni)} ...
+				evalstr = ['vh_pipepiece1(atd, ''' channels{c} spacer 'DEC'', ''' channels{c} '_DEC' label{n(ni)} ...
 					''',''plotthresholdestimate'',1,''t_levels'',' mat2str(tlevels{n(ni)}) ');'],
 			else,
-				evalstr = ['vh_pipepiece2(atd, ''' channels{c} '_DEC'', ''' channels{c} '_DEC' label{n(ni)} ...
+				evalstr = ['vh_pipepiece2(atd, ''' channels{c} spacer 'DEC'', ''' channels{c} '_DEC' label{n(ni)} ...
 					''',''plotthresholdestimate'',1,''t_levels'',' mat2str(tlevels{n(ni)}) ');'],
 			end;
 			if doit, at_foreachdirdo(d,evalstr); end;
