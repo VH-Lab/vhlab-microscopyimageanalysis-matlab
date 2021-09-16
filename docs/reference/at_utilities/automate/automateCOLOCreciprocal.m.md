@@ -1,0 +1,6 @@
+# automateCOLOCreciprocal
+
+```
+  AUTOMATE COLOC CREATION
+
+```

@@ -1,10 +1,7 @@
-site_name: vhlab-toolbox-matlab
-repo_url: https://github.com/VH-Lab/vhlab-toolbox-matlab
-site_author: Steve Van Hooser
+site_name: vhlab-ArrayTomography-matlab
+repo_url: https://github.com/VH-Lab/vhlab-ArrayTomography-matlab
+site_author: VH Lab
 docs_dir: 'docs'
-google_analytics:
-  - UA-91714905-7
-  - auto
 theme:
   name: 'material'
   palette:
