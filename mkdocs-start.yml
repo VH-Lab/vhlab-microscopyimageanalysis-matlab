@@ -1,0 +1,24 @@
+site_name: vhlab-ArrayTomography-matlab
+repo_url: https://github.com/VH-Lab/vhlab-ArrayTomography-matlab
+site_author: VH Lab
+docs_dir: 'docs'
+theme:
+  name: 'material'
+  palette:
+    - scheme: default
+      primary: 'teal'
+      secondary: 'teal'
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+  features:
+    - navigation
+nav:
+  - Home: index.md
+  - Installation: 'installation.md'
+  - Contributing: 'contributing.md'
+  - Code reference:
