@@ -1,7 +1,7 @@
 function mia_build
 
 
-dirname = ['/Users/vanhoosr/Documents/matlab/tools/vhlab-ArrayTomography-matlab'];
+dirname = ['C:\Users\cxyka\OneDrive - brandeis.edu\Brandeis\research\2021 fall\vhlab-ArrayTomography-matlab'];
 
 m=vlt.matlab.mfiledirinfo(dirname);
 
