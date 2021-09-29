@@ -208,7 +208,7 @@ mia.utilities.at_foreachdirdo(d_here,'mia.pipelines.vh_roicomparepipe(atd, ''VG_
 mia.utilities.at_foreachdirdo(d_here,'mia.pipelines.vh_roicomparepipe(atd, ''spine_ROI_'', ''VG_DECsv9_roiresbf'',''useRes'',0);')
 
 mia.utilities.at_foreachdirdo(d_here([1:10 12]),'mia.pipelines.vh_groundtruthcompare(atd,''PSD_DECsv9_roiresbf'',''spine_ROI_DLW_ROI'',''PSD_ROI_'');');
-at_foreachdirdo(d_here([11 13:16]),'mia.pipelines.vh_groundtruthcompare(atd,''PSD_DECsv9_roiresbf'',''spine_ROI_SG_ROI'',''PSD_ROI_'');');
+mia.utilities.at_foreachdirdo(d_here([11 13:16]),'mia.pipelines.vh_groundtruthcompare(atd,''PSD_DECsv9_roiresbf'',''spine_ROI_SG_ROI'',''PSD_ROI_'');');
 mia.utilities.at_foreachdirdo(d_here([17:18]),'mia.pipelines.vh_groundtruthcompare(atd,''PSD_DECsv9_roiresbf'',''spine_ROI_KC_ROI'',''PSD_ROI_'');');
 mia.utilities.at_foreachdirdo(d_here([1:10 12]),'mia.pipelines.vh_groundtruthcompare(atd,''VG_DECsv9_roiresbf'',''spine_ROI_DLW_ROI'',''VG_ROI_'');');
 mia.utilities.at_foreachdirdo(d_here([11 13:16]),'mia.pipelines.vh_groundtruthcompare(atd,''VG_DECsv9_roiresbf'',''spine_ROI_SG_ROI'',''VG_ROI_'');');
@@ -241,7 +241,7 @@ mia.utilities.at_foreachdirdo(d_here,'mia.pipelines.vh_pipepiece1(atd, ''PSD_DEC
 mia.utilities.at_foreachdirdo(d_here,'mia.pipelines.vh_pipepiece1(atd, ''VG_DEC'', ''VG_DECsv11'',''plotthresholdestimate'',1,''t_levels'',[99.999 99.9]);')
 
 
-mia.utilities.at_foreachdirdo(d_here,'vh_filter2tbrightness(atd,''PSD_DECsv11_roires'',''PSD_DECsv11_roiresbf'');');
+mia.utilities.at_foreachdirdo(d_here,'mia.pipelines.vh_filter2tbrightness(atd,''PSD_DECsv11_roires'',''PSD_DECsv11_roiresbf'');');
 mia.utilities.at_foreachdirdo(d_here,'mia.pipelines.vh_filter2tbrightness(atd,''VG_DECsv11_roires'',''VG_DECsv11_roiresbf'');');
 
 
