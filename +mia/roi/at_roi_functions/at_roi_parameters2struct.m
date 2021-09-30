@@ -1,7 +1,7 @@
 function outstruct = at_roi_parameters2struct(roiparams)
 % AT_ROI_PARAMETERS2STRUCT - return a structure with 1-D fields
 %
-% OUTSTRUCT = AT_ROI_PARAMETERS2STRUCT(ROIPARAMS)
+% OUTSTRUCT = mia.roi.roi_functions.at_roi_parameters2struct(ROIPARAMS)
 %
 %  
 
