@@ -33,7 +33,7 @@ for i=1:numel(dirlist),
             if numel(this_image) > 3 & strncmp(lower(this_image(end-2:end)),'_th',3) & ~strncmp(lower(this_image(1:scansize)),lower(exclude_channel),scansize)
                 threshed_img_name = imgs(k);
                 disp(['Now gathering data from ' fname '...']);
-                makefinalroi(atd,threshed_img_name);
+                mia.utilities.automate.makefinalroi(atd,threshed_img_name);
             end
         end
     else
@@ -58,7 +58,7 @@ disp(['Making original ROIs!'])
 clear p;
 p.connectivity = 6;
 S1_rois_output_name = [name_root '_auto_roi'];
-at_roi_connect(atd, which_img, S1_rois_output_name, p);
+mia.roi.roi_makers.at_roi_connect(atd, which_img, S1_rois_output_name, p);
 
 % Step 2: resegment ROIs
 disp(['Watershed resegmentation!'])
@@ -70,7 +70,7 @@ p.use_bwdist = 0;
 p.imagename = ''; % should use "default in history"
 p.assignborders = 1;
 S2_res_output_name = [name_root '_auto_res'];
-at_roi_resegment(atd, S1_rois_output_name, S2_res_output_name, p);
+mia.roi.roi_editors.at_roi_resegment(atd, S1_rois_output_name, S2_res_output_name, p);
 
 % Step 3: volume filter
 disp(['Volume filter!'])
@@ -97,7 +97,7 @@ else
     disp(['... but for now, defaulting to 8-512 pixel volume'])
 end
 S3_vf_output_name = [name_root '_auto_vf'];
-at_roi_volumefilter(atd, S2_res_output_name, S3_vf_output_name, p);
+mia.roi.roi_editors.at_roi_volumefilter(atd, S2_res_output_name, S3_vf_output_name, p);
 
 % Step 5: prominency filter
 disp(['Squat filter!'])
@@ -106,6 +106,6 @@ p.prc_cut = 5;
 p.dist_cardinal = 15;
 p.imagename = '';
 S4_sf_output_name = [name_root '_auto_sf'];
-at_roi_squatfilter(atd, S3_vf_output_name, S4_sf_output_name, p);
+mia.roi.roi_editors.at_roi_squatfilter(atd, S3_vf_output_name, S4_sf_output_name, p);
 
 end

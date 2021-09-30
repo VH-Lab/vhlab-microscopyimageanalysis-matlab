@@ -2,7 +2,7 @@
 function trawldataforthreshed(fname,ch1,ch2)
 % Runs a pipeline for COLOCALIZATION creation  on two sets of ROIs
 % (designated as ch1 and ch2 as strings, such as 'PSD' which exactly match
-% the beginning of the ROI name), generated with automateROIcreation images
+% the beginning of the ROI name), generated with mia.utilities.automate.automateROIcreation images
 % in a folder. It'll search the whole folder for the right files, and it's
 % intended to be used over a long period (like overnight). Requires ROIs
 % that have sent through the pipeline OR named with the suffix "_auto_pf".
@@ -52,7 +52,7 @@ p.threshold = 0.01;
 p.roi_set_2 = [ch2 '_auto_pf'];
 coloc12input = [ch1 '_auto_pf'];
 coloc12output = [ch1 'autocolocw' ch2];
-at_colocalization_shiftxyz(atd,coloc12input,coloc12output,p);
+mia.colocalization.at_colocalization_makers.at_colocalization_shiftxyz(atd,coloc12input,coloc12output,p);
 
 % Step 2: make the second colocalization
 disp(['Making second colocalization! (Ch2 -> Ch1)'])
@@ -64,7 +64,7 @@ p.threshold = 0.01;
 p.roi_set_2 = [ch1 '_auto_pf'];
 coloc21input = [ch2 '_auto_pf'];
 coloc21output = [ch2 'autocolocw' ch1];
-at_colocalization_shiftxyz(atd,coloc21input,coloc21output,p);
+mia.colocalization.at_colocalization_makers.at_colocalization_shiftxyz(atd,coloc21input,coloc21output,p);
 
 % Step 3: find puncta in Ch1 that are colocalized with Ch2
 disp(['Making first colocalized filter!'])
@@ -73,7 +73,7 @@ p.colocalization_name = coloc12output;
 p.include_overlaps = 1;
 filter12input = [ch1 '_auto_pf'];
 filter12output = [ch1 '_colocw' ch2];
-at_roi_filtercolocalization(atd,filter12input,filter12output,p);
+mia.roi.roi_editors.at_roi_filtercolocalization(atd,filter12input,filter12output,p);
 
 % Step 4: find puncta in Ch2 that are colocalized with Ch1
 disp(['Making second colocalized filter!'])
@@ -82,6 +82,6 @@ p.colocalization_name = coloc21output;
 p.include_overlaps = 1;
 filter21input = [ch2 '_auto_pf'];
 filter21output = [ch2 '_colocw' ch1];
-at_roi_filtercolocalization(atd,filter21input,filter21output,p);
+mia.roi.roi_editors.at_roi_filtercolocalization(atd,filter21input,filter21output,p);
 
 end
