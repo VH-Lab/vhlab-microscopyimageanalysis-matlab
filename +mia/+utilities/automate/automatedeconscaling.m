@@ -6,7 +6,7 @@ filenames = dir(fname);
 for i=1:numel(filenames),
     [starts,stops] = regexp(filenames(i).name,'^[C](\d+)[-]','forceCellOutput');
     if ~isempty(starts{1})
-    mia.scaler.airyscaler4([fname filesep filenames(i).name])
+    airyscaler4([fname filesep filenames(i).name])
 end, end
 
 end

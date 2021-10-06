@@ -1,11 +1,11 @@
 %% NUMBER OF PIXELS ABOVE HIGH THRESHOLD FILTER
 function out = at_roi_numabovethreshfilter (atd, input_itemname, output_itemname, parameters)
 % out = AT_ROI_PROMINENCY FILTER (ATD,INPUT_ITEMANME,OUTPUT_ITEMNAME,PARAMETERS) 
-% atd should be a directory culminating in an "analysis" file for mia.GUI.archived_code.ATGUI
+% atd should be a directory culminating in an "analysis" file for ATGUI
 % code.
 % input_itemname is specified in at_gui as a selected ROI set, which must
 % have been generated with the doublethreshold system and must have had a
-% threshold supplied by mia.utilities.at_estimatethresholds.
+% threshold supplied by at_estimatethresholds.
 % output_itemname is also specified in at_gui, and entered as you wish
 
 % This filter has one useful parameter, num_above, representing the number
@@ -31,30 +31,30 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = mia.roi.roi_editors.at_roi_numabovethreshfilter;
+			out_choice = at_roi_numabovethreshfilter;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.roi.roi_editors.at_roi_numabovethreshfilter(atd,input_itemname,output_itemname,buttonname);
+				out = at_roi_numabovethreshfilter(atd,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 		case 'choose_inputdlg',
-			out_p = mia.roi.roi_editors.at_roi_numabovethreshfilter;
+			out_p = at_roi_numabovethreshfilter;
 			defaultparameters.num_above = 50;
 			defaultparameters.imagename = '';
 			parameters = dlg2struct('Choose parameters', out_p{1}, out_p{2}, defaultparameters);
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.roi.roi_editors.at_roi_numabovethreshfilter(atd,input_itemname,output_itemname,parameters);
+				out = at_roi_numabovethreshfilter(atd,input_itemname,output_itemname,parameters);
 			end
 	end; % switch
 	return;
 end;
 
-%% Load the ROIs in the set (both L and CC files from mia.GUI.archived_code.ATGUI code)
+%% Load the ROIs in the set (both L and CC files from ATGUI code)
 L_in_file = getlabeledroifilename(atd,input_itemname);
 roi_in_file = getroifilename(atd,input_itemname);
 load(roi_in_file,'CC','-mat');
@@ -63,14 +63,14 @@ oldobjects = CC.NumObjects;
 
 %% Load the original image
 if isempty(parameters.imagename), % choose it 
-    [dummy,im_fname] = mia.roi.roi_functions.at_roi_underlying_image(atd,input_itemname);
+    [dummy,im_fname] = at_roi_underlying_image(atd,input_itemname);
     parameters.imagename = im_fname;
 end
 
-[num_images,img_stack] = mia.at_loadscaledstack(parameters.imagename);
+[num_images,img_stack] = at_loadscaledstack(parameters.imagename);
 
 %% Change ROI format from indexes to y x z (ind2sub)
-[puncta_info] = mia.utilities.at_puncta_info(img_stack,CC);
+[puncta_info] = at_puncta_info(img_stack,CC);
 
 %% Get the threshold data
 hist = gethistory(atd,'ROIs',input_itemname);
@@ -110,13 +110,13 @@ save(roi_out_file,'CC','-mat');
 save(L_out_file,'L','-mat');
 
 h = gethistory(atd,'ROIs',input_itemname);
-h(end+1) = struct('parent',input_itemname,'operation','mia.roi.roi_editors.at_roi_resegment','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','at_roi_resegment','parameters',parameters,...
 	'description',['Pared down ' int2str(oldobjects) ' ROIs below ' int2str(parameters.num_above) ' pixels above peak threshold into ' int2str(newobjects) ' from ' input_itemname '.']);
 sethistory(atd,'ROIs',output_itemname,h);
 
 str2text([getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
-mia.roi.roi_functions.at_roi_parameters(atd,roi_out_file);
+at_roi_parameters(atd,roi_out_file);
 
 out = 1;
 end

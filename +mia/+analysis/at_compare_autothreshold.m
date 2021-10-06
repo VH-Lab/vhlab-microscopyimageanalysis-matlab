@@ -1,7 +1,7 @@
 function at_compare_autothreshold(d, imageName, varargin)
 % AT_COMPARE_AUTOTHRESHOLD - compare autothresholding performance for multiple experiments
 % 
-% mia.analysis.at_compare_autothreshold(D, IMAGENAME)
+% AT_COMPARE_AUTOTHRESHOLD(D, IMAGENAME)
 %
 % D is a cell array of directory names to examine, and IMAGENAME is the image
 % to process with the autothreshold function. No results are saved except
@@ -30,7 +30,7 @@ f = figure;
 for i=1:numel(d),
 	atd = atdir(d{i});
 	supersubplot(f,N,M,i);
-	mia.at_pipelines.vh_autothreshold_plot(atd, imageName,'t_levels',t_levels);
+	vh_autothreshold_plot(atd, imageName,'t_levels',t_levels);
 	switch labelmethod,
 		case 'IMNAME#',
 			title([imageName ' ' int2str(i)]);

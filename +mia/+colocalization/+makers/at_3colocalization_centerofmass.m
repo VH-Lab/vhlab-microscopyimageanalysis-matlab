@@ -1,7 +1,7 @@
 function out = at_3colocalization_centerofmass(atd, input_itemname, output_itemname, parameters)
 % AT_3COLOCALIZATION_CENTEROFMASS - Estimate colocalization by center-of-mass distance, triple
 % 
-%  OUT = mia.colocalization.at_colocalization_makers.at_3colocalization_centerofmass(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = AT_3COLOCALIZATION_CENTEROFMASS(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -23,17 +23,17 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = mia.colocalization.at_colocalization_makers.at_3colocalization_centerofmass;
+			out_choice = at_3colocalization_centerofmass;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.colocalization.at_colocalization_makers.at_3colocalization_centerofmass(atd,input_itemname,output_itemname,buttonname);
+				out = at_3colocalization_centerofmass(atd,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 		case 'choose_inputdlg',
-			out_p = mia.colocalization.at_colocalization_makers.at_3colocalization_centerofmass;
+			out_p = at_3colocalization_centerofmass;
 			default_parameters.distance_threshold = 5;
 			default_parameters.distance_infinity = 50;
 			default_parameters.show_graphical_progress = 1;
@@ -88,7 +88,7 @@ if ischar(parameters),
 					end;
 				end;
 
-				out = mia.colocalization.at_colocalization_makers.at_3colocalization_centerofmass(atd,input_itemname,output_itemname,parameters);
+				out = at_3colocalization_centerofmass(atd,input_itemname,output_itemname,parameters);
 			end;
 	end;
 	return;
@@ -108,7 +108,7 @@ try,
 	roipfilename{1} = getroiparametersfilename(atd, input_itemname);
 	if isempty(roipfilename{1}), error('filename is empty.'); end;
 catch,
-	mia.roi.roi_functions.at_roi_parameters(atd,rois{1});
+	at_roi_parameters(atd,rois{1});
 	roipfilename{1} = getroiparametersfilename(atd, input_itemname);
 end;
 
@@ -120,7 +120,7 @@ try,
 	roipfilename{2} = getroiparametersfilename(atd, parameters.roi_set_2);
     if isempty(roipfilename{2}), error(['file is empty.']); end;
 catch,
-	mia.roi.roi_functions.at_roi_parameters(atd,rois{2});
+	at_roi_parameters(atd,rois{2});
 	roipfilename{2} = getroiparametersfilename(atd, parameters.roi_set_2);
 end
 
@@ -132,7 +132,7 @@ try,
 	roipfilename{3} = getroiparametersfilename(atd, parameters.roi_set_3);
     if isempty(roipfilename{3}), error(['file is empty.']); end;
 catch,
-	mia.roi.roi_functions.at_roi_parameters(atd,rois{3});
+	at_roi_parameters(atd,rois{3});
 	roipfilename{3} = getroiparametersfilename(atd, parameters.roi_set_3);
 end
 
@@ -193,7 +193,7 @@ save(colocalizationdata_out_file,'colocalization_data','-mat');
 overlapped_objects = numel(find(overlap_thresh));
 
 h = gethistory(atd,'images',input_itemname);
-h(end+1) = struct('parent',input_itemname,'operation','mia.colocalization.at_colocalization_makers.at_colocalization_centerofmass','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','at_colocalization_centerofmass','parameters',parameters,...
 	'description',['Found ' int2str(overlapped_objects) ' CLs with distance threshold <= ' num2str(parameters.distance_threshold) ...
 	' pixels of ROI ' input_itemname ' onto ROI ' parameters.roi_set_2 ' and ROI ' parameters.roi_set_3 '.']);
 
@@ -203,4 +203,3 @@ str2text([getpathname(atd) filesep 'CLAs' filesep output_itemname filesep 'paren
 
 out = 1;
 
- 

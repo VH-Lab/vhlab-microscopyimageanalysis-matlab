@@ -1,14 +1,14 @@
 %% PROMINENCY FILTER
 function out = at_roi_squatfilter (atd, input_itemname, output_itemname, parameters)
 % out = AT_ROI_SQUAT FILTER (ATD,INPUT_ITEMANME,OUTPUT_ITEMNAME,PARAMETERS) 
-% atd should be a directory culminating in an "analysis" file for mia.GUI.archived_code.ATGUI
+% atd should be a directory culminating in an "analysis" file for ATGUI
 % code.
 % input_itemname is specified in at_gui as a selected ROI set
 % output_itemname is also specified in at_gui, and entered as you wish
 % this filter has one parameter, the threshold of prominence needed to
 % consider a punctum sufficiently prominent over its local background - the
 % logic being that if it not prominent, it is unlikely to be real.
-% you can also manually set these three parameters for mia.roi.roi_functions.at_roi_locbacgr if you
+% you can also manually set these three parameters for at_roi_locbacgr if you
 % want: % parameters.dist_cardinal (default 50); parameters.CV_binsize
 % (default 5);
 % parameters.CV_thresh (default 0.01).
@@ -31,17 +31,17 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = mia.roi.roi_editors.at_roi_squatfilter;
+			out_choice = at_roi_squatfilter;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.roi.roi_editors.at_roi_squatfilter(atd,input_itemname,output_itemname,buttonname);
+				out = at_roi_squatfilter(atd,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 		case 'choose_inputdlg',
-			out_p = mia.roi.roi_editors.at_roi_squatfilter;
+			out_p = at_roi_squatfilter;
 			defaultparameters.dist_cardinal = 15;
 			defaultparameters.prc_cut = 5;
 			defaultparameters.imagename = '';
@@ -49,7 +49,7 @@ if ischar(parameters),
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.roi.roi_editors.at_roi_squatfilter(atd,input_itemname,output_itemname,parameters);
+				out = at_roi_squatfilter(atd,input_itemname,output_itemname,parameters);
 			end
 	end; % switch
 	return;
@@ -59,10 +59,10 @@ end;
 ROIname = getroifilename(atd,input_itemname);
 foldername = fileparts(ROIname);
 
-% [intensity_thresh,max_neg_slopes,cutoff,highest_pixel] = mia.roi.roi_functions.at_roi_secthreshslopes(atd,ROIname,parameters);
-[local_bg,whh,highest_pixel]= mia.roi.roi_functions.at_roi_widthhalfheight(atd,ROIname,parameters);
+% [intensity_thresh,max_neg_slopes,cutoff,highest_pixel] = at_roi_secthreshslopes(atd,ROIname,parameters);
+[local_bg,whh,highest_pixel]= at_roi_widthhalfheight(atd,ROIname,parameters);
 
-%% Load the ROIs in the set (both L and CC files from mia.GUI.archived_code.ATGUI code)
+%% Load the ROIs in the set (both L and CC files from ATGUI code)
 L_in_file = getlabeledroifilename(atd,input_itemname);
 roi_in_file = getroifilename(atd,input_itemname);
 load(roi_in_file,'CC','-mat');
@@ -71,14 +71,14 @@ oldobjects = CC.NumObjects;
 
 %% Load the original image
 if isempty(parameters.imagename), % choose it 
-    [dummy,im_fname] = mia.roi.roi_functions.at_roi_underlying_image(atd,input_itemname);
+    [dummy,im_fname] = at_roi_underlying_image(atd,input_itemname);
     parameters.imagename = im_fname;
 end
 
-[num_images,img_stack] = mia.at_loadscaledstack(parameters.imagename);
+[num_images,img_stack] = at_loadscaledstack(parameters.imagename);
 
 %% Change ROI format from indexes to y x z (ind2sub)
-[puncta_info] = mia.utilities.at_puncta_info(img_stack,CC);
+[puncta_info] = at_puncta_info(img_stack,CC);
 
 %% Get simple puncta information
 for punctum = 1: size(puncta_info,1),
@@ -112,11 +112,11 @@ try,
 end;
 
 h = gethistory(atd,'ROIs',input_itemname);
-h(end+1) = struct('parent',input_itemname,'operation','mia.roi.roi_editors.at_roi_resegment','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','at_roi_resegment','parameters',parameters,...
 	'description',['ROIs were pared down from ' int2str(oldobjects) ' to ' int2str(newobjects) ', rejecting non-prominent members from ' input_itemname '.']);
 sethistory(atd,'ROIs',output_itemname,h);
 
-mia.roi.roi_functions.at_roi_savesubset(atd,input_itemname, good_indexes, output_itemname, h);
+at_roi_savesubset(atd,input_itemname, good_indexes, output_itemname, h);
 
 out = 1;
 end

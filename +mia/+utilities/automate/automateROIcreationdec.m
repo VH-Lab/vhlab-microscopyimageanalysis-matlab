@@ -33,7 +33,7 @@ for i=1:numel(dirlist),
             if numel(this_image) > 3 & strncmp(lower(this_image(end-2:end)),'_th',3) & ~strncmp(lower(this_image(1:scansize)),lower(exclude_channel),scansize)
                 threshed_img_name = imgs(k);
                 disp(['Now gathering data from ' fname '...']);
-                mia.utilities.automate.makefinalroi(atd,threshed_img_name);
+                makefinalroi(atd,threshed_img_name);
             end
         end
     else
@@ -45,7 +45,7 @@ end
 end
 
 %% RUN THE PIPELINE
-function mia.at_utilities.automate.makefinalroi(atd,threshed_img_name)
+function makefinalroi(atd,threshed_img_name)
 % Goes through the steps for my ROI analysis as of early October 2020.
 % Requires input as a file name with the suffix _th (case sensitive).
 which_img = cell2mat(threshed_img_name);
@@ -58,7 +58,7 @@ disp(['Making original ROIs!'])
 clear p;
 p.connectivity = 6;
 S1_rois_output_name = [name_root '_auto_roi'];
-mia.roi.roi_makers.at_roi_connect(atd, which_img, S1_rois_output_name, p);
+at_roi_connect(atd, which_img, S1_rois_output_name, p);
 
 % Step 2: resegment ROIs
 disp(['Watershed resegmentation!'])
@@ -70,7 +70,7 @@ p.use_bwdist = 0;
 p.imagename = ''; % should use "default in history"
 p.assignborders = 1;
 S2_res_output_name = [name_root '_auto_res'];
-mia.roi.roi_editors.at_roi_resegment(atd, S1_rois_output_name, S2_res_output_name, p);
+at_roi_resegment(atd, S1_rois_output_name, S2_res_output_name, p);
 
 % Step 3: volume filter
 disp(['Volume filter!'])
@@ -97,7 +97,7 @@ else
     disp(['... but for now, defaulting to 8-512 pixel volume'])
 end
 S3_vf_output_name = [name_root '_auto_vf'];
-mia.roi.roi_editors.at_roi_volumefilter(atd, S2_res_output_name, S3_vf_output_name, p);
+at_roi_volumefilter(atd, S2_res_output_name, S3_vf_output_name, p);
 
 % Step 5: prominency filter
 disp(['Squat filter!'])
@@ -106,6 +106,6 @@ p.prc_cut = 5;
 p.dist_cardinal = 15;
 p.imagename = '';
 S4_sf_output_name = [name_root '_auto_sf'];
-mia.roi.roi_editors.at_roi_squatfilter(atd, S3_vf_output_name, S4_sf_output_name, p);
+at_roi_squatfilter(atd, S3_vf_output_name, S4_sf_output_name, p);
 
 end

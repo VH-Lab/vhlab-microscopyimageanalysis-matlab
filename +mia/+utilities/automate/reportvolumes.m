@@ -2,9 +2,9 @@ function reportvolumes(atd,input_itemname)
 %% COMPARES PSD ROIs TO VG ROIs
 
 % Get the Image
-[dummy,im_fname] = mia.roi.roi_functions.at_roi_underlying_image(atd,input_itemname);
+[dummy,im_fname] = at_roi_underlying_image(atd,input_itemname);
 parameters.imagename = im_fname;
-[num_images,img_stack] = mia.at_loadscaledstack(parameters.imagename);
+[num_images,img_stack] = at_loadscaledstack(parameters.imagename);
 
 % Get the ROIs
 L_in_file = getlabeledroifilename(atd,input_itemname);

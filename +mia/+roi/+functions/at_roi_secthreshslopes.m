@@ -1,7 +1,7 @@
 %% Local Background
 function [intensity_thresh,max_neg_slope,cutoff,highest_pixel]= secthreshslopes(atd,filename,varargin)
 % [local_bg,highest_pixel] = SECTHRESHSLOPES(ATD,FILENAME,VARARGIN) 
-% atd should be a directory culminating in an "analysis" file for mia.GUI.archived_code.ATGUI
+% atd should be a directory culminating in an "analysis" file for ATGUI
 % code.
 % filename is the full path to an ROI dataset, including the ".mat"
 % exension 
@@ -23,7 +23,7 @@ assign(varargin{:});
 
 ROIintparam = [];
 
-%% Use mia.roi.roi_functions.at_roi_parameters code to identify the correct .CC and img file
+%% Use at_roi_parameters code to identify the correct .CC and img file
 disp(['Grabbing image and ROI information!']);
 a = load(filename,'-mat');
 
@@ -34,11 +34,11 @@ if isempty(itemnamecutoff),
 	error(['Could not identiy ROI name!']);
 end;
 itemname = itemfilename(1:itemnamecutoff(1)-1);
-[dummy,im_fname] = mia.roi.roi_functions.at_roi_underlying_image(atd,itemname);
+[dummy,im_fname] = at_roi_underlying_image(atd,itemname);
 
 %% Convert information into DLW formats
-[num_images,img_stack] = mia.at_loadscaledstack(im_fname);
-[puncta_info] = mia.utilities.at_puncta_info(img_stack,a.CC);
+[num_images,img_stack] = at_loadscaledstack(im_fname);
+[puncta_info] = at_puncta_info(img_stack,a.CC);
 
 %% Calculate the cardinal slopes
 disp(['Calculating local background!']);
