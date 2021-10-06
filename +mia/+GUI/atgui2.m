@@ -1,7 +1,7 @@
 function out = atgui2(name, varargin)
 % ATGUI2 - 2nd generation GUI for Array Tomography analysis
 %
-%   ATGUI2 
+%   mia.GUI.atgui2 
 %
 %   Launches a graphical user interface for Array Tomography
 %   analysis. 
@@ -34,7 +34,7 @@ if length(command)>length(name),
 end;
 
 if ~command_extract_success,
-	error(['Command must include ATGUI2 name']);
+	error(['Command must include mia.GUI.atgui2 name']);
 end;
 
 % initialize our internal variables or pull it

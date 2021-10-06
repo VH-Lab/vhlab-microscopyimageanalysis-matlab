@@ -45,7 +45,7 @@ end
 end
 
 %% RUN THE PIPELINE
-function makefinalroi(atd,threshed_img_name)
+function mia.at_utilities.automate.makefinalroi(atd,threshed_img_name)
 % Goes through the steps for my ROI analysis as of early October 2020.
 % Requires input as a file name with the suffix _th (case sensitive).
 which_img = cell2mat(threshed_img_name);
