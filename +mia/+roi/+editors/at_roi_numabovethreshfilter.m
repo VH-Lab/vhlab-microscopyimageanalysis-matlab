@@ -1,11 +1,11 @@
 %% NUMBER OF PIXELS ABOVE HIGH THRESHOLD FILTER
 function out = at_roi_numabovethreshfilter (atd, input_itemname, output_itemname, parameters)
 % out = AT_ROI_PROMINENCY FILTER (ATD,INPUT_ITEMANME,OUTPUT_ITEMNAME,PARAMETERS) 
-% atd should be a directory culminating in an "analysis" file for ATGUI
+% atd should be a directory culminating in an "analysis" file for mia.GUI.archived_code.ATGUI
 % code.
 % input_itemname is specified in at_gui as a selected ROI set, which must
 % have been generated with the doublethreshold system and must have had a
-% threshold supplied by at_estimatethresholds.
+% threshold supplied by mia.utilities.at_estimatethresholds.
 % output_itemname is also specified in at_gui, and entered as you wish
 
 % This filter has one useful parameter, num_above, representing the number
@@ -54,7 +54,7 @@ if ischar(parameters),
 	return;
 end;
 
-%% Load the ROIs in the set (both L and CC files from ATGUI code)
+%% Load the ROIs in the set (both L and CC files from mia.GUI.archived_code.ATGUI code)
 L_in_file = getlabeledroifilename(atd,input_itemname);
 roi_in_file = getroifilename(atd,input_itemname);
 load(roi_in_file,'CC','-mat');
@@ -67,10 +67,10 @@ if isempty(parameters.imagename), % choose it
     parameters.imagename = im_fname;
 end
 
-[num_images,img_stack] = at_loadscaledstack(parameters.imagename);
+[num_images,img_stack] = mia.at_loadscaledstack(parameters.imagename);
 
 %% Change ROI format from indexes to y x z (ind2sub)
-[puncta_info] = at_puncta_info(img_stack,CC);
+[puncta_info] = mia.utilities.at_puncta_info(img_stack,CC);
 
 %% Get the threshold data
 hist = gethistory(atd,'ROIs',input_itemname);

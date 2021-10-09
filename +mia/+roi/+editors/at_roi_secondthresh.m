@@ -1,7 +1,7 @@
 %% SECOND THRESHOLD
 function out = at_roi_secondthresh (atd, input_itemname, output_itemname, parameters)
 % out = AT_ROI_SECONDTHRESH(ATD,INPUT_ITEMANME,OUTPUT_ITEMNAME,PARAMETERS) 
-% atd should be a directory culminating in an "analysis" file for ATGUI
+% atd should be a directory culminating in an "analysis" file for mia.GUI.archived_code.ATGUI
 % code.
 % input_itemname is specified in at_gui as a selected ROI set
 % output_itemname is also specified in at_gui, and entered as you wish
@@ -66,7 +66,7 @@ else
     [local_bg,highest_pixel] = at_roi_locbacgr(atd,ROIname,parameters);
 end
 
-%% Load the ROIs in the set (both L and CC files from ATGUI code)
+%% Load the ROIs in the set (both L and CC files from mia.GUI.archived_code.ATGUI code)
 L_in_file = getlabeledroifilename(atd,input_itemname);
 roi_in_file = getroifilename(atd,input_itemname);
 load(roi_in_file,'CC','-mat');
@@ -79,10 +79,10 @@ if isempty(parameters.imagename), % choose it
     parameters.imagename = im_fname;
 end
 
-[num_images,img_stack] = at_loadscaledstack(parameters.imagename);
+[num_images,img_stack] = mia.at_loadscaledstack(parameters.imagename);
 
 %% Change ROI format from indexes to y x z (ind2sub)
-[puncta_info] = at_puncta_info(img_stack,CC);
+[puncta_info] = mia.utilities.at_puncta_info(img_stack,CC);
 
 %% Find the location, intensity, and frame of the peak pixel
 for punctum = 1: size(puncta_info,1),

@@ -1,26 +1,26 @@
 function varargout = ATGUI(varargin)
 % ATGUI MATLAB code for ATGUI.fig
-%      ATGUI, by itself, creates a new ATGUI or raises the existing
+%      mia.GUI.archived_code.ATGUI, by itself, creates a new mia.GUI.archived_code.ATGUI or raises the existing
 %      singleton*.
 %
-%      H = ATGUI returns the handle to a new ATGUI or the handle to
+%      H = mia.GUI.archived_code.ATGUI returns the handle to a new mia.GUI.archived_code.ATGUI or the handle to
 %      the existing singleton*.
 %
-%      ATGUI('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in ATGUI.M with the given input arguments.
+%      mia.GUI.archived_code.ATGUI('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in mia.GUI.archived_code.ATGUI.M with the given input arguments.
 %
-%      ATGUI('Property','Value',...) creates a new ATGUI or raises the
+%      mia.GUI.archived_code.ATGUI('Property','Value',...) creates a new mia.GUI.archived_code.ATGUI or raises the
 %      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the ATGUI before ATGUI_OpeningFcn gets called.  An
+%      applied to the mia.GUI.archived_code.ATGUIUI.archived_code.ATGUI before ATGUI_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
 %      stop.  All inputs are passed to ATGUI_OpeningFcn via varargin.
 %
-%      *See ATGUI Options on GUIDE's Tools menu.  Choose "ATGUI allows only one
+%      *See mia.GUI.archived_code.ATGUI Options on GUIDE's Tools menu.  Choose "mia.GUI.archived_code.ATGUI allows only one
 %      instance to run (singleton)".
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help ATGUI
+% Edit the above text to modify the response to help mia.GUI.archived_code.ATGUI
 
 % Last Modified by GUIDE v2.5 23-Jul-2014 14:21:30
 
@@ -44,21 +44,21 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before ATGUI is made visible.
+% --- Executes just before mia.GUI.archived_code.ATGUI is made visible.
 function ATGUI_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to ATGUI (see VARARGIN)
+% varargin   command line arguments to mia.GUI.archived_code.ATGUI (see VARARGIN)
 
-% Choose default command line output for ATGUI
+% Choose default command line output for mia.GUI.archived_code.ATGUI
 handles.output = hObject;
 
 % Update handles structure
 guidata(hObject, handles);
 
-% UIWAIT makes ATGUI wait for user response (see UIRESUME)
+% UIWAIT makes mia.GUI.archived_code.ATGUI wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
 
@@ -220,7 +220,7 @@ fullfilename=strcat(handles.mydata.pathsave, '\', name, '.mat');
 
 %Home grown punta detection script.
 [roi.imrois, roi.L, imrois2d,BW]...
-    = spotdetector3(imthresh, 4, 'im', 1, {'im'});
+    = mia.z_old_archived_code.spotdetector3(imthresh, 4, 'im', 1, {'im'});
 tic
 count=0;
 handles.roi=[];
@@ -240,7 +240,7 @@ end
         
     
 
-handles.roi.props =roi_properties(handles.roi.imrois, IMdata);
+handles.roi.props =mia.z_old_archived_code.roi_properties(handles.roi.imrois, IMdata);
 set(handles.text14,'String',length(handles.roi.props));
 set(handles.listbox1,'userdata',handles.roi.imrois);
 
@@ -287,7 +287,7 @@ if isempty(i) | isempty(strtrim(str)), return; end;
     
     for n = 1:numel(i),
         for j = i(n),  
-            [roi2d, roi2dperim] = roi3d2dprojection(handles.roi.imrois(j).pixelinds, size(IMdata), zdim);
+            [roi2d, roi2dperim] = mia.z_old_archived_code.roi3d2dprojection(handles.roi.imrois(j).pixelinds, size(IMdata), zdim);
              if isempty(roi2dperim),
              else,
                 for k=1:length(roi2dperim),
@@ -345,7 +345,7 @@ index_selected = get(handles.popupmenu5, 'Value');
     
     if a
         for i=1:length(handles.roi.props),
-            [roi2d, roi2dperim] = roi3d2dprojection(handles.roi.imrois(i).pixelinds, size(IMdata), zdim);
+            [roi2d, roi2dperim] = mia.z_old_archived_code.roi3d2dprojection(handles.roi.imrois(i).pixelinds, size(IMdata), zdim);
             axes(handles.axes4)
             hold on;
             if isempty(roi2dperim)
@@ -462,14 +462,14 @@ zrange = [str2num(get(handles.edit24,'string')):1:str2num(get(handles.edit25,'st
 direction=get(handles.popupmenu6, 'value');
 
 if direction==2
-    [rois3dmerged, rois1.roi.L] = rois3dcat(rois1.roi.imrois,rois1.roi.L);
-    [rois_overlap] = all_overlaps(rois3dmerged, rois2.roi.imrois,...
+    [rois3dmerged, rois1.roi.L] = mia.z_old_archived_code.rois3dcat(rois1.roi.imrois,rois1.roi.L);
+    [rois_overlap] = mia.z_old_archived_code.all_overlaps(rois3dmerged, rois2.roi.imrois,...
         rois1.roi.L, rois2.roi.L, n, xrange, yrange, zrange);
     handles.mydata.overlapfilename=strcat(handles.mydata.pathsave, '\', name, 'Overlap2on1', '.mat');
     handles.roi=rois2.roi;
 else
-    [rois3dmerged, rois2.roi.L] = rois3dcat(rois2.roi.imrois, rois2.roi.L);
-    [rois_overlap] = all_overlaps(rois3dmerged, rois1.roi.imrois,...
+    [rois3dmerged, rois2.roi.L] = mia.z_old_archived_code.rois3dcat(rois2.roi.imrois, rois2.roi.L);
+    [rois_overlap] = mia.z_old_archived_code.all_overlaps(rois3dmerged, rois1.roi.imrois,...
         rois2.roi.L, rois1.roi.L, n, xrange, yrange, zrange);
     handles.mydata.overlapfilename=strcat(handles.mydata.pathsave, '\', name, 'Overlap1on2', '.mat');
     handles.roi=rois1.roi;
@@ -482,7 +482,7 @@ color='y';
 
 for i=1:length(rois_overlap.index),
     j=rois_overlap.index(i);
-    [roi2d, roi2dperim] = roi3d2dprojection(handles.roi.imrois(j).pixelinds, size(IMdata), zdim);
+    [roi2d, roi2dperim] = mia.z_old_archived_code.roi3d2dprojection(handles.roi.imrois(j).pixelinds, size(IMdata), zdim);
      axes(handles.axes4)
      hold on;
      if isempty(roi2dperim)
@@ -711,13 +711,13 @@ coloc_thresh = str2num(get(handles.edit26,'string'));
 i = get(handles.popupmenu6, 'value');
 
 if i == 1,
-    [roiscolocalization] = find_colocalization(overlap.overlap12, coloc_thresh);
+    [roiscolocalization] = mia.z_old_archived_code.find_colocalization(overlap.overlap12, coloc_thresh);
     figure;
     coloc_num = numel(find(roiscolocalization == 1));
     rois_per_area = numel(coloc_num)/bwarea(im1);
     bar(rois_per_area);
 else
-    [roiscolocalization] = find_colocalization(overlap.overlap21, coloc_thresh);
+    [roiscolocalization] = mia.z_old_archived_code.find_colocalization(overlap.overlap21, coloc_thresh);
 end;
 
 mydata=handles.mydata;

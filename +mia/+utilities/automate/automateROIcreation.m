@@ -33,7 +33,7 @@ for i=1:numel(dirlist),
             if numel(this_image) > 3 & strncmp(lower(this_image(end-2:end)),'_th',3) & ~strncmp(lower(this_image(1:scansize)),lower(exclude_channel),scansize)
                 threshed_img_name = imgs(k);
                 disp(['Now gathering data from ' fname '...']);
-                makefinalroi(atd,threshed_img_name);
+                mia.utilities.automate.makefinalroi(atd,threshed_img_name);
             end
         end
     else
@@ -45,7 +45,7 @@ end
 end
 
 %% RUN THE PIPELINE
-function makefinalroi(atd,threshed_img_name)
+function mia.utilities.automate.makefinalroi(atd,threshed_img_name)
 % Goes through the steps for my ROI analysis as of early October 2020.
 % Requires input as a file name with the suffix _th (case sensitive).
 which_img = cell2mat(threshed_img_name);

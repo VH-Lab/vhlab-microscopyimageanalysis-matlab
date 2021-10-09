@@ -2,7 +2,7 @@
 function trawldataforthreshed(fname,ch1,ch2)
 % Runs a pipeline for COLOCALIZATION creation  on two sets of ROIs
 % (designated as ch1 and ch2 as strings, such as 'PSD' which exactly match
-% the beginning of the ROI name), generated with automateROIcreation images
+% the beginning of the ROI name), generated with mia.utilities.automate.automateROIcreation images
 % in a folder. It'll search the whole folder for the right files, and it's
 % intended to be used over a long period (like overnight). Requires ROIs
 % that have sent through the pipeline OR named with the suffix "_auto_pf".

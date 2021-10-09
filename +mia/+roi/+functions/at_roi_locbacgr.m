@@ -1,7 +1,7 @@
 %% Local Background
 function [local_bg,highest_pixel]= at_roi_locbacgr(atd,filename,varargin)
 % [local_bg,highest_pixel] = AT_ROI_LOCBACGR(ATD,FILENAME,VARARGIN) 
-% atd should be a directory culminating in an "analysis" file for ATGUI
+% atd should be a directory culminating in an "analysis" file for mia.GUI.archived_code.ATGUI
 % code.
 % filename is the full path to an ROI dataset, including the ".mat"
 % exension 
@@ -36,8 +36,8 @@ itemname = itemfilename(1:itemnamecutoff(1)-1);
 [dummy,im_fname] = at_roi_underlying_image(atd,itemname);
 
 %% Convert information into DLW formats
-[num_images,img_stack] = at_loadscaledstack(im_fname);
-[puncta_info] = at_puncta_info(img_stack,a.CC);
+[num_images,img_stack] = mia.at_loadscaledstack(im_fname);
+[puncta_info] = mia.utilities.at_puncta_info(img_stack,a.CC);
 
 %% Calculate the local background
 disp(['Calculating local background!']);

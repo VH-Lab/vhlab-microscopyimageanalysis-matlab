@@ -1,7 +1,7 @@
 function at_examine_rois(d, roisetA, roisetB, claAonB, varargin)
 % AT_EXAMINE_ROIS - examine ROI sizes, intensity, overlaps
 %
-% AT_EXAMINE_ROIS(D, ROISETA, ROISETB, CLAAONB, ...)
+% mia.analysis.at_examine_rois(D, ROISETA, ROISETB, CLAAONB, ...)
 %
 % 
 

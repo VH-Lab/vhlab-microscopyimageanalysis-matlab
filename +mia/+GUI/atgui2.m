@@ -1,7 +1,7 @@
 function out = atgui2(name, varargin)
 % ATGUI2 - 2nd generation GUI for Array Tomography analysis
 %
-%   ATGUI2 
+%   mia.GUI.atgui2 
 %
 %   Launches a graphical user interface for Array Tomography
 %   analysis. 
@@ -34,7 +34,7 @@ if length(command)>length(name),
 end;
 
 if ~command_extract_success,
-	error(['Command must include ATGUI2 name']);
+	error(['Command must include mia.GUI.atgui2 name']);
 end;
 
 % initialize our internal variables or pull it
@@ -44,7 +44,7 @@ if strcmp(lower(command),'init'),
         end;
 elseif strcmp(lower(command),'set_vars'), % if it is set_vars, leave ud alone, user had to set it
 elseif ~strcmp(lower(command),'get_vars') & ~strcmp(lower(command),'get_handles'), % let the routine below handle it
-        ud = atgui2(name,'command',[name 'Get_Vars']);
+        ud = mia.GUI.atgui2(name,'command',[name 'Get_Vars']);
 end;
 
 if ~strcmp(lower(command),'init')
@@ -58,7 +58,7 @@ switch lower(command),
 		p = get(fig,'position');
 		set(fig,'position',[p(1) p(2) 915 685]);
 
-		uidefs = basicuitools_defs('callbackstr',['callbacknametag(''atgui2'',''' name ''');']);
+		uidefs = basicuitools_defs('callbackstr',['callbacknametag(''mia.GUI.atgui2'',''' name ''');']);
 
 		uicontrol(uidefs.txt,'units','pixels','position',[5 620+35 450 25],'fontweight','bold',...
 				'fontsize',16,'string','Array Tomography Analysis GUI','tag',[name 'ATGUI_Title']);
@@ -71,36 +71,36 @@ switch lower(command),
 		uicontrol(uidefs.button,'units','pixels','position',[5+50+5+275+5+50+5 620+5 50 20],...
 				'string','Update','tag',[name 'ATGUI_PathUpdateButton']);
 
-		at_itemeditlist_gui('ROIg','itemtype','ROIs','itemtype_singular','ROI','itemtype_plural','ROIs',...
-				'UpperRightPoint',[450 300],'LowerLeftPoint',[5 5],'new_functions',at_roi_makers_list,'new_items','IMl',...
-				'edit_functions',at_roi_editors_list,'edit_items','ROIg','visiblecbstring','Draw lines',...
-				'drawaction','atgui2','drawaction_userinputs',{name,'command',[name 'ATGUI_DrawROIs']},...
+		mia.GUI.at_itemeditlist_gui('ROIg','itemtype','ROIs','itemtype_singular','ROI','itemtype_plural','ROIs',...
+				'UpperRightPoint',[450 300],'LowerLeftPoint',[5 5],'new_functions',mia.roi.at_roi_makers_list,'new_items','IMl',...
+				'edit_functions',mia.roi.at_roi_editors_list,'edit_items','ROIg','visiblecbstring','Draw lines',...
+				'drawaction','mia.GUI.atgui2','drawaction_userinputs',{name,'command',[name 'ATGUI_DrawROIs']},...
 				'extracbstring','Overlay','useextracb',1);
-		at_itemeditlist_gui('IMl','UpperRightPoint',[450 605],'LowerLeftPoint',[5 305],'useedit',0,'usevisible',0,'viewselectiononly',1,...
-				'drawaction','atgui2','drawaction_userinputs',{name,'command',[name 'ATGUI_DrawImage']},...
-				'new_functions',at_image_process_list);
-		at_itemeditlist_gui('COLg','UpperRightPoint',[450+455 300],'LowerLeftPoint',[455 5],...
+		mia.GUI.at_itemeditlist_gui('IMl','UpperRightPoint',[450 605],'LowerLeftPoint',[5 305],'useedit',0,'usevisible',0,'viewselectiononly',1,...
+				'drawaction','mia.GUI.atgui2','drawaction_userinputs',{name,'command',[name 'ATGUI_DrawImage']},...
+				'new_functions',mia.image.at_image_process_list);
+		mia.GUI.at_itemeditlist_gui('COLg','UpperRightPoint',[450+455 300],'LowerLeftPoint',[455 5],...
 				'itemtype','CLAs','itemtype_singular','CLA','itemtype_plural','Colocalization Analyses','visiblecbstring','Draw lines',...
-				'drawaction','atgui2','drawaction_userinputs',{name,'command',[name 'ATGUI_DrawColocalizations']},...
+				'drawaction','mia.GUI.atgui2','drawaction_userinputs',{name,'command',[name 'ATGUI_DrawColocalizations']},...
 				'new_functions',at_colocalization_makers_list,'new_items','ROIg',...
-				'edit_functions',at_colocalization_editors_list,'edit_items','COLg', ...
+				'edit_functions',mia.colocalization.at_colocalization_editors_list,'edit_items','COLg', ...
 				'extracbstring','Overlay','useextracb',1);
 
 		image_viewer_gui('IMv','LowerLeftPoint',[455 305],'UpperRightPoint',[455+450 685-5],'showhistogram',0,...
-				'drawcompletionfunc',['atgui2(''' name ''', ''command'', [''' name ''' ''ATGUI_ImageMoved'']);']);
+				'drawcompletionfunc',['mia.GUI.atgui2(''' name ''', ''command'', [''' name ''' ''ATGUI_ImageMoved'']);']);
 
 		ch = get(fig,'children');
 		set(ch,'units','normalized');
 
 		if ~isempty(ud.pathname), 
-			atgui2(name,'command',[name 'ATGUI_PathUpdateButton'],'fig',fig);
+			mia.GUI.atgui2(name,'command',[name 'ATGUI_PathUpdateButton'],'fig',fig);
 		end;
 
         case 'get_vars',
-                handles = atgui2(name,'command',[name 'get_handles'],'fig',fig);
+                handles = mia.GUI.atgui2(name,'command',[name 'get_handles'],'fig',fig);
                 out = get(handles.ATGUI_Title,'userdata');
         case 'set_vars',  % needs 'ud' to be passed by caller
-                handles = atgui2(name,'command',[name 'get_handles'],'fig',fig);
+                handles = mia.GUI.atgui2(name,'command',[name 'get_handles'],'fig',fig);
                 set(handles.ATGUI_Title,'userdata',ud);
         case 'get_handles',
                 handle_base_names = {'ATGUI_Title','ATGUI_PathTxt','ATGUI_PathEdit','ATGUI_PathChangeButton','ATGUI_PathUpdateButton'};
@@ -112,17 +112,17 @@ switch lower(command),
 	case lower('ATGUI_PathChangeButton'),
 		newpath = uigetdir(pwd);
 		if ~eqlen(newpath,0),
-                	handles = atgui2(name,'command',[name 'get_handles'],'fig',fig);
+                	handles = mia.GUI.atgui2(name,'command',[name 'get_handles'],'fig',fig);
 			set(handles.ATGUI_PathEdit','string',newpath);
-                	atgui2(name,'command',[name 'ATGUI_PathUpdateButton'],'fig',fig);
+                	mia.GUI.atgui2(name,'command',[name 'ATGUI_PathUpdateButton'],'fig',fig);
 		end;
 
 	case lower('ATGUI_PathUpdateButton'),
-                handles = atgui2(name,'command',[name 'get_handles'],'fig',fig);
+                handles = mia.GUI.atgui2(name,'command',[name 'get_handles'],'fig',fig);
 		newpath = get(handles.ATGUI_PathEdit','string');
 		if exist(newpath)==7,
 			ud.pathname = newpath;
-                	atgui2(name,'command',[name 'set_vars'],'ud',ud);
+                	mia.GUI.atgui2(name,'command',[name 'set_vars'],'ud',ud);
 
 			% need to update lists here
 			atd = atdir(ud.pathname);
@@ -130,28 +130,28 @@ switch lower(command),
 			itemlists = {'IMl','ROIg','COLg'};
 			for i=1:length(items),
 				itemstruct = getitems(atd,items{i});
-				at_itemeditlist_gui(itemlists{i},'command',[itemlists{i} 'update_itemlist'],'atd',atd);
+				mia.GUI.at_itemeditlist_gui(itemlists{i},'command',[itemlists{i} 'update_itemlist'],'atd',atd);
 			end;
 		else,
 			error(['New pathname ' newpath ' does not exist.']);
 		end;
 	case lower('ATGUI_ImageMoved'),
-		at_itemeditlist_gui('ROIg','command',['ROIg' 'drawaction'],'fig',fig);
-		at_itemeditlist_gui('COLg','command',['COLg' 'drawaction'],'fig',fig);
+		mia.GUI.at_itemeditlist_gui('ROIg','command',['ROIg' 'drawaction'],'fig',fig);
+		mia.GUI.at_itemeditlist_gui('COLg','command',['COLg' 'drawaction'],'fig',fig);
 	case lower('ATGUI_DrawImage'), % NEEDS INPUT ARGUMENT theinput.itemname
-                handles = atgui2(name,'command',[name 'get_handles'],'fig',fig);
+                handles = mia.GUI.atgui2(name,'command',[name 'get_handles'],'fig',fig);
 		atd = atdir(ud.pathname);
 		imfile = getimagefilename(atd,theinput.itemname);
 		image_viewer_gui('IMv','command',['IMv' 'Set_Image'],'imfile',imfile);
-		atgui2(name,'command',[name 'ATGUI_ImageMoved'],'fig',fig);
+		mia.GUI.atgui2(name,'command',[name 'ATGUI_ImageMoved'],'fig',fig);
 	case lower('ATGUI_DrawROIs'), % NEEDS INPUT ARGUMENT theinput.itemstruct_parameters
 		disp(['Got request to draw ROIs.']);
-		atgui2(name,'command',[name 'ATGUI_DrawROIOverlay'],'fig',fig,'theinput',theinput);
-		atgui2(name,'command',[name 'ATGUI_DrawROILines'],'fig',fig,'theinput',theinput);
+		mia.GUI.atgui2(name,'command',[name 'ATGUI_DrawROIOverlay'],'fig',fig,'theinput',theinput);
+		mia.GUI.atgui2(name,'command',[name 'ATGUI_DrawROILines'],'fig',fig,'theinput',theinput);
 
 	case lower('ATGUI_DrawROILines'),% NEEDS INPUT ARGUMENT theinput.itemstruct_parameters
 		disp(['Got request to draw ROIs as lines and numbers.']);
-                handles = atgui2(name,'command',[name 'get_handles'],'fig',fig);
+                handles = mia.GUI.atgui2(name,'command',[name 'get_handles'],'fig',fig);
 		atd = atdir(ud.pathname);
 
 		itemstruct_parameters = theinput.itemstruct_parameters;
@@ -202,7 +202,7 @@ switch lower(command),
 	case lower('ATGUI_DrawROIOverlay'),
 		disp(['Got request to draw ROIs as overlay.']);
 
-                handles = atgui2(name,'command',[name 'get_handles'],'fig',fig);
+                handles = mia.GUI.atgui2(name,'command',[name 'get_handles'],'fig',fig);
 		atd = atdir(ud.pathname);
 
 		itemstruct_parameters = theinput.itemstruct_parameters;
@@ -256,12 +256,12 @@ switch lower(command),
 
 	case lower('ATGUI_DrawColocalizations'), % NEEDS INPUT ARGUMENT theinput.itemstruct_parameters
 		disp(['Got request to draw CLA.']);
-		atgui2(name,'command',[name 'ATGUI_DrawCLAOverlay'],'fig',fig,'theinput',theinput);
-		atgui2(name,'command',[name 'ATGUI_DrawCLALines'],'fig',fig,'theinput',theinput);
+		mia.GUI.atgui2(name,'command',[name 'ATGUI_DrawCLAOverlay'],'fig',fig,'theinput',theinput);
+		mia.GUI.atgui2(name,'command',[name 'ATGUI_DrawCLALines'],'fig',fig,'theinput',theinput);
 
 	case lower('ATGUI_DrawCLALines'),
 		disp(['Got request to draw CLAs as lines and numbers.']);
-                handles = atgui2(name,'command',[name 'get_handles'],'fig',fig);
+                handles = mia.GUI.atgui2(name,'command',[name 'get_handles'],'fig',fig);
 		atd = atdir(ud.pathname);
 		itemstruct_parameters = theinput.itemstruct_parameters;
 
@@ -319,7 +319,7 @@ switch lower(command),
 	case lower('ATGUI_DrawCLAOverlay'),
 		disp(['Got request to draw CLAs as overlay.']);
 
-                handles = atgui2(name,'command',[name 'get_handles'],'fig',fig);
+                handles = mia.GUI.atgui2(name,'command',[name 'get_handles'],'fig',fig);
 		atd = atdir(ud.pathname);
 
 		itemstruct_parameters = theinput.itemstruct_parameters;
@@ -379,6 +379,7 @@ switch lower(command),
 		axes(currentAxes);
 
 	otherwise,
-		disp(['Unknown command to ATGUI2: ' command ', name = ' name ]);
+		disp(['Unknown command to mia.GUI.atgui2: ' command ', name = ' name ]);
 end;
 
+ 
