@@ -31,24 +31,24 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = at_roi_numabovethreshfilter;
+			out_choice = mia.roi.editors.at_roi_numabovethreshfilter;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = at_roi_numabovethreshfilter(atd,input_itemname,output_itemname,buttonname);
+				out = mia.roi.editors.at_roi_numabovethreshfilter(atd,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 		case 'choose_inputdlg',
-			out_p = at_roi_numabovethreshfilter;
+			out_p = mia.roi.editors.at_roi_numabovethreshfilter;
 			defaultparameters.num_above = 50;
 			defaultparameters.imagename = '';
 			parameters = dlg2struct('Choose parameters', out_p{1}, out_p{2}, defaultparameters);
 			if isempty(parameters),
 				out = [];
 			else,
-				out = at_roi_numabovethreshfilter(atd,input_itemname,output_itemname,parameters);
+				out = mia.roi.editors.at_roi_numabovethreshfilter(atd,input_itemname,output_itemname,parameters);
 			end
 	end; % switch
 	return;
@@ -63,7 +63,7 @@ oldobjects = CC.NumObjects;
 
 %% Load the original image
 if isempty(parameters.imagename), % choose it 
-    [dummy,im_fname] = at_roi_underlying_image(atd,input_itemname);
+    [dummy,im_fname] = mia.roi.functions.at_roi_underlying_image(atd,input_itemname);
     parameters.imagename = im_fname;
 end
 
@@ -110,13 +110,13 @@ save(roi_out_file,'CC','-mat');
 save(L_out_file,'L','-mat');
 
 h = gethistory(atd,'ROIs',input_itemname);
-h(end+1) = struct('parent',input_itemname,'operation','at_roi_resegment','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.at_roi_resegment','parameters',parameters,...
 	'description',['Pared down ' int2str(oldobjects) ' ROIs below ' int2str(parameters.num_above) ' pixels above peak threshold into ' int2str(newobjects) ' from ' input_itemname '.']);
 sethistory(atd,'ROIs',output_itemname,h);
 
 str2text([getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
-at_roi_parameters(atd,roi_out_file);
+mia.roi.functions.at_roi_parameters(atd,roi_out_file);
 
 out = 1;
 end

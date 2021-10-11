@@ -58,7 +58,7 @@ disp(['Making original ROIs!'])
 clear p;
 p.connectivity = 6;
 S1_rois_output_name = [name_root '_auto_roi'];
-at_roi_connect(atd, which_img, S1_rois_output_name, p);
+mia.roi.makers.at_roi_connect(atd, which_img, S1_rois_output_name, p);
 
 % Step 2: resegment ROIs
 disp(['Watershed resegmentation!'])
@@ -72,16 +72,7 @@ p.assignborders = 1;
 S2_res_output_name = [name_root '_auto_res'];
 at_roi_resegment(atd, S1_rois_output_name, S2_res_output_name, p);
 
-% Step 3: second threshold on ROIs
-disp(['Second threshold!'])
-p.secthresh = 0.50;
-p.dist_cardinal = 50;
-p.CV_binsize = 5;
-p.imagename = '';
-S3_sth_output_name = [name_root '_auto_sth'];
-at_roi_secondthresh (atd, S2_res_output_name, S3_sth_output_name, p)
-
-% Step 4: volume filter
+% Step 3: volume filter
 disp(['Volume filter!'])
 clear p;
 if strncmp(threshed_img_name,'PSD',3)
@@ -105,17 +96,16 @@ else
     disp(['Please either edit this code or your threshed image names, code has contingencies for PSD, VG and BAS'])
     disp(['... but for now, defaulting to 8-512 pixel volume'])
 end
-S4_vf_output_name = [name_root '_auto_vf'];
-at_roi_volumefilter(atd, S3_sth_output_name, S4_vf_output_name, p);
+S3_vf_output_name = [name_root '_auto_vf'];
+mia.roi.editors.at_roi_volumefilter(atd, S2_res_output_name, S3_vf_output_name, p);
 
 % Step 5: prominency filter
-disp(['Prominency filter!'])
+disp(['Squat filter!'])
 clear p;
-p.prom_thresh = 0;
-p.dist_cardinal = 50;
-p.CV_binsize = 5;
+p.prc_cut = 5;
+p.dist_cardinal = 15;
 p.imagename = '';
-S5_pf_output_name = [name_root '_auto_pf'];
-at_roi_prominencyfilter(atd, S4_vf_output_name, S5_pf_output_name, p);
+S4_sf_output_name = [name_root '_auto_sf'];
+mia.roi.editors.at_roi_squatfilter(atd, S3_vf_output_name, S4_sf_output_name, p);
 
 end

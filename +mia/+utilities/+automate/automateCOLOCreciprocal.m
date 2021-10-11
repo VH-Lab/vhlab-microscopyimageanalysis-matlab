@@ -49,10 +49,10 @@ p.shiftsX = [-2 -1 0 1 2];
 p.shiftsY = [-2 -1 0 1 2];
 p.shiftsZ = 0;
 p.threshold = 0.01;
-p.roi_set_2 = [ch2 '_auto_sf'];
-coloc12input = [ch1 '_auto_sf'];
+p.roi_set_2 = [ch2 '_auto_pf'];
+coloc12input = [ch1 '_auto_pf'];
 coloc12output = [ch1 'autocolocw' ch2];
-at_colocalization_shiftxyz(atd,coloc12input,coloc12output,p);
+mia.colocalization.makers.at_colocalization_shiftxyz(atd,coloc12input,coloc12output,p);
 
 % Step 2: make the second colocalization
 disp(['Making second colocalization! (Ch2 -> Ch1)'])
@@ -61,27 +61,27 @@ p.shiftsX = [-2 -1 0 1 2];
 p.shiftsY = [-2 -1 0 1 2];
 p.shiftsZ = 0;
 p.threshold = 0.01;
-p.roi_set_2 = [ch1 '_auto_sf'];
-coloc21input = [ch2 '_auto_sf'];
+p.roi_set_2 = [ch1 '_auto_pf'];
+coloc21input = [ch2 '_auto_pf'];
 coloc21output = [ch2 'autocolocw' ch1];
-at_colocalization_shiftxyz(atd,coloc21input,coloc21output,p);
+mia.colocalization.makers.at_colocalization_shiftxyz(atd,coloc21input,coloc21output,p);
 
 % Step 3: find puncta in Ch1 that are colocalized with Ch2
 disp(['Making first colocalized filter!'])
 clear p;
 p.colocalization_name = coloc12output;
 p.include_overlaps = 1;
-filter12input = [ch1 '_auto_sf'];
+filter12input = [ch1 '_auto_pf'];
 filter12output = [ch1 '_colocw' ch2];
-at_roi_filtercolocalization(atd,filter12input,filter12output,p);
+mia.roi.editors.at_roi_filtercolocalization(atd,filter12input,filter12output,p);
 
 % Step 4: find puncta in Ch2 that are colocalized with Ch1
 disp(['Making second colocalized filter!'])
 clear p;
 p.colocalization_name = coloc21output;
 p.include_overlaps = 1;
-filter21input = [ch2 '_auto_sf'];
+filter21input = [ch2 '_auto_pf'];
 filter21output = [ch2 '_colocw' ch1];
-at_roi_filtercolocalization(atd,filter21input,filter21output,p);
+mia.roi.editors.at_roi_filtercolocalization(atd,filter21input,filter21output,p);
 
 end

@@ -1,7 +1,7 @@
 function out = at_3colocalization_shift(atd, input_itemname, output_itemname, parameters)
 % AT_3COLOCALIZATION_SHIFT - Calculate colocalized ROI triples
 % 
-%  OUT = AT_3COLOCALIZATION_SHIFT(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.COLOCALIZATION.MAKERS.AT_3COLOCALIZATION_SHIFT(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -22,17 +22,17 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = at_3colocalization_shift;
+			out_choice = mia.colocalization.makers.at_3colocalization_shift;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = at_3colocalization_shift(atd,input_itemname,output_itemname,buttonname);
+				out = mia.colocalization.makers.at_3colocalization_shift(atd,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 		case 'choose_inputdlg',
-			out_p = at_3colocalization_shift;
+			out_p = mia.colocalization.makers.at_3colocalization_shift;
 			default_parameters.shifts= -2:2;
 			default_parameters.threshold = 0.33;
 			default_parameters.roi_set_2 = '';
@@ -86,7 +86,7 @@ if ischar(parameters),
 					end;
 				end;
 
-				out = at_3colocalization_shift(atd,input_itemname,output_itemname,parameters);
+				out = mia.colocalization.makers.at_3colocalization_shift(atd,input_itemname,output_itemname,parameters);
 			end;
 	end;
 	return;
@@ -134,7 +134,7 @@ save(colocalizationdata_out_file,'colocalization_data','-mat');
 overlapped_objects = sum(overlap_thresh(:));
 
 h = gethistory(atd,'images',input_itemname);
-h(end+1) = struct('parent',input_itemname,'operation','at_3colocalization_shift','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','mia.colocalization.makers.at_3colocalization_shift','parameters',parameters,...
 	'description',['Found ' int2str(overlapped_objects) ' CLs with threshold = ' num2str(parameters.threshold) ' of ROI ' input_itemname ' onto ROI set ' parameters.roi_set_2 ' and ROI set ' parameters.roi_set_3 '.']);
 
 sethistory(atd,'CLAs',output_itemname,h);

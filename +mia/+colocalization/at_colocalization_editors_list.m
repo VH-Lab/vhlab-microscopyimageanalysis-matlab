@@ -7,14 +7,14 @@ function s = at_colocalization_editors_list
 %  for editing CLA calculations in array tomography images
 %
 
-dirname = fileparts(which('at_colocalization_rethreshold')); %grab an example from the directory
+dirname = fileparts(which('mia.colocalization.editors.at_colocalization_rethreshold')); %grab an example from the directory
 
 d = dir([dirname filesep '*.m']);
 
 s = {};
 
 for i=1:length(d),
-	if ~strcmp(lower(d(i).name),lower('Contents.m')),
+	if ~strcmp(lower(d(i).name),lower('mia.image.process.Contents.m')),
 		[dummy,s{end+1,1},ext] = fileparts(d(i).name);
 	end;
 end;

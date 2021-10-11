@@ -21,28 +21,28 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = at_image_thresholdimport;
+			out_choice = mia.image.process.at_image_thresholdimport;
 			if numel(out_choice{3})==1,
-				out = at_image_thresholdimport(atd,input_itemname,output_itemname,out_choice{3}{1});
+				out = mia.image.process.at_image_thresholdimport(atd,input_itemname,output_itemname,out_choice{3}{1});
 				return;
 			end;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = at_image_thresholdimport(atd,input_itemname,output_itemname,buttonname);
+				out = mia.image.process.at_image_thresholdimport(atd,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 
 		case {'choose_inputdlg'},
-			out_p = at_image_thresholdimport;
+			out_p = mia.image.process.at_image_thresholdimport;
 			default_parameters.input_filename = '';
 			parameters = dlg2struct('Choose parameters',out_p{1},out_p{2},default_parameters);
 			if isempty(parameters),
 				out = [];
 			else,
-				out = at_image_thresholdimport(atd,input_itemname,output_itemname,parameters);
+				out = mia.image.process.at_image_thresholdimport(atd,input_itemname,output_itemname,parameters);
 			end;
 	end;
 	return;
@@ -61,7 +61,7 @@ if isempty(parameters.input_filename),
 end;
 
 h = gethistory(atd,'images',input_itemname);
-h(end+1) = struct('parent',input_itemname,'operation','at_image_thresholdimport','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','mia.image.process.at_image_thresholdimport','parameters',parameters,...
 	'description',['Applied threshold using file ' parameters.input_filename ' to image ' input_itemname '.']);
 
 im_in_file = parameters.input_filename;

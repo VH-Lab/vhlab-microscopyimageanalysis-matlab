@@ -1,7 +1,7 @@
 function out = at_colocalization_rethreshold(atd, input_itemname, output_itemname, parameters)
 % AT_COLOCALIZATION_RETHRESHOLD - Redo colocalization labeling by changing threshold
 % 
-%  OUT = AT_COLOCALIZATION_RETHRESHOLD(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.COLOCALIZATION.EDITORS.AT_COLOCALIZATION_RETHRESHOLD(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -19,23 +19,23 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = at_colocalization_rethreshold;
+			out_choice = mia.colocalization.editors.at_colocalization_rethreshold;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = at_colocalization_rethreshold(atd,input_itemname,output_itemname,buttonname);
+				out = mia.colocalization.editors.at_colocalization_rethreshold(atd,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 		case 'choose_inputdlg',
-			out_p = at_colocalization_rethreshold;
+			out_p = mia.colocalization.editors.at_colocalization_rethreshold;
 			default_parameters.threshold = 0.33;
 			parameters = dlg2struct('Choose parameters',out_p{1},out_p{2},default_parameters);
 			if isempty(parameters),
 				out = [];
 			else,
-				out = at_colocalization_rethreshold(atd,input_itemname,output_itemname,parameters);
+				out = mia.colocalization.editors.at_colocalization_rethreshold(atd,input_itemname,output_itemname,parameters);
 			end;
 
 	end;
@@ -66,7 +66,7 @@ try, mkdir([getpathname(atd) filesep 'CLAs' filesep output_itemname]); end;
 save(colocalization_out_file,'colocalization_data','-mat');
 
 h = gethistory(atd,'CLAs',input_itemname),
-h(end+1) = struct('parent',input_itemname,'operation','at_colocalization_rethreshold','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','mia.colocalization.editors.at_colocalization_rethreshold','parameters',parameters,...
 	'description',['Rethresholded with new threshold ' num2str(parameters.threshold) '. Found ' int2str(overlapped_objects) ' CLs.' ]);
 sethistory(atd,'CLAs',output_itemname,h);
 

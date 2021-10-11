@@ -1,7 +1,7 @@
 function out = at_roi_volumefilter(atd, input_itemname, output_itemname, parameters)
 % AT_ROI_VOLUMEFILTER - Filter ROIs by volume
 % 
-%  OUT = AT_ROI_VOLUMEFILTER(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.ROI.EDITORS.AT_ROI_VOLUMEFILTER(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -19,24 +19,24 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = at_roi_volumefilter;
+			out_choice = mia.roi.editors.at_roi_volumefilter;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = at_roi_volumefilter(atd,input_itemname,output_itemname,buttonname);
+				out = mia.roi.editors.at_roi_volumefilter(atd,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 		case 'choose_inputdlg',
-			out_p = at_roi_volumefilter;
+			out_p = mia.roi.editors.at_roi_volumefilter;
 			default_parameters.volume_minimum = 1;
 			default_parameters.volume_maximum = Inf;
 			parameters = dlg2struct('Choose parameters',out_p{1},out_p{2},default_parameters);
 			if isempty(parameters),
 				out = [];
 			else,
-				out = at_roi_volumefilter(atd,input_itemname,output_itemname,parameters);
+				out = mia.roi.editors.at_roi_volumefilter(atd,input_itemname,output_itemname,parameters);
 			end;
 		case 'choose_graphical',
 			f = figure;
@@ -143,7 +143,7 @@ if ischar(parameters),
 					elseif ok,
 						%disp('here');
 						parameters = struct('volume_minimum',minvol,'volume_maximum',maxvol);
-						out = at_roi_volumefilter(atd,input_itemname,output_itemname,parameters);
+						out = mia.roi.editors.at_roi_volumefilter(atd,input_itemname,output_itemname,parameters);
 						success = 1;
                                         end;
                                 end;
@@ -170,10 +170,10 @@ end;
 
 good_indexes = find( (ROI_sizes >= parameters.volume_minimum) & (ROI_sizes <= parameters.volume_maximum) );
 h = gethistory(atd,'ROIs',input_itemname);
-h(end+1) = struct('parent',input_itemname,'operation','at_roi_volumefilter','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.at_roi_volumefilter','parameters',parameters,...
 	'description',['Filtered all but ' int2str(numel(good_indexes)) ' ROIs between ' num2str(parameters.volume_minimum) ' and ' num2str(parameters.volume_maximum) ' of ROIS ' input_itemname '.']);
 
-at_roi_savesubset(atd,input_itemname, good_indexes, output_itemname, h);
+mia.roi.functions.at_roi_savesubset(atd,input_itemname, good_indexes, output_itemname, h);
 
 out = 1;
 
