@@ -79,7 +79,7 @@ bin_range = find(out.bin_centers<=noiseCutOff);
 bin_range = bin_range(end);
 
 [out.p_noise,gof]=vlt.fit.skewgaussfit_constraints(out.bin_centers(1:bin_range)', out.counts(1:bin_range)',...
-	'a_range',[0 0]); 
+	'a_range',[0 0],'d_hint',5*(0.1*(bin_range-1))); 
 
 out.noise_fit = vlt.fit.skewgauss(out.bin_centers,out.p_noise);
 
