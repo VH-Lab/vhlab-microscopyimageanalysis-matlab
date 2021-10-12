@@ -1,4 +1,4 @@
-function out = at_itemeditlist_gui(name,varargin)
+function out = itemeditlist_gui(name,varargin)
 % AT_ITEMLIST_GUI - Manage the view of a multi-frame image in a Matlab GUI
 %
 %   AT_ITEMLIST_GUI
@@ -110,7 +110,7 @@ if length(command)>length(name),
 end;
 
 if ~command_extract_success,
-	error(['Command must include AT_ITEMLIST_GUI name (see help mia.GUI.at_itemeditlist_gui)']);
+	error(['Command must include AT_ITEMLIST_GUI name (see help mia.GUI.itemeditlist_gui)']);
 end;
 
 % initialize our internal variables or pull it
@@ -120,12 +120,12 @@ if strcmp(lower(command),'init'),
 	end;
 elseif strcmp(lower(command),'set_vars'), % if it is set_vars, leave ud alone, user had to set it
 elseif ~strcmp(lower(command),'get_vars') & ~strcmp(lower(command),'get_handles'), % let the routine below handle it
-	ud = mia.GUI.at_itemeditlist_gui(name,'command',[name 'Get_Vars'],'fig',fig);
+	ud = mia.GUI.itemeditlist_gui(name,'command',[name 'Get_Vars'],'fig',fig);
 end;
 
 switch lower(command),
 	case 'init',
-		uidefs = basicuitools_defs('callbackstr', ['callbacknametag(''mia.GUI.at_itemeditlist_gui'',''' name ''');']);
+		uidefs = basicuitools_defs('callbackstr', ['callbacknametag(''mia.GUI.itemeditlist_gui'',''' name ''');']);
 
 		w = ud.sizeparams.DefaultWidth;
 		h = ud.sizeparams.DefaultHeight;
@@ -227,13 +227,13 @@ switch lower(command),
 			rescale_subrect([2*ws+listwidth h-ws-r-listheight uiitemsize+ws+popupwidth -5.5*rs+r+listheight],[0 0 w h],target_rect,3),...
 			'tag',[name 'InfoList'],'BackgroundColor',[1 1 1],'Max',2,'value',[]);
 
-		mia.GUI.at_itemeditlist_gui(name,'command',[name 'Set_Vars'],'ud',ud);
+		mia.GUI.itemeditlist_gui(name,'command',[name 'Set_Vars'],'ud',ud);
 	
 	case 'get_vars',
-		handles = mia.GUI.at_itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
+		handles = mia.GUI.itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
 		out = get(handles.ItemList,'userdata');
 	case 'set_vars',  % needs 'ud' to be passed by caller
-		handles = mia.GUI.at_itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
+		handles = mia.GUI.itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
 		set(handles.ItemList,'userdata',ud);
 	case 'get_handles',
 		handle_base_names = {'OuterFrame','ItemTitleTxt','ItemList','NewItemTitleTxt','NewItemPopup','InfoList','DeleteBt','ColorEdit','ColorTxt','VisibleCB','ExtraCB',...
@@ -245,9 +245,9 @@ switch lower(command),
 
 	case 'update_itemlist', % requires atd
 		itemstruct = getitems(atd,ud.itemtype);
-		[liststr,info] = mia.GUI.at_itemstruct2list(itemstruct);
+		[liststr,info] = mia.GUI.itemstruct2list(itemstruct);
 		ud.atd = atd;
-		handles = mia.GUI.at_itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
+		handles = mia.GUI.itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
 		set(handles.ItemList,'string',liststr,'value',1);
 
 		% really need something to merge changes with the previous version
@@ -264,11 +264,11 @@ switch lower(command),
 			end;
 		end;
 		ud.itemstruct = itemstruct;
-		mia.GUI.at_itemeditlist_gui(name,'command',[name 'Set_Vars'],'ud',ud);
-		mia.GUI.at_itemeditlist_gui(name,'command',[name 'itemlist'],'ud',ud);
+		mia.GUI.itemeditlist_gui(name,'command',[name 'Set_Vars'],'ud',ud);
+		mia.GUI.itemeditlist_gui(name,'command',[name 'itemlist'],'ud',ud);
 
 	case 'itemlist',
-		handles = mia.GUI.at_itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
+		handles = mia.GUI.itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
 		liststr = get(handles.ItemList,'string');
 		listval = get(handles.ItemList,'value');
 
@@ -307,14 +307,14 @@ switch lower(command),
 		end;
 
 	case 'newitempopup',  % use alternate list location
-		handles = mia.GUI.at_itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
+		handles = mia.GUI.itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
 		menustr = get(handles.NewItemPopup,'string');
 		menuval = get(handles.NewItemPopup,'value');
 		if isempty(ud.new_items),
 			liststr = get(handles.ItemList,'string');
 			listval = get(handles.ItemList,'value');
 		else,
-			otherhandles = mia.GUI.at_itemeditlist_gui(ud.new_items,'command',[ud.new_items 'get_handles'],'fig',fig);
+			otherhandles = mia.GUI.itemeditlist_gui(ud.new_items,'command',[ud.new_items 'get_handles'],'fig',fig);
 			liststr = get(otherhandles.ItemList,'string');
 			listval = get(otherhandles.ItemList,'value');
 		end;
@@ -332,18 +332,18 @@ switch lower(command),
 				if ~good, errordlg(['Item name ' answer{1} ' already exists. Please choose another.']); end;
 			end;
 			feval(menustr{menuval},ud.atd,liststr{listval},answer{1},'choose');
-			mia.GUI.at_itemeditlist_gui(name,'command',[name 'update_itemlist'],'fig',fig,'atd',ud.atd);
+			mia.GUI.itemeditlist_gui(name,'command',[name 'update_itemlist'],'fig',fig,'atd',ud.atd);
 		end;
 
 	case 'edititempopup',
-		handles = mia.GUI.at_itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
+		handles = mia.GUI.itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
 		menustr = get(handles.EditItemPopup,'string');
 		menuval = get(handles.EditItemPopup,'value');
 		if isempty(ud.edit_items),
 			liststr = get(handles.ItemList,'string');
 			listval = get(handles.ItemList,'value');
 		else,
-			otherhandles = mia.GUI.at_itemeditlist_gui(ud.edit_items,'command',[ud.edit_items 'get_handles'],'fig',fig);
+			otherhandles = mia.GUI.itemeditlist_gui(ud.edit_items,'command',[ud.edit_items 'get_handles'],'fig',fig);
 			liststr = get(otherhandles.ItemList,'string');
 			listval = get(otherhandles.ItemList,'value');
 		end;
@@ -361,11 +361,11 @@ switch lower(command),
 				if ~good, errordlg(['Item name ' answer{1} ' already exists. Please choose another.']); end;
 			end;
 			feval(menustr{menuval},ud.atd,liststr{listval},answer{1},'choose');
-			mia.GUI.at_itemeditlist_gui(name,'command',[name 'update_itemlist'],'fig',fig,'atd',ud.atd);
+			mia.GUI.itemeditlist_gui(name,'command',[name 'update_itemlist'],'fig',fig,'atd',ud.atd);
 		end;
 
 	case 'deletebt',
-		handles = mia.GUI.at_itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
+		handles = mia.GUI.itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
 		liststr = get(handles.ItemList,'string');
 		listval = get(handles.ItemList,'value');
 
@@ -375,11 +375,11 @@ switch lower(command),
 		buttonname = questdlg(['Are you sure you want to delete the item ' itemname '?'],'Are you sure?','Yes','No','No');
 		if strcmp(lower(buttonname),'yes'),
 			deleteitem(ud.atd,ud.itemtype,itemname);
-			mia.GUI.at_itemeditlist_gui(name,'command',[name 'update_itemlist'],'fig',fig,'atd',ud.atd);
+			mia.GUI.itemeditlist_gui(name,'command',[name 'update_itemlist'],'fig',fig,'atd',ud.atd);
 		end;
 
 	case 'visiblecb',
-		handles = mia.GUI.at_itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
+		handles = mia.GUI.itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
 		liststr = get(handles.ItemList,'string');
 		listval = get(handles.ItemList,'value');
 		if isempty(listval) | isempty(liststr), return; end;
@@ -388,12 +388,12 @@ switch lower(command),
 		l = find(ismember({ud.itemstruct_parameters.itemname},itemname));
 		if ~isempty(l),
 			ud.itemstruct_parameters(l).visible = get(handles.VisibleCB,'value');
-			mia.GUI.at_itemeditlist_gui(name,'command',[name 'Set_Vars'],'ud',ud);
-			mia.GUI.at_itemeditlist_gui(name,'command',[name 'drawaction'],'ud',ud);
+			mia.GUI.itemeditlist_gui(name,'command',[name 'Set_Vars'],'ud',ud);
+			mia.GUI.itemeditlist_gui(name,'command',[name 'drawaction'],'ud',ud);
 		end;
 
 	case 'extracb',
-		handles = mia.GUI.at_itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
+		handles = mia.GUI.itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
 		liststr = get(handles.ItemList,'string');
 		listval = get(handles.ItemList,'value');
 		if isempty(listval) | isempty(liststr), return; end;
@@ -402,15 +402,15 @@ switch lower(command),
 		l = find(ismember({ud.itemstruct_parameters.itemname},itemname));
 		if ~isempty(l),
 			ud.itemstruct_parameters(l).extracb= get(handles.ExtraCB,'value');
-			mia.GUI.at_itemeditlist_gui(name,'command',[name 'Set_Vars'],'ud',ud);
-			vars = mia.GUI.at_itemeditlist_gui(name,'command',[name 'get_vars'],'fig',fig);
+			mia.GUI.itemeditlist_gui(name,'command',[name 'Set_Vars'],'ud',ud);
+			vars = mia.GUI.itemeditlist_gui(name,'command',[name 'get_vars'],'fig',fig);
 			if vars.extracbcallsdrawaction,
-				mia.GUI.at_itemeditlist_gui(name,'command',[name 'drawaction'],'ud',ud);
+				mia.GUI.itemeditlist_gui(name,'command',[name 'drawaction'],'ud',ud);
 			end;
 		end;
 
 	case 'coloredit',
-		handles = mia.GUI.at_itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
+		handles = mia.GUI.itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
 		liststr = get(handles.ItemList,'string');
 		listval = get(handles.ItemList,'value');
 		if isempty(listval) | isempty(liststr), return; end;
@@ -433,8 +433,8 @@ switch lower(command),
 				errordlg(['RGB values must be between 0 and 1, and must be a [1x3] matrix.']);
 			else,
 				ud.itemstruct_parameters(l).color = rgb;
-				mia.GUI.at_itemeditlist_gui(name,'command',[name 'Set_Vars'],'ud',ud);
-				mia.GUI.at_itemeditlist_gui(name,'command',[name 'drawaction'],'ud',ud);
+				mia.GUI.itemeditlist_gui(name,'command',[name 'Set_Vars'],'ud',ud);
+				mia.GUI.itemeditlist_gui(name,'command',[name 'drawaction'],'ud',ud);
 			end;
 		end;
 
