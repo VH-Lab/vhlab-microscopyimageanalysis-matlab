@@ -1,7 +1,7 @@
-function out = at_image_threshold(atd, input_itemname, output_itemname, parameters)
-% AT_IMAGE_THRESHOLD - Threshold an image and store results
+function out = threshold(atd, input_itemname, output_itemname, parameters)
+% THRESHOLD - Threshold an image and store results
 %  
-%  OUT = MIA.IMAGE.PROCESS.AT_IMAGE_THRESHOLD(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.IMAGE.PROCESS.THRESHOLD(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the
 %  parameters is returned in OUT. OUT{1}{n} is the name of the nth parameter, and
@@ -51,24 +51,24 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = mia.image.process.at_image_threshold;
+			out_choice = mia.image.process.threshold;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.image.process.at_image_threshold(atd,input_itemname,output_itemname,buttonname);
+				out = mia.image.process.threshold(atd,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 
 		case {'choose_inputdlg'},
-			out_p = mia.image.process.at_image_threshold;
+			out_p = mia.image.process.threshold;
 			default_parameters.threshold = 100;
 			parameters = dlg2struct('Choose parameters',out_p{1},out_p{2},default_parameters);
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.image.process.at_image_threshold(atd,input_itemname,output_itemname,parameters);
+				out = mia.image.process.threshold(atd,input_itemname,output_itemname,parameters);
 			end;
 		case {'choose_graphical'},
 			f = figure;
@@ -81,7 +81,7 @@ if ischar(parameters),
 			uicontrol(uidefs.button,'position',[20 300 45 25],'string','OK', 'tag','OKButton','callback',['set(gcbo,''userdata'',1); uiresume;']);
 			uicontrol(uidefs.button,'position',[20 270 45 25],'string','Cancel','tag','CancelButton','callback',['set(gcbo,''userdata'',1); uiresume;']);
 
-			image_viewer_gui(image_viewer_name,'imfile',imfile,'imagemodifierfunc','mia.image.process.at_image_threshold(im);')
+			image_viewer_gui(image_viewer_name,'imfile',imfile,'imagemodifierfunc','mia.image.process.threshold(im);')
 
 			success = 0;
 
@@ -125,7 +125,7 @@ if ischar(parameters),
 						set(findobj(gcf,'tag','ThresholdEdit'),'userdata',0);
 					elseif ok,
 						parameters = struct('threshold',threshold);
-						out = mia.image.process.at_image_threshold(atd,input_itemname,output_itemname,parameters);
+						out = mia.image.process.threshold(atd,input_itemname,output_itemname,parameters);
 						success = 1;
 					end;
 				end;
@@ -139,7 +139,7 @@ end;
  % perform the thresholding
 
 h = gethistory(atd,'images',input_itemname);
-h(end+1) = struct('parent',input_itemname,'operation','mia.image.process.at_image_threshold','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','mia.image.process.threshold','parameters',parameters,...
 	'description',['Applied threshold of ' num2str(parameters.threshold) ' to image ' input_itemname '.']);
 
 im_in_file = getimagefilename(atd,input_itemname);

@@ -1,7 +1,7 @@
-function out = at_image_blur(atd, input_itemname, output_itemname, parameters)
-% AT_IMAGE_BLUR - Threshold an image and store results
+function out = blur(atd, input_itemname, output_itemname, parameters)
+% BLUR - Threshold an image and store results
 %  
-%  OUT = MIA.IMAGE.PROCESS.AT_IMAGE_BLUR(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.IMAGE.PROCESS.BLUR(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the
 %  parameters is returned in OUT. OUT{1}{n} is the name of the nth parameter, and
@@ -21,18 +21,18 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = mia.image.process.at_image_blur();
+			out_choice = mia.image.process.blur();
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.image.process.at_image_blur(atd,input_itemname,output_itemname,buttonname);
+				out = mia.image.process.blur(atd,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 
 		case {'choose_inputdlg'},
-			out_p = mia.image.process.at_image_blur();
+			out_p = mia.image.process.blur();
 			default_parameters.useGaussian = 1;
 			default_parameters.radius = 20;
 			default_parameters.filtersize = 100;
@@ -40,7 +40,7 @@ if ischar(parameters),
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.image.process.at_image_blur(atd,input_itemname,output_itemname,parameters);
+				out = mia.image.process.blur(atd,input_itemname,output_itemname,parameters);
 			end;
 	end;
 	return;
@@ -55,7 +55,7 @@ else,
 end;
 
 h = gethistory(atd,'images',input_itemname);
-h(end+1) = struct('parent',input_itemname,'operation','mia.image.process.at_image_blur','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','mia.image.process.blur','parameters',parameters,...
 	'description',['Applied ' filter_type_str ' blur with radius ' num2str(parameters.radius) ' and filtersize ' num2str(parameters.filtersize) ' to image ' input_itemname '.']);
 
 im_in_file = getimagefilename(atd,input_itemname);

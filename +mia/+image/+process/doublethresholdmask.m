@@ -1,5 +1,5 @@
-function out = at_image_doublethresholdmask(atd, input_itemname, mask_itemname, output_itemname, parameters)
-% AT_IMAGE_DOUBLETHRESHOLDMASK - Threshold an image based on a mask and store results
+function out = doublethresholdmask(atd, input_itemname, mask_itemname, output_itemname, parameters)
+% DOUBLETHRESHOLDMASK - Threshold an image based on a mask and store results
 %  
 %  OUT = MIA.IMAGE.PROCESS.AT_IMAGE_DOUBLETHRESHOLD(ATD, INPUT_ITEMNAME, MASK_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
