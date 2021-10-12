@@ -1,4 +1,4 @@
-function s = at_colocalization_editors_list
+function s = editors_list
 % AT_COLOCALIZATION_COLOCALIZATION_LIST - List of available AT_COLOCALIZATION editor functions
 %
 %  S = AT_COLOCALIZATION_EDITORS LIST
@@ -7,7 +7,7 @@ function s = at_colocalization_editors_list
 %  for editing CLA calculations in array tomography images
 %
 
-dirname = fileparts(which('mia.colocalization.editors.at_colocalization_rethreshold')); %grab an example from the directory
+dirname = fileparts(which('mia.colocalization.editors.rethreshold')); %grab an example from the directory
 
 d = dir([dirname filesep '*.m']);
 

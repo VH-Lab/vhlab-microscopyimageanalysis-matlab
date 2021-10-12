@@ -52,7 +52,7 @@ p.threshold = 0.01;
 p.roi_set_2 = [ch2 '_auto_pf'];
 coloc12input = [ch1 '_auto_pf'];
 coloc12output = [ch1 'autocolocw' ch2];
-mia.colocalization.makers.at_colocalization_shiftxyz(atd,coloc12input,coloc12output,p);
+mia.colocalization.makers.shiftxyz(atd,coloc12input,coloc12output,p);
 
 % Step 2: make the second colocalization
 disp(['Making second colocalization! (Ch2 -> Ch1)'])
@@ -64,7 +64,7 @@ p.threshold = 0.01;
 p.roi_set_2 = [ch1 '_auto_pf'];
 coloc21input = [ch2 '_auto_pf'];
 coloc21output = [ch2 'autocolocw' ch1];
-mia.colocalization.makers.at_colocalization_shiftxyz(atd,coloc21input,coloc21output,p);
+mia.colocalization.makers.shiftxyz(atd,coloc21input,coloc21output,p);
 
 % Step 3: find puncta in Ch1 that are colocalized with Ch2
 disp(['Making first colocalized filter!'])

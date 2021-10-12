@@ -1,7 +1,7 @@
-function out = at_3colocalization_centerofmass(atd, input_itemname, output_itemname, parameters)
-% AT_3COLOCALIZATION_CENTEROFMASS - Estimate colocalization by center-of-mass distance, triple
+function out = 3colocalization_centerofmass(atd, input_itemname, output_itemname, parameters)
+% 3COLOCALIZATION_CENTEROFMASS - Estimate colocalization by center-of-mass distance, triple
 % 
-%  OUT = MIA.COLOCALIZATION.MAKERS.AT_3COLOCALIZATION_CENTEROFMASS(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.COLOCALIZATION.MAKERS.3COLOCALIZATION_CENTEROFMASS(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -23,17 +23,17 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = mia.colocalization.makers.at_3colocalization_centerofmass;
+			out_choice = mia.colocalization.makers.3colocalization_centerofmass;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.colocalization.makers.at_3colocalization_centerofmass(atd,input_itemname,output_itemname,buttonname);
+				out = mia.colocalization.makers.3colocalization_centerofmass(atd,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 		case 'choose_inputdlg',
-			out_p = mia.colocalization.makers.at_3colocalization_centerofmass;
+			out_p = mia.colocalization.makers.3colocalization_centerofmass;
 			default_parameters.distance_threshold = 5;
 			default_parameters.distance_infinity = 50;
 			default_parameters.show_graphical_progress = 1;
@@ -88,7 +88,7 @@ if ischar(parameters),
 					end;
 				end;
 
-				out = mia.colocalization.makers.at_3colocalization_centerofmass(atd,input_itemname,output_itemname,parameters);
+				out = mia.colocalization.makers.3colocalization_centerofmass(atd,input_itemname,output_itemname,parameters);
 			end;
 	end;
 	return;
@@ -193,7 +193,7 @@ save(colocalizationdata_out_file,'colocalization_data','-mat');
 overlapped_objects = numel(find(overlap_thresh));
 
 h = gethistory(atd,'images',input_itemname);
-h(end+1) = struct('parent',input_itemname,'operation','mia.colocalization.makers.at_colocalization_centerofmass','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','mia.colocalization.makers.centerofmass','parameters',parameters,...
 	'description',['Found ' int2str(overlapped_objects) ' CLs with distance threshold <= ' num2str(parameters.distance_threshold) ...
 	' pixels of ROI ' input_itemname ' onto ROI ' parameters.roi_set_2 ' and ROI ' parameters.roi_set_3 '.']);
 

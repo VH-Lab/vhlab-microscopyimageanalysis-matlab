@@ -1,4 +1,4 @@
-function out = at_3colocalization_shiftxyz(atd, input_itemname, output_itemname, parameters)
+function out = 3colocalization_shiftxyz(atd, input_itemname, output_itemname, parameters)
 % AT_3COLOCALIZATION_SHIFT - Calculate colocalized ROI triples
 % 
 %  OUT = AT_3COLOCALIZATION_SHIFT(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
@@ -22,17 +22,17 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = at_3colocalization_shiftxyz;
+			out_choice = mia.colocalization.makers.3colocalization_shiftxyz;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = at_3colocalization_shiftxyz(atd,input_itemname,output_itemname,buttonname);
+				out = mia.colocalization.makers.3colocalization_shiftxyz(atd,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 		case 'choose_inputdlg',
-			out_p = at_3colocalization_shiftxyz;
+			out_p = mia.colocalization.makers.3colocalization_shiftxyz;
 			default_parameters.shiftsx= -2:2;
       default_parameters.shiftsy= -2:2;
       default_parameters.shiftsz= -2:2;
@@ -88,7 +88,7 @@ if ischar(parameters),
 					end;
 				end;
 
-				out = at_3colocalization_shiftxyz(atd,input_itemname,output_itemname,parameters);
+				out = mia.colocalization.makers.3colocalization_shiftxyz(atd,input_itemname,output_itemname,parameters);
 			end;
 	end;
 	return;
