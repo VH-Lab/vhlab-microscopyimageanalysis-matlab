@@ -78,8 +78,18 @@ idx = find(im(:)<noiseCutOff);
 bin_range = find(out.bin_centers<=noiseCutOff);
 bin_range = bin_range(end);
 
-[out.p_noise,gof]=vlt.fit.skewgaussfit_constraints(out.bin_centers(1:bin_range)', out.counts(1:bin_range)',...
+[p_noise1,gof1]=vlt.fit.skewgaussfit_constraints(out.bin_centers(1:bin_range)', out.counts(1:bin_range)',...
 	'a_range',[0 0],'d_hint',5*(0.1*(bin_range-1))); 
+[p_noise2,gof2]=vlt.fit.skewgaussfit_constraints(out.bin_centers(1:bin_range)', out.counts(1:bin_range)',...
+	'a_range',[0 0]);
+if gof1.sse<gof2.sse,
+    out.p_noise = p_noise1;
+    gof = gof1;
+else,
+    out.p_noise = p_noise2;
+    gof = gof2;
+end;
+
 
 out.noise_fit = vlt.fit.skewgauss(out.bin_centers,out.p_noise);
 
