@@ -80,7 +80,7 @@ try,
 	roipfilename{1} = getroiparametersfilename(atd, input_itemname);
 	if isempty(roipfilename{1}), error('filename is empty.'); end;
 catch,
-	mia.roi.functions.at_roi_parameters(atd,rois{1});
+	mia.roi.functions.parameters(atd,rois{1});
 	roipfilename{1} = getroiparametersfilename(atd, input_itemname);
 end;
 
@@ -91,7 +91,7 @@ L{2} = getlabeledroifilename(atd,parameters.roi_set_2);
 try,
 	roipfilename{2} = getroiparametersfilename(atd, parameters.roi_set_2);
 catch,
-	mia.roi.functions.at_roi_parameters(atd,rois{2});
+	mia.roi.functions.parameters(atd,rois{2});
 	roipfilename{2} = getroiparametersfilename(atd, parameters.roi_set_2);
 end
 

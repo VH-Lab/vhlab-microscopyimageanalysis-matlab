@@ -12,6 +12,6 @@ p.property_name = 'MaxIntensity3';
 p.min_property = h(1).parameters.threshold1;
 p.max_property = Inf;
 
-mia.roi.editors.at_roi_propertyfilter(atd,inputname,outputname,p);
+mia.roi.editors.propertyfilter(atd,inputname,outputname,p);
 
 parameters = p;

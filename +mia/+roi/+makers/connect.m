@@ -1,7 +1,7 @@
-function out = at_roi_connect(atd, input_itemname, output_itemname, parameters)
-% AT_ROI_CONNECT - Use BWCONNCOMP to compute ROIs from thresholded image
+function out = connect(atd, input_itemname, output_itemname, parameters)
+% CONNECT - Use BWCONNCOMP to compute ROIs from thresholded image
 % 
-%  OUT = MIA.ROI.MAKERS.AT_ROI_CONNECT(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.ROI.MAKERS.CONNECT(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -19,23 +19,23 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = mia.roi.makers.at_roi_connect;
+			out_choice = mia.roi.makers.connect;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.roi.makers.at_roi_connect(atd,input_itemname,output_itemname,buttonname);
+				out = mia.roi.makers.connect(atd,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 		case 'choose_inputdlg',
-			out_p = mia.roi.makers.at_roi_connect;
+			out_p = mia.roi.makers.connect;
 			default_parameters.connectivity = 6;
 			parameters = dlg2struct('Choose parameters',out_p{1},out_p{2},default_parameters);
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.roi.makers.at_roi_connect(atd,input_itemname,output_itemname,parameters);
+				out = mia.roi.makers.connect(atd,input_itemname,output_itemname,parameters);
 			end;
 	end;
 	return;
@@ -64,13 +64,13 @@ save(roi_out_file,'CC','-mat');
 save(L_out_file,'L','-mat');
 
 h = gethistory(atd,'images',input_itemname);
-h(end+1) = struct('parent',input_itemname,'operation','mia.roi.makers.at_roi_connect','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','mia.roi.makers.connect','parameters',parameters,...
 	'description',['Found ' int2str(CC.NumObjects) ' ROIs with conn=' num2str(parameters.connectivity) ' to image ' input_itemname '.']);
 sethistory(atd,'ROIs',output_itemname,h);
 
 str2text([getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
-mia.roi.functions.at_roi_parameters(atd,roi_out_file);
+mia.roi.functions.parameters(atd,roi_out_file);
 
 out = 1;
 

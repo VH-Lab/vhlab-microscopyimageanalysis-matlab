@@ -58,7 +58,7 @@ disp(['Making original ROIs!'])
 clear p;
 p.connectivity = 6;
 S1_rois_output_name = [name_root '_auto_roi'];
-mia.roi.makers.at_roi_connect(atd, which_img, S1_rois_output_name, p);
+mia.roi.makers.connect(atd, which_img, S1_rois_output_name, p);
 
 % Step 2: resegment ROIs
 disp(['Watershed resegmentation!'])
@@ -70,7 +70,7 @@ p.use_bwdist = 0;
 p.imagename = ''; % should use "default in history"
 p.assignborders = 1;
 S2_res_output_name = [name_root '_auto_res'];
-mia.roi.editors.at_roi_resegment(atd, S1_rois_output_name, S2_res_output_name, p);
+mia.roi.editors.resegment(atd, S1_rois_output_name, S2_res_output_name, p);
 
 % Step 3: second threshold on ROIs
 disp(['Second threshold!'])
@@ -79,7 +79,7 @@ p.dist_cardinal = 50;
 p.CV_binsize = 5;
 p.imagename = '';
 S3_sth_output_name = [name_root '_auto_sth'];
-mia.roi.editors.at_roi_secondthresh (atd, S2_res_output_name, S3_sth_output_name, p)
+mia.roi.editors.secondthresh (atd, S2_res_output_name, S3_sth_output_name, p)
 
 % Step 4: volume filter
 disp(['Volume filter!'])
@@ -106,7 +106,7 @@ else
     disp(['... but for now, defaulting to 8-512 pixel volume'])
 end
 S4_vf_output_name = [name_root '_auto_vf'];
-mia.roi.editors.at_roi_volumefilter(atd, S3_sth_output_name, S4_vf_output_name, p);
+mia.roi.editors.volumefilter(atd, S3_sth_output_name, S4_vf_output_name, p);
 
 % Step 5: prominency filter
 disp(['Prominency filter!'])
@@ -116,6 +116,6 @@ p.dist_cardinal = 50;
 p.CV_binsize = 5;
 p.imagename = '';
 S5_pf_output_name = [name_root '_auto_pf'];
-mia.roi.editors.at_roi_prominencyfilter(atd, S4_vf_output_name, S5_pf_output_name, p);
+mia.roi.editors.prominencyfilter(atd, S4_vf_output_name, S5_pf_output_name, p);
 
 end

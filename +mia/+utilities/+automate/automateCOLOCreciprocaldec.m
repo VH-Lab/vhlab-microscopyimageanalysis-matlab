@@ -73,7 +73,7 @@ p.colocalization_name = coloc12output;
 p.include_overlaps = 1;
 filter12input = [ch1 '_auto_sf'];
 filter12output = [ch1 '_colocw' ch2];
-mia.roi.editors.at_roi_filtercolocalization(atd,filter12input,filter12output,p);
+mia.roi.editors.filtercolocalization(atd,filter12input,filter12output,p);
 
 % Step 4: find puncta in Ch2 that are colocalized with Ch1
 disp(['Making second colocalized filter!'])
@@ -82,6 +82,6 @@ p.colocalization_name = coloc21output;
 p.include_overlaps = 1;
 filter21input = [ch2 '_auto_sf'];
 filter21output = [ch2 '_colocw' ch1];
-mia.roi.editors.at_roi_filtercolocalization(atd,filter21input,filter21output,p);
+mia.roi.editors.filtercolocalization(atd,filter21input,filter21output,p);
 
 end

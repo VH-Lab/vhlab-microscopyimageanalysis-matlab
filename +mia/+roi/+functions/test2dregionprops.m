@@ -1,4 +1,4 @@
-function [myprops2d_all, myprops2d_indiv] = at_roi_test2dregionprops(CC2)
+function [myprops2d_all, myprops2d_indiv] = test2dregionprops(CC2)
 
 
 disp('Doing full regionprops2d...');

@@ -1,7 +1,7 @@
-function out = at_roi_maskfilter(atd, input_itemname, output_itemname, parameters)
-% AT_ROI_VOLUMEFILTER - Filter ROIs by volume
+function out = maskfilter(atd, input_itemname, output_itemname, parameters)
+% VOLUMEFILTER - Filter ROIs by volume
 % 
-%  OUT = MIA.ROI.EDITORS.AT_ROI_VOLUMEFILTER(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.ROI.EDITORS.VOLUMEFILTER(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -19,15 +19,15 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out = mia.roi.editors.at_roi_maskfilter(atd,input_itemname,output_itemname,'choose_inputdlg');
+			out = mia.roi.editors.maskfilter(atd,input_itemname,output_itemname,'choose_inputdlg');
 		case 'choose_inputdlg',
-			out_p = mia.roi.editors.at_roi_maskfilter;
+			out_p = mia.roi.editors.maskfilter;
 			default_parameters.mask_file = '';
 			parameters = dlg2struct('Choose parameters',out_p{1},out_p{2},default_parameters);
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.roi.editors.at_roi_maskfilter(atd,input_itemname,output_itemname,parameters);
+				out = mia.roi.editors.maskfilter(atd,input_itemname,output_itemname,parameters);
 			end;
 	end;
 	return;
@@ -54,10 +54,10 @@ load(L_in_file,'L','-mat');
 good_indexes = setdiff(unique(L(find(im>0))),0);
 
 h = gethistory(atd,'ROIs',input_itemname),
-h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.at_roi_maskfilter','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.maskfilter','parameters',parameters,...
 	'description',['Filtered all but ' int2str(numel(good_indexes)) ' ROIs based on ' parameters.mask_file ' of ROIS ' input_itemname '.']);
 
-mia.roi.functions.at_roi_savesubset(atd,input_itemname, good_indexes, output_itemname, h);
+mia.roi.functions.savesubset(atd,input_itemname, good_indexes, output_itemname, h);
 
 out = 1;
 

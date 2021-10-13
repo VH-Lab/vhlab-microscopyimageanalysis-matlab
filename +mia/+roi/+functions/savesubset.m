@@ -1,7 +1,7 @@
-function at_roi_savesubset(atd, input_itemname, indexes, output_itemname, history)
-% AT_ROI_SAVESUBSET - save an subset of ROI and its associated files 
+function savesubset(atd, input_itemname, indexes, output_itemname, history)
+% SAVESUBSET - save an subset of ROI and its associated files 
 %
-% MIA.ROI.FUNCTIONS.AT_ROI_SAVESUBSET(ATD, INPUT_ITEMNAME, INDEXES, OUTPUT_ITEMNAME, HISTORY)
+% MIA.ROI.FUNCTIONS.SAVESUBSET(ATD, INPUT_ITEMNAME, INDEXES, OUTPUT_ITEMNAME, HISTORY)
 %
 % Saves a new ROI set with OUTPUT_ITEMNAME, selecting a subset (INDEXES) of the
 % ROIS in the ROI set at INPUT_ITEMNAME. HISTORY is saved with the new ROI set.

@@ -1,7 +1,7 @@
-function out = at_roi_zspanfilter(atd, input_itemname, output_itemname, parameters)
-% AT_ROI_ZSPANFILTER - Filter ROIs by Z span
+function out = zspanfilter(atd, input_itemname, output_itemname, parameters)
+% ZSPANFILTER - Filter ROIs by Z span
 % 
-%  OUT = MIA.ROI.EDITORS.AT_ROI_ZSPANFILTER(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.ROI.EDITORS.ZSPANFILTER(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -19,24 +19,24 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = mia.roi.editors.at_roi_zspanfilter;
+			out_choice = mia.roi.editors.zspanfilter;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.roi.editors.at_roi_zspanfilter(atd,input_itemname,output_itemname,buttonname);
+				out = mia.roi.editors.zspanfilter(atd,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 		case 'choose_inputdlg',
-			out_p = mia.roi.editors.at_roi_zspanfilter;
+			out_p = mia.roi.editors.zspanfilter;
 			default_parameters.z_span_minimum = 1;
 			default_parameters.z_span_maximum = Inf;
 			parameters = dlg2struct('Choose parameters',out_p{1},out_p{2},default_parameters);
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.roi.editors.at_roi_zspanfilter(atd,input_itemname,output_itemname,parameters);
+				out = mia.roi.editors.zspanfilter(atd,input_itemname,output_itemname,parameters);
 			end;
 		case 'choose_graphical',
 			f = figure;
@@ -131,7 +131,7 @@ if ischar(parameters),
 					elseif ok,
 						%disp('here');
 						parameters = struct('z_span_minimum',minzspan,'z_span_maximum',maxzspan);
-						out = mia.roi.editors.at_roi_zspanfilter(atd,input_itemname,output_itemname,parameters);
+						out = mia.roi.editors.zspanfilter(atd,input_itemname,output_itemname,parameters);
 						success = 1;
                                         end;
                                 end;
@@ -171,7 +171,7 @@ save(roi_out_file,'CC','-mat');
 save(L_out_file,'L','-mat');
 
 h = gethistory(atd,'ROIs',input_itemname),
-h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.at_roi_zspanfilter','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.zspanfilter','parameters',parameters,...
 	'description',['Filtered all but ' int2str(CC.NumObjects) ' ROIs with z spans between ' num2str(parameters.z_span_minimum) ' and ' num2str(parameters.z_span_maximum) ' of ROIS ' input_itemname '.']);
 sethistory(atd,'ROIs',output_itemname,h);
 

@@ -1,5 +1,5 @@
 %% NUMBER OF PIXELS ABOVE HIGH THRESHOLD FILTER
-function out = at_roi_numabovethreshfilter (atd, input_itemname, output_itemname, parameters)
+function out = numabovethreshfilter (atd, input_itemname, output_itemname, parameters)
 % out = AT_ROI_PROMINENCY FILTER (ATD,INPUT_ITEMANME,OUTPUT_ITEMNAME,PARAMETERS) 
 % atd should be a directory culminating in an "analysis" file for mia.GUI.archived_code.ATGUI
 % code.
@@ -31,24 +31,24 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = mia.roi.editors.at_roi_numabovethreshfilter;
+			out_choice = mia.roi.editors.numabovethreshfilter;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.roi.editors.at_roi_numabovethreshfilter(atd,input_itemname,output_itemname,buttonname);
+				out = mia.roi.editors.numabovethreshfilter(atd,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 		case 'choose_inputdlg',
-			out_p = mia.roi.editors.at_roi_numabovethreshfilter;
+			out_p = mia.roi.editors.numabovethreshfilter;
 			defaultparameters.num_above = 50;
 			defaultparameters.imagename = '';
 			parameters = dlg2struct('Choose parameters', out_p{1}, out_p{2}, defaultparameters);
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.roi.editors.at_roi_numabovethreshfilter(atd,input_itemname,output_itemname,parameters);
+				out = mia.roi.editors.numabovethreshfilter(atd,input_itemname,output_itemname,parameters);
 			end
 	end; % switch
 	return;
@@ -63,7 +63,7 @@ oldobjects = CC.NumObjects;
 
 %% Load the original image
 if isempty(parameters.imagename), % choose it 
-    [dummy,im_fname] = mia.roi.functions.at_roi_underlying_image(atd,input_itemname);
+    [dummy,im_fname] = mia.roi.functions.underlying_image(atd,input_itemname);
     parameters.imagename = im_fname;
 end
 
@@ -110,13 +110,13 @@ save(roi_out_file,'CC','-mat');
 save(L_out_file,'L','-mat');
 
 h = gethistory(atd,'ROIs',input_itemname);
-h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.at_roi_resegment','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.resegment','parameters',parameters,...
 	'description',['Pared down ' int2str(oldobjects) ' ROIs below ' int2str(parameters.num_above) ' pixels above peak threshold into ' int2str(newobjects) ' from ' input_itemname '.']);
 sethistory(atd,'ROIs',output_itemname,h);
 
 str2text([getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
-mia.roi.functions.at_roi_parameters(atd,roi_out_file);
+mia.roi.functions.parameters(atd,roi_out_file);
 
 out = 1;
 end

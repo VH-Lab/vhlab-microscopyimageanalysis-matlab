@@ -1,7 +1,7 @@
-function [image_name,imagefilename] = at_roi_underlying_image(atd,roi_name)
-% AT_ROI_UNDERLYING_IMAGE - what is the underlying image of an ROI set?
+function [image_name,imagefilename] = underlying_image(atd,roi_name)
+% UNDERLYING_IMAGE - what is the underlying image of an ROI set?
 %
-% [IMAGE_NAME,IMAGEFILENAME] = MIA.ROI.FUNCTIONS.AT_ROI_UNDERLYING_IMAGE(ATD,ROI_NAME)
+% [IMAGE_NAME,IMAGEFILENAME] = MIA.ROI.FUNCTIONS.UNDERLYING_IMAGE(ATD,ROI_NAME)
 %
 % Return the raw image item that underlies the ROIs with name ROI_NAME.
 %

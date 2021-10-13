@@ -1,7 +1,7 @@
-function out = at_roi_propertyfilter(atd, input_itemname, output_itemname, parameters)
-% AT_ROI_PROPERTYFILTER - Filter ROIs by volume
+function out = propertyfilter(atd, input_itemname, output_itemname, parameters)
+% PROPERTYFILTER - Filter ROIs by volume
 % 
-%  OUT = MIA.ROI.EDITORS.AT_ROI_PROPERTYFILTER(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.ROI.EDITORS.PROPERTYFILTER(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -19,24 +19,24 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = mia.roi.editors.at_roi_propertyfilter;
+			out_choice = mia.roi.editors.propertyfilter;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.roi.editors.at_roi_propertyfilter(atd,input_itemname,output_itemname,buttonname);
+				out = mia.roi.editors.propertyfilter(atd,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 		case 'choose_inputdlg',
-			out_p = mia.roi.editors.at_roi_propertyfilter;
+			out_p = mia.roi.editors.propertyfilter;
 			default_parameters.min_property = -Inf;
 			default_parameters.max_property  = Inf;
 			parameters = dlg2struct('Choose parameters',out_p{1},out_p{2},default_parameters);
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.roi.editors.at_roi_propertyfilter(atd,input_itemname,output_itemname,parameters);
+				out = mia.roi.editors.propertyfilter(atd,input_itemname,output_itemname,parameters);
 			end;
 		case 'choose_graphical',
 			% needs to be done
@@ -155,7 +155,7 @@ if ischar(parameters),
 					elseif ok,
 						%disp('here');
 						parameters = struct('volume_minimum',min,'volume_maximum',max);
-						out = mia.roi.editors.at_roi_propertyfilter(atd,input_itemname,output_itemname,parameters);
+						out = mia.roi.editors.propertyfilter(atd,input_itemname,output_itemname,parameters);
 						success = 1;
                                         end;
                                 end;
@@ -180,10 +180,10 @@ eval(['ROI_property = [ROIparameters.params' parameters.property_name(end) 'd.' 
 good_indexes = find( (ROI_property >= parameters.min_property) & (ROI_property <= parameters.max_property) );
 
 h = gethistory(atd,'ROIs',input_itemname);
-h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.at_roi_propertyfilter','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.propertyfilter','parameters',parameters,...
 	'description',['Filtered all but ' int2str(numel(good_indexes)) ' ROIs with property ' parameters.property_name ' between ' num2str(parameters.min_property) ' and ' num2str(parameters.max_property) ' of ROIS ' input_itemname '.']);
 
-mia.roi.functions.at_roi_savesubset(atd,input_itemname, good_indexes, output_itemname, h);
+mia.roi.functions.savesubset(atd,input_itemname, good_indexes, output_itemname, h);
 
 out = 1;
 

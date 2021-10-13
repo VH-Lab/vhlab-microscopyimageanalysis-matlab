@@ -1,7 +1,7 @@
-function out = at_roi_resegment(atd, input_itemname, output_itemname, parameters)
-% AT_ROI_COMBINE - Filter ROIs by volume
+function out = resegment(atd, input_itemname, output_itemname, parameters)
+% COMBINE - Filter ROIs by volume
 % 
-%  OUT = MIA.ROI.EDITORS.AT_ROI_COMBINE(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.ROI.EDITORS.COMBINE(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -25,17 +25,17 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = mia.roi.editors.at_roi_resegment;
+			out_choice = mia.roi.editors.resegment;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.roi.editors.at_roi_resegment(atd,input_itemname,output_itemname,buttonname);
+				out = mia.roi.editors.resegment(atd,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 		case 'choose_inputdlg',
-			out_p = mia.roi.editors.at_roi_resegment;
+			out_p = mia.roi.editors.resegment;
 			defaultparameters.resegment_algorithm = 'watershed';
 			defaultparameters.connectivity = 0;
 			defaultparameters.values_outside_roi = 0;
@@ -46,7 +46,7 @@ if ischar(parameters),
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.roi.editors.at_roi_resegment(atd,input_itemname,output_itemname,parameters);
+				out = mia.roi.editors.resegment(atd,input_itemname,output_itemname,parameters);
 			end
 	end; % switch
 	return;
@@ -127,13 +127,13 @@ save(roi_out_file,'CC','-mat');
 save(L_out_file,'L','-mat');
 
 h = gethistory(atd,'ROIs',input_itemname);
-h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.at_roi_resegment','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.resegment','parameters',parameters,...
 	'description',['Resegmented ' int2str(oldobjects) ' ROIs into ' int2str(newobjects) ' from ' input_itemname '.']);
 sethistory(atd,'ROIs',output_itemname,h);
 
 str2text([getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
-mia.roi.functions.at_roi_parameters(atd,roi_out_file);
+mia.roi.functions.parameters(atd,roi_out_file);
 
 out = 1;
 
