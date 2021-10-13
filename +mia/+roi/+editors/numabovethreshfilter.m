@@ -67,7 +67,7 @@ if isempty(parameters.imagename), % choose it
     parameters.imagename = im_fname;
 end
 
-[num_images,img_stack] = mia.at_loadscaledstack(parameters.imagename);
+[num_images,img_stack] = mia.loadscaledstack(parameters.imagename);
 
 %% Change ROI format from indexes to y x z (ind2sub)
 [puncta_info] = mia.utilities.puncta_info(img_stack,CC);

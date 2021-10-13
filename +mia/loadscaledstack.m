@@ -1,5 +1,5 @@
 %% Get image values
-function [num_images,img_stack] = at_loadscaledstack(fname)
+function [num_images,img_stack] = loadscaledstack(fname)
 %% INSTRUCTIONS
 
 %% INITIALIZE

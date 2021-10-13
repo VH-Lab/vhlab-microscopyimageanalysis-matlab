@@ -37,7 +37,7 @@ itemname = itemfilename(1:itemnamecutoff(1)-1);
 [dummy,im_fname] = mia.roi.functions.underlying_image(atd,itemname);
 
 %% Convert information into DLW formats
-[num_images,img_stack] = mia.at_loadscaledstack(im_fname);
+[num_images,img_stack] = mia.loadscaledstack(im_fname);
 [puncta_info] = mia.utilities.puncta_info(img_stack,a.CC);
 
 %% Calculate the cardinal slopes

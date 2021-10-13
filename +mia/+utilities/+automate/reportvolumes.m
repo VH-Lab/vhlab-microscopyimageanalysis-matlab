@@ -4,7 +4,7 @@ function reportvolumes(atd,input_itemname)
 % Get the Image
 [dummy,im_fname] = mia.roi.functions.underlying_image(atd,input_itemname);
 parameters.imagename = im_fname;
-[num_images,img_stack] = mia.at_loadscaledstack(parameters.imagename);
+[num_images,img_stack] = mia.loadscaledstack(parameters.imagename);
 
 % Get the ROIs
 L_in_file = getlabeledroifilename(atd,input_itemname);
