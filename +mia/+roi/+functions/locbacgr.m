@@ -37,7 +37,7 @@ itemname = itemfilename(1:itemnamecutoff(1)-1);
 
 %% Convert information into DLW formats
 [num_images,img_stack] = mia.at_loadscaledstack(im_fname);
-[puncta_info] = mia.utilities.at_puncta_info(img_stack,a.CC);
+[puncta_info] = mia.utilities.puncta_info(img_stack,a.CC);
 
 %% Calculate the local background
 disp(['Calculating local background!']);

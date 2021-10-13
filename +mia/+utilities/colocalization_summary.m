@@ -1,8 +1,8 @@
-function [out,msg] = at_colocalization_summary(the_atdir, colocalization)
-% AT_COLOCALIZATION_SUMMARY - provide a summary of co-localizations
+function [out,msg] = colocalization_summary(the_atdir, colocalization)
+% COLOCALIZATION_SUMMARY - provide a summary of co-localizations
 %
 %
-% [OUT, MSG] = mia.utilities.at_colocalization_summary(THE_ATDIR, COLOCALIZATION)
+% [OUT, MSG] = mia.utilities.colocalization_summary(THE_ATDIR, COLOCALIZATION)
 %
 % Returns a summary structure and string message describing the results
 % of the triple colocalization analysis named COLOCALIZATION for the array tomography
@@ -11,7 +11,7 @@ function [out,msg] = at_colocalization_summary(the_atdir, colocalization)
 % Example:
 %     the_atdir = atdir('/Users/vanhoosr/Downloads/2015-06-03');
 %     colname = 'SPINE_PSD_VGLUT_anyoverlap_2shift'; % example roi name
-%     [out,msg] = mia.utilities.at_colocalization_summary(the_atdir, colname);
+%     [out,msg] = mia.utilities.colocalization_summary(the_atdir, colname);
 %
 % See also: ATDIR
 %

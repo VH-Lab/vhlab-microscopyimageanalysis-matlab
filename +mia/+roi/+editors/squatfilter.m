@@ -78,7 +78,7 @@ end
 [num_images,img_stack] = mia.at_loadscaledstack(parameters.imagename);
 
 %% Change ROI format from indexes to y x z (ind2sub)
-[puncta_info] = mia.utilities.at_puncta_info(img_stack,CC);
+[puncta_info] = mia.utilities.puncta_info(img_stack,CC);
 
 %% Get simple puncta information
 for punctum = 1: size(puncta_info,1),

@@ -5,7 +5,7 @@ function out = numabovethreshfilter (atd, input_itemname, output_itemname, param
 % code.
 % input_itemname is specified in at_gui as a selected ROI set, which must
 % have been generated with the doublethreshold system and must have had a
-% threshold supplied by mia.utilities.at_estimatethresholds.
+% threshold supplied by mia.utilities.estimatethresholds.
 % output_itemname is also specified in at_gui, and entered as you wish
 
 % This filter has one useful parameter, num_above, representing the number
@@ -70,7 +70,7 @@ end
 [num_images,img_stack] = mia.at_loadscaledstack(parameters.imagename);
 
 %% Change ROI format from indexes to y x z (ind2sub)
-[puncta_info] = mia.utilities.at_puncta_info(img_stack,CC);
+[puncta_info] = mia.utilities.puncta_info(img_stack,CC);
 
 %% Get the threshold data
 hist = gethistory(atd,'ROIs',input_itemname);

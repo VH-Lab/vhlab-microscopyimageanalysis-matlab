@@ -84,7 +84,7 @@ end
 [num_images,img_stack] = mia.at_loadscaledstack(parameters.imagename);
 
 %% Change ROI format from indexes to y x z (ind2sub)
-[puncta_info] = mia.utilities.at_puncta_info(img_stack,CC);
+[puncta_info] = mia.utilities.puncta_info(img_stack,CC);
 
 %% Calculate Best Guess for Prominency Filter (if not disabled in settings)
 if parameters.prom_thresh == 0,
