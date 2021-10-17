@@ -116,6 +116,11 @@ if isempty(cla_compA_gt_fname),
 	error(['No colocalization analysis ' [groundtruthA_rois '_x_' computerA_rois '_CLA'] ' found. It needs to be computed before running this function.']);
 end;
 
+cla_gtA_mask_fname = getcolocalizationfilename(atd, [maskregion_rois '_x_' groundtruthA_rois '_CLA']);
+if isempty(cla_gtA_mask_fname),
+	error(['No colocalization analysis ' [maskregion_rois '_x_' groundtruthA_rois '_CLA'] ' found. It needs to be computed before running this function.']);
+end;
+
 cla_compB_mask_fname = getcolocalizationfilename(atd, [maskregion_rois '_x_' computerB_rois '_CLA']);
 if isempty(cla_compB_mask_fname),
 	error(['No colocalization analysis ' [maskregion_rois '_x_' computerB_rois '_CLA'] ' found. It needs to be computed before running this function.']);
@@ -182,11 +187,35 @@ cla_compB_gt = load(cla_compB_gt_fname,'-mat');
 [compA_rois_with_some_mask,J] = find(cla_compA_mask.colocalization_data.overlap_ba>overlap_threshold_mask);
 % which ROIs detected by the computer are substantially in the masked region?
 [compA_rois_substantially_in_mask,J] = find(cla_compA_mask.colocalization_data.overlap_ba>=0.5);
+% which ROIs detected by the human for A have some overlap with the masked region?
+[groundtruthA_rois_with_some_mask,J] = find(cla_compA_mask.colocalization_data.overlap_ba>overlap_threshold_mask);
+% which ROIs detected by the computer are substantially in the masked region?
+[compA_rois_substantially_in_mask,J] = find(cla_compA_mask.colocalization_data.overlap_ba>=0.5);
+
 
 % which ROIs detected by the computer for B have some overlap with the masked region?
 [compB_rois_with_some_mask,J] = find(cla_compB_mask.colocalization_data.overlap_ba>overlap_threshold_mask);
 % which ROIs detected by the computer are substantially in the masked region?
 [compB_rois_substantially_in_mask,J] = find(cla_compB_mask.colocalization_data.overlap_ba>=0.5);
+
+
+ % 
+ % 
+ % true positives:
+ %    Step 1:
+ %    To be considered as a groundtruth positive, a groundtruthA ROI must
+ %    1) be colocalized with a groundtruthB ROI (synaptic colocalization)
+ %    2) must overlap the mask region substantially
+ %    Step 2:
+ %    A groundtruth positive is considered detected if there exists a compA ROI that
+ %    1) is colocalized with a compB ROI
+ %    2) overlaps the groundtruthA roi by amount THRESHOLD (fraction 0..1)  (compA onto groundtruthA)
+ %
+ % false positives:
+ %    To be considered as a false positive, a compA ROI must
+ %    1) overlap the mask region substantially (it had a chance to be marked by the human observer)
+ %    2) be colocalized with a compB ROI
+ %    3) NOT exhibit any overlap with any groundtruthA ROI that is colocalized with groundtruthB ROI
 
 
 % which ROIs detected by the computer substantially overlap the groundtruth ROIs?
