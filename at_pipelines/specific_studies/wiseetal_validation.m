@@ -11,6 +11,11 @@ at_foreachdirdo(d_here,'vh_roicomparepipe(atd, ''VG_ROI_'', ''VG_DECsv1_roiresvf
 at_foreachdirdo(d_here,'vh_roicomparepipe(atd, ''spine_ROI_'', ''PSD_DECsv1_roiresvf'',''useRes'',0);')
 at_foreachdirdo(d_here,'vh_roicomparepipe(atd, ''spine_ROI_'', ''VG_DECsv1_roiresvf'',''useRes'',0);')
 at_foreachdirdo(d_here,'vh_coloc1(atd,''PSD_DECsv1_roiresvf'',''VG_DECsv1_roiresvf'',''PSD_DECsv1_roiresvf_X_VG_DECsv1_roiresvf'');');
+at_foreachdirdo(d_here([1:6 11 13:16]),'vh_roicomparepipe(atd, ''spine_ROI_'', ''PSD_ROI_SG_ROIres'',''useRes'',0);')
+at_foreachdirdo(d_here([1:6 11 13:16]),'vh_roicomparepipe(atd, ''spine_ROI_'', ''VG_ROI_SG_ROIres'',''useRes'',0);')
+at_foreachdirdo(d_here([1 3:6 17 18]),'vh_roicomparepipe(atd, ''spine_ROI_'', ''PSD_ROI_KC_ROIres'',''useRes'',0);')
+at_foreachdirdo(d_here([1 3:6 17 18]),'vh_roicomparepipe(atd, ''spine_ROI_'', ''VG_ROI_KC_ROIres'',''useRes'',0);')
+
 
 at_foreachdirdo(d_here([1:10 12]),'vh_groundtruthcompare(atd,''PSD_DECsv1_roiresvf'',''spine_ROI_DLW_ROI'',''PSD_ROI_'');');
 at_foreachdirdo(d_here([11 13:16]),'vh_groundtruthcompare(atd,''PSD_DECsv1_roiresvf'',''spine_ROI_SG_ROI'',''PSD_ROI_'');');

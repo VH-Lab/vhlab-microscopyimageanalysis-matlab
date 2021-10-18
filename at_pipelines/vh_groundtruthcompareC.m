@@ -11,7 +11,7 @@ function [parameters] = vh_groundtruthcompareC(atd, maskregion, computer_roisA, 
 %
 % Example:
 %    atd = at_dir([MYEXPERIMENTPATH]);
-%    vh_groundtruthcompare(atd,'PSD_DECsv1','spine_ROI_DLW_ROI','PSD_ROI_');
+%    vh_groundtruthcompareC(atd,'PSD_DECsv1','spine_ROI_DLW_ROI','PSD_ROI_');
 %
 
 
@@ -39,7 +39,7 @@ end;
 
 for i=1:numel(indexes),
 	disp(['Now working on ' roilist(indexes(i)).name '...']);
-	stats = at_groundtruthcorrespondence(atd,computer_rois, maskregion_rois, roilist(indexes(i)).name);
+	stats = at_groundtruthcorrespondenceC(atd,computer_rois, maskregion_rois, roilist(indexes(i)).name);
 	save([getpathname(atd) filesep 'groundtruth_analysis' filesep computer_rois '_x_' roilist(indexes(i)).name '.mat'],'stats');
 end;
 

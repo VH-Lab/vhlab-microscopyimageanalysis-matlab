@@ -1,4 +1,4 @@
-function [stats] = at_groundtruthcorrespondenceC(atd, markregion_rois, computerA_rois, groundtruthA_rois, computerB_rois, groundtruthB_rois, varargin)
+function [stats] = at_groundtruthcorrespondenceC(atd, maskregion_rois, computerA_rois, groundtruthA_rois, computerB_rois, groundtruthB_rois, varargin)
 % AT_GROUNDTRUTHCORRESPONDENCE 
 %
 % STATS = AT_GROUNDTRUTHCORRESPONDENCEC(ATD, MASKREGION_ROIS, COMPUTERA_ROIS, GROUNDTRUTHA_ROIS, COMPUTERB_ROIS, GROUNDTRUTHB_ROIS, ...)
@@ -77,13 +77,14 @@ function [stats] = at_groundtruthcorrespondenceC(atd, markregion_rois, computerA
 % ---------------------------------------------------------------------------
 %
 % Example:
-function [stats] = at_groundtruthcorrespondenceC(atd, markregion_rois, computerA_rois, groundtruthA_rois, computerB_rois, groundtruthB_rois, varargin)
+% function [stats] = at_groundtruthcorrespondenceC(atd, markregion_rois, computerA_rois, groundtruthA_rois, computerB_rois, groundtruthB_rois, varargin)
 %    computerA_rois = 'PSD_DECsv9_roiresbf';
 %    groundtruthA_rois = 'PSD_ROI_KC_ROIres';
 %    maskregion_rois = 'spine_ROI_DLW_ROI';
 %    computerB_rois = 'VG_DECsv9_roiresbf';
 %    groundtruthB_rois = 'VG_ROI_KC_ROIres';
-%    stats = at_groundtruthcorrespondence(atd,computer_rois,maskregion_rois,groundtruth_rois);
+%    stats = at_groundtruthcorrespondenceC(atd, maskregion_rois, computerA_rois, groundtruthA_rois, computerB_rois, groundtruthB_rois);
+%    % edit this
 %    figure;
 %    subplot(2,1,1);
 %    plot(stats.vol_gt,stats.N_overlaps_gt_onto_comp(stats.volorder_gt,4),'o'); % threshold: 4 = 30%
@@ -102,6 +103,7 @@ function [stats] = at_groundtruthcorrespondenceC(atd, markregion_rois, computerA
 
 overlap_threshold_mask = 0.0;
 overlap_threshold_substantially_in_mask = 0.75; 
+synaptic_overlap_threshold = 0.00001;
 
 vlt.data.assign(varargin{:});
 
@@ -111,8 +113,9 @@ cla_compA_mask_fname = getcolocalizationfilename(atd, [maskregion_rois '_x_' com
 if isempty(cla_compA_mask_fname),
 	error(['No colocalization analysis ' [maskregion_rois '_x_' computerA_rois '_CLA'] ' found. It needs to be computed before running this function.']);
 end;
-cla_compA_gt_fname = getcolocalizationfilename(atd, [groundtruthA_rois '_x_' computerA_rois '_CLA']);
-if isempty(cla_compA_gt_fname),
+
+cla_gt_compA_fname = getcolocalizationfilename(atd, [groundtruthA_rois '_x_' computerA_rois '_CLA']);
+if isempty(cla_gt_compA_fname),
 	error(['No colocalization analysis ' [groundtruthA_rois '_x_' computerA_rois '_CLA'] ' found. It needs to be computed before running this function.']);
 end;
 
@@ -176,36 +179,21 @@ end;
 
 
 cla_compA_mask = load(cla_compA_mask_fname,'-mat');
-cla_compA_gt = load(cla_compA_gt_fname,'-mat');
+cla_gt_compA = load(cla_gt_compA_fname,'-mat');
 
 cla_compB_mask = load(cla_compB_mask_fname,'-mat');
 cla_compB_gt = load(cla_compB_gt_fname,'-mat');
+cla_groundtruthAB = load(cla_groundtruth_fname,'-mat');
+cla_groundtruthA_mask = load(cla_gtA_mask_fname,'-mat');
+cla_compAB = load(cla_computerAB_fname,'-mat');
 
 
-
-% which ROIs detected by the computer for A have some overlap with the masked region?
-[compA_rois_with_some_mask,J] = find(cla_compA_mask.colocalization_data.overlap_ba>overlap_threshold_mask);
-% which ROIs detected by the computer are substantially in the masked region?
-[compA_rois_substantially_in_mask,J] = find(cla_compA_mask.colocalization_data.overlap_ba>=0.5);
-% which ROIs detected by the human for A have some overlap with the masked region?
-[groundtruthA_rois_with_some_mask,J] = find(cla_compA_mask.colocalization_data.overlap_ba>overlap_threshold_mask);
-% which ROIs detected by the computer are substantially in the masked region?
-[compA_rois_substantially_in_mask,J] = find(cla_compA_mask.colocalization_data.overlap_ba>=0.5);
-
-
-% which ROIs detected by the computer for B have some overlap with the masked region?
-[compB_rois_with_some_mask,J] = find(cla_compB_mask.colocalization_data.overlap_ba>overlap_threshold_mask);
-% which ROIs detected by the computer are substantially in the masked region?
-[compB_rois_substantially_in_mask,J] = find(cla_compB_mask.colocalization_data.overlap_ba>=0.5);
-
-
- % 
- % 
+ % thinking:
  % true positives:
  %    Step 1:
  %    To be considered as a groundtruth positive, a groundtruthA ROI must
  %    1) be colocalized with a groundtruthB ROI (synaptic colocalization)
- %    2) must overlap the mask region substantially
+ %    2) must have some overlap with the mask region
  %    Step 2:
  %    A groundtruth positive is considered detected if there exists a compA ROI that
  %    1) is colocalized with a compB ROI
@@ -216,11 +204,78 @@ cla_compB_gt = load(cla_compB_gt_fname,'-mat');
  %    1) overlap the mask region substantially (it had a chance to be marked by the human observer)
  %    2) be colocalized with a compB ROI
  %    3) NOT exhibit any overlap with any groundtruthA ROI that is colocalized with groundtruthB ROI
+ %
+ % now the code:
+ % TRUE POSITIVES
+ % step 1: groundtruthA ROI must
+ %    1) be colocalized with a groundtruthB ROI (synaptic colocalization)
+groundtruthA_colocalized = [full(sum(cla_groundtruthAB.colocalization_data.overlap_ab>synaptic_overlap_threshold,2))]>0;
+ %    2) must have some overlap with the mask region
+groundtruthA_somemaskoverlap = [ full(sum(cla_groundtruthA_mask.colocalization_data.overlap_ba>overlap_threshold_mask,2))] >0;
 
+groundtruthA_toconsider_indexes = intersect(find(groundtruthA_colocalized),find(groundtruthA_somemaskoverlap));
+
+ % true positives step 2:groundtruth positive is considered detected if there exists a compA ROI that
+ %    1) is colocalized with a compB ROI
+ %    2) overlaps the groundtruthA roi by amount THRESHOLD (fraction 0..1)  (compA onto groundtruthA)
+compAB_colocalized = [full(sum(cla_compAB.colocalization_data.overlap_ab>synaptic_overlap_threshold,2))]>0;
+compAB_colocalized_indexes = find(compAB_colocalized);
+
+N_gt_detected_thresholds = 10;
+os = linspace(0,0.9,N_gt_detected_thresholds);
+gt_detected = zeros(1,N_gt_detected_thresholds);
+gt_possible = numel(groundtruthA_toconsider_indexes);
+gt_hit = {};
+gt_miss = {};
+true_positive_rate = zeros(1,N_gt_detected_thresholds);
+
+for i=1:numel(os),
+	THRESHOLD = os(i);
+	compA_groundtruthA_colocalized = [full(sum(cla_gt_compA.colocalization_data.overlap_ab(groundtruthA_toconsider_indexes,compAB_colocalized_indexes)>=THRESHOLD,2))]>0;
+	gt_detected(i) = sum(compA_groundtruthA_colocalized);
+	gt_hit{i} = groundtruthA_toconsider_indexes(find(compA_groundtruthA_colocalized));
+	gt_miss{i} = groundtruthA_toconsider_indexes(find(compA_groundtruthA_colocalized==0));
+	true_positive_rate(i) = gt_detected(i)/gt_possible;
+end;
+
+
+ % now FALSE POSITIVES
+ %    To be considered as a false positive, a compA ROI must
+ %    1) overlap the mask region substantially (it had a chance to be marked by the human observer)
+ %    2) be colocalized with a compB ROI
+ %    3) NOT exhibit any overlap with any groundtruthA ROI that is colocalized with groundtruthB ROI
+ %    To determine the false positive RATE, we consider the number of the total false positives
+ %    out of all colocalized compA ROIs that are substantially in the mask region
+
+% which ROIs detected by the computer are substantially in the masked region?
+[compA_rois_substantially_in_mask,J] = find(cla_compA_mask.colocalization_data.overlap_ba>=overlap_threshold_substantially_in_mask);
+
+compA_potential_false_positives = intersect(compA_rois_substantially_in_mask,compAB_colocalized_indexes);
+compA_false_positives_count = zeros(1,N_gt_detected_thresholds);
+compA_false_positives_rate = zeros(1,N_gt_detected_thresholds);
+false_positives_not = {};
+false_positives_are = {};
+
+for i=1:numel(os),
+	THRESHOLD = os(i);
+	compA_false_positives = [full(sum(cla_gt_compA.colocalization_data.overlap_ba(compA_potential_false_positives,:)>=THRESHOLD,2))]==0;
+	compA_false_positives_count(i) = sum(compA_false_positives);
+	false_positives_not{i} = compA_potential_false_positives(find(compA_false_positives==0));
+	false_positives_are{i} = compA_potential_false_positives(find(compA_false_positives));
+	compA_false_positives_rate(i) = compA_false_positives_count(i) / numel(compA_potential_false_positives);
+end;
+
+
+stats = vlt.data.var2struct('false_positives_not','false_positives_are','compA_false_positives_rate','compA_false_positives_count','compA_potential_false_positives',...
+	'gt_detected','gt_possible','gt_hit','gt_miss','true_positive_rate','os','N_gt_detected_thresholds');
+
+return;
+
+
+ % garbage from previous version that only looked at puncta
 
 % which ROIs detected by the computer substantially overlap the groundtruth ROIs?
 
-N_overlap_comp_onto_gt_thresholds = 10;
 N_comp_rois = numel(comp_rois_with_some_mask);
 N_groundtruth_rois = size(cla_comp_gt.colocalization_data.overlap_ab,1);
 N_comp_rois_substantial = numel(comp_rois_substantially_in_mask);
@@ -229,7 +284,6 @@ N_overlaps_comp_onto_gt = zeros(N_comp_rois,N_overlap_comp_onto_gt_thresholds);
 N_overlaps_gt_onto_comp = zeros(N_groundtruth_rois,N_overlap_comp_onto_gt_thresholds);
 N_overlaps_comp_substantial_onto_gt = zeros(N_comp_rois_substantial,N_overlap_comp_onto_gt_thresholds);
 
-os = linspace(0,0.9,N_overlap_comp_onto_gt_thresholds);
 
 for i=1:length(os),
 	N_overlaps_comp_onto_gt(:,i) = [ full(sum(cla_comp_gt.colocalization_data.overlap_ba(comp_rois_with_some_mask,:)>os(i),2)) ];
@@ -237,11 +291,11 @@ for i=1:length(os),
 	N_overlaps_comp_substantial_onto_gt(:,i) = [ full(sum(cla_comp_gt.colocalization_data.overlap_ba(comp_rois_substantially_in_mask,:)>os(i),2)) ];
 end;
 
-roi_comp_params_file = getroiparametersfilename(atd,cla_comp_gt.colocalization_data.parameters.roi_set_2);
-roi_gt_params_file = getroiparametersfilename(atd,cla_comp_gt.colocalization_data.parameters.roi_set_1);
+roi_compA_params_file = getroiparametersfilename(atd,cla_compA_gt.colocalization_data.parameters.roi_set_2);
+roi_gtA_params_file = getroiparametersfilename(atd,cla_compA_gt.colocalization_data.parameters.roi_set_1);
 
-roi_comp_params = load(roi_comp_params_file,'-mat');
-roi_gt_params = load(roi_gt_params_file,'-mat');
+roi_compA_params = load(roi_compA_params_file,'-mat');
+roi_gtA_params = load(roi_gtA_params_file,'-mat');
 
 vol_comp = [roi_comp_params.ROIparameters.params3d(comp_rois_with_some_mask).Volume];
 vol_gt = [roi_gt_params.ROIparameters.params3d(:).Volume];
