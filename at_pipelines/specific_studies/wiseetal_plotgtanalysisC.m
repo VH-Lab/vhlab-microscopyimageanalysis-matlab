@@ -18,8 +18,8 @@ for i=1:numel(s),
 			psd_experindex(end+1) = i;
 			psd_falsepositives(end+1,1) = n;
 			psd_truepositives(end+1,1) = n;
-			psd_falsepositives(end,1:11) = h.compA.false_positives_rate;
-			psd_truepositives(end,1+v) = h.true_positive_rate;
+			psd_falsepositives(end,2:11) = h.compA_false_positives_rate;
+			psd_truepositives(end,2:11) = h.true_positive_rate;
 		end;
 	end;
 end;
