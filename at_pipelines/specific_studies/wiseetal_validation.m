@@ -15,6 +15,8 @@ at_foreachdirdo(d_here([1:6 11 13:16]),'vh_roicomparepipe(atd, ''spine_ROI_'', '
 at_foreachdirdo(d_here([1:6 11 13:16]),'vh_roicomparepipe(atd, ''spine_ROI_'', ''VG_ROI_SG_ROIres'',''useRes'',0);')
 at_foreachdirdo(d_here([1 3:6 17 18]),'vh_roicomparepipe(atd, ''spine_ROI_'', ''PSD_ROI_KC_ROIres'',''useRes'',0);')
 at_foreachdirdo(d_here([1 3:6 17 18]),'vh_roicomparepipe(atd, ''spine_ROI_'', ''VG_ROI_KC_ROIres'',''useRes'',0);')
+at_foreachdirdo(d_here([7:10 12]),'vh_roicomparepipe(atd, ''spine_ROI_'', ''PSD_ROI_DW_ROIres'',''useRes'',0);')
+at_foreachdirdo(d_here([7:10 12]),'vh_roicomparepipe(atd, ''spine_ROI_'', ''VG_ROI_DW_ROIres'',''useRes'',0);')
 
 
 at_foreachdirdo(d_here([1:10 12]),'vh_groundtruthcompare(atd,''PSD_DECsv1_roiresvf'',''spine_ROI_DLW_ROI'',''PSD_ROI_'');');
@@ -83,8 +85,10 @@ at_foreachdirdo(d_here([11 13:16]),'vh_groundtruthcompare(atd,''VG_DECsv2_roires
 at_foreachdirdo(d_here([17 18]),'vh_groundtruthcompare(atd,''VG_DECsv2_roiresbf'',''spine_ROI_KC_ROI'',''VG_ROI_'');');
 
 at_foreachdirdo(d_here([1 3:6]),'vh_groundtruthcompareC(atd,''spine_ROI_DLW_ROI'', ''PSD_DECsv2_roiresbf'',''PSD_ROI_KC_ROIres'', ''VG_DECsv2_roiresbf'',''VG_ROI_KC_ROIres'');');
-at_foreachdirdo(d_here([1:6 ]),'vh_groundtruthcompareC(atd,''spine_ROI_DLW_ROI'', ''PSD_DECsv2_roiresbf'',''PSD_ROI_SG_ROIres'', ''VG_DECsv2_roiresbf'',''VG_ROI_SG_ROIres'');');
 at_foreachdirdo(d_here([17 18]),'vh_groundtruthcompareC(atd,''spine_ROI_KC_ROI'', ''PSD_DECsv2_roiresbf'',''PSD_ROI_KC_ROIres'', ''VG_DECsv2_roiresbf'',''VG_ROI_KC_ROIres'');');
+at_foreachdirdo(d_here([1:6]),'vh_groundtruthcompareC(atd,''spine_ROI_DLW_ROI'', ''PSD_DECsv2_roiresbf'',''PSD_ROI_SG_ROIres'', ''VG_DECsv2_roiresbf'',''VG_ROI_SG_ROIres'');');
+at_foreachdirdo(d_here([11 13:16]),'vh_groundtruthcompareC(atd,''spine_ROI_SG_ROI'', ''PSD_DECsv2_roiresbf'',''PSD_ROI_SG_ROIres'', ''VG_DECsv2_roiresbf'',''VG_ROI_SG_ROIres'');');
+at_foreachdirdo(d_here([7:10 12 ]),'vh_groundtruthcompareC(atd,''spine_ROI_DLW_ROI'', ''PSD_DECsv2_roiresbf'',''PSD_ROI_DW_ROIres'', ''VG_DECsv2_roiresbf'',''VG_ROI_DW_ROIres'');');
 
 
 % algorithm 103 
