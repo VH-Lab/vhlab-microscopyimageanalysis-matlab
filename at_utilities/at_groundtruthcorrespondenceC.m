@@ -181,7 +181,7 @@ end;
 cla_compA_mask = load(cla_compA_mask_fname,'-mat');
 cla_gt_compA = load(cla_gt_compA_fname,'-mat');
 
-%cla_compB_mask = load(cla_compB_mask_fname,'-mat');
+cla_compB_mask = load(cla_compB_mask_fname,'-mat');
 cla_compB_gt = load(cla_compB_gt_fname,'-mat');
 cla_groundtruthAB = load(cla_groundtruth_fname,'-mat');
 cla_groundtruthA_mask = load(cla_gtA_mask_fname,'-mat');
@@ -203,7 +203,8 @@ cla_compAB = load(cla_computerAB_fname,'-mat');
  %    To be considered as a false positive, a compA ROI must
  %    1) overlap the mask region substantially (it had a chance to be marked by the human observer)
  %    2) be colocalized with a compB ROI
- %    3) NOT exhibit any overlap with any groundtruthA ROI that is colocalized with groundtruthB ROI
+ %    3) the compB ROI has to be substantially in the viewing region
+ %    4) NOT exhibit any overlap with any groundtruthA ROI that is colocalized with groundtruthB ROI
  %
  % now the code:
  % TRUE POSITIVES
@@ -243,14 +244,20 @@ end;
  %    To be considered as a false positive, a compA ROI must
  %    1) overlap the mask region substantially (it had a chance to be marked by the human observer)
  %    2) be colocalized with a compB ROI
- %    3) NOT exhibit any overlap with any groundtruthA ROI that is colocalized with groundtruthB ROI
+ %    3) the compB ROI has to be substantially in the viewing region
+ %    4) NOT exhibit any overlap with any groundtruthA ROI that is colocalized with groundtruthB ROI
  %    To determine the false positive RATE, we consider the number of the total false positives
  %    out of all colocalized compA ROIs that are substantially in the mask region
 
 % which ROIs detected by the computer are substantially in the masked region?
 [compA_rois_substantially_in_mask,J] = find(cla_compA_mask.colocalization_data.overlap_ba>=overlap_threshold_substantially_in_mask);
+[compB_rois_substantially_in_mask,J] = find(cla_compB_mask.colocalization_data.overlap_ba>=overlap_threshold_substantially_in_mask);
+
+compAB_colocalized_Binmask = [full(sum(cla_compAB.colocalization_data.overlap_ab(:,compB_rois_substantially_in_mask)>synaptic_overlap_threshold,2))]>0;
+compAB_colocalized_Binmask_indexes = find(compAB_colocalized_Binmask);
 
 compA_potential_false_positives = intersect(compA_rois_substantially_in_mask,compAB_colocalized_indexes);
+
 compA_false_positives_count = zeros(1,N_gt_detected_thresholds);
 compA_false_positives_rate = zeros(1,N_gt_detected_thresholds);
 false_positives_not = {};
