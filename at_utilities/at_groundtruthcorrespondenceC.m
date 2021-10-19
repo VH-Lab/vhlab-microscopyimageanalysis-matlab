@@ -140,7 +140,7 @@ end;
 
 cla_computerAB_fname = getcolocalizationfilename(atd, [computerA_rois '_X_' computerB_rois]);
 if isempty(cla_computerAB_fname),
-	error(['No colocalization analysis ' [computerA_rois '_x_' computerB_rois] ' found. It needs to be computed before running this function.']);
+	error(['No colocalization analysis ' [computerA_rois '_X_' computerB_rois] ' found. It needs to be computed before running this function.']);
 end;
 
 hist = gethistory(atd,'ROIs',computerA_rois);
@@ -181,7 +181,7 @@ end;
 cla_compA_mask = load(cla_compA_mask_fname,'-mat');
 cla_gt_compA = load(cla_gt_compA_fname,'-mat');
 
-cla_compB_mask = load(cla_compB_mask_fname,'-mat');
+%cla_compB_mask = load(cla_compB_mask_fname,'-mat');
 cla_compB_gt = load(cla_compB_gt_fname,'-mat');
 cla_groundtruthAB = load(cla_groundtruth_fname,'-mat');
 cla_groundtruthA_mask = load(cla_gtA_mask_fname,'-mat');
@@ -294,8 +294,8 @@ end;
 roi_compA_params_file = getroiparametersfilename(atd,cla_compA_gt.colocalization_data.parameters.roi_set_2);
 roi_gtA_params_file = getroiparametersfilename(atd,cla_compA_gt.colocalization_data.parameters.roi_set_1);
 
-roi_compA_params = load(roi_compA_params_file,'-mat');
-roi_gtA_params = load(roi_gtA_params_file,'-mat');
+%roi_compA_params = load(roi_compA_params_file,'-mat');
+%roi_gtA_params = load(roi_gtA_params_file,'-mat');
 
 vol_comp = [roi_comp_params.ROIparameters.params3d(comp_rois_with_some_mask).Volume];
 vol_gt = [roi_gt_params.ROIparameters.params3d(:).Volume];
