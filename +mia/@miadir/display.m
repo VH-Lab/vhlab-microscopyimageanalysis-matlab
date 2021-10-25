@@ -1,15 +1,15 @@
-function display(atd)
-% DISPLAY print info from an ATDIR object
+function display(md)
+% DISPLAY print info from an MIADIR object
 %
-%   DISPLAY(ATD)
+%   DISPLAY(MD)
 %
-%   Displays information about the ATDIR object ATD
+%   Displays information about the MIADIR object MD
 %
-%   See also: ATDIR
+%   See also: MIADIR
 
 if isempty(inputname(1)),
-	disp([inputname(1) '; manages directory ' getpathname(atd) ]);
+	disp([inputname(1) '; manages directory ' getpathname(md) ]);
 else,
-	disp([inputname(1) '; manages directory ' getpathname(atd) ]);
+	disp([inputname(1) '; manages directory ' getpathname(md) ]);
 end;
 

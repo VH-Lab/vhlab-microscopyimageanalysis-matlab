@@ -1,9 +1,9 @@
-function ad = atdir(pathname)
-% ATDIR - data directory management for Array Tomography data.
+classdef miadir
+% MIADIR - data directory management for Array Tomography data.
 %
-%  AD = ATDIR(PATHNAME)
+%  MD = MIADIR(PATHNAME)
 %
-%  Creates a data directory management object AD with full pathname
+%  Creates a data directory management object MD with full pathname
 %  PATHNAME.
 % 
 %  The directory format is as follows. There is a directory
@@ -25,17 +25,45 @@ function ad = atdir(pathname)
 %    colocalization/
 %
 %
-% See also: METHODS('ATDIR')
+% See also: METHODS('MIADIR')
 %
+    properties 
+        pathname
+        S
+    end
+
+    methods
+        function md = miadir(pathname);
+                if nargin == 0,
+                    md.pathname = '';
+                else,
+                    md.pathname = fixpath(pathname);
+                    if exist(pathname)~=7, error([pathname ' does not exist.']); end;
+                end;
+                
+                md.S = struct('pathname',pathname);
+                
+                %md = class(S,'mia.miadir');
+        end
+        addtag(ds, dir, tagname, value)
+        deleteitem(md,itemtype,itemname)
+        display(md)
+        cfilename = getcolocalizationfilename(md, itemname)
+        h = gethistory(md, itemtype, itemname)
+        imfilename = getimagefilename(md, itemname)
+        itemstruct = getitems(md, itemtype)
+        labeledroifilename = getlabeledroifilename(md, itemname)
+        p = getparent(md, itemtype, itemname)
+        p = getpathname(md)
+        roifilename = getroifilename(md, itemname)
+        roipfilename = getroiparametersfilename(md, itemname, showerror)
+        tag = gettag(ds,dir)
+        b = hastag(ds,dir,tagname)
+        removetag(ds, dir, tagname)
+        h = sethistory(md, itemtype, itemname, h)
+    end
+end
 
 
-if nargin == 0,
-	pathname = '';
-else,
-	pathname = fixpath(pathname);
-	if exist(pathname)~=7, error([pathname ' does not exist.']); end;
-end;
 
-S = struct('pathname',pathname);
-ad = class(S,'atdir');
 

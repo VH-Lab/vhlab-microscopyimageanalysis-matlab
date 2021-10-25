@@ -1,12 +1,12 @@
-function p = getpathname(atd)
-% GETPATHNAME - Get the pathname of an ATDIR
+function p = getpathname(md)
+% GETPATHNAME - Get the pathname of an MIADIR
 %
-%  P = GETPATHNAME(ATD)
+%  P = GETPATHNAME(MD)
 %
-%  Returns the pathname associated with the ATDIR directory
-%  ATD.
+%  Returns the pathname associated with the MIADIR directory
+%  MD.
 %
-%  See also: ATDIR
+%  See also: MIADIR
 %
 
-p = atd.pathname;
+p = md.pathname;

@@ -1,10 +1,10 @@
-function itemstruct = getitems(atd, itemtype)
-% GETITEMS - Get items of a particular type in an ATDIR experiment directory
+function itemstruct = getitems(md, itemtype)
+% GETITEMS - Get items of a particular type in an MIADIR experiment directory
 %  
-%   ITEMSTRUCT = GETITEMS(ATD, ITEMTYPE)
+%   ITEMSTRUCT = GETITEMS(MD, ITEMTYPE)
 %
 %  Returns an item struct array with all items of ITEMTYPE
-%  in the ATDIR director ATD.
+%  in the MIADIR director MD.
 %
 %  Examples of ITEMTYPE could be 'images', 'ROIs', etc...
 %
@@ -17,15 +17,15 @@ function itemstruct = getitems(atd, itemtype)
 
 itemstruct = emptystruct('name','parent','history');
 
-d = dir([atd.pathname filesep itemtype]);
+d = dir([md.pathname filesep itemtype]);
 dirnumbers = find([d.isdir]);
 dirlist = {d(dirnumbers).name};
 dirlist = dirlist_trimdots(dirlist);
 
 for i=1:length(dirlist),
 	n.name = dirlist{i};
-	n.parent = getparent(atd,itemtype,n.name);
-	n.history = gethistory(atd,itemtype,n.name);
+	n.parent = getparent(md,itemtype,n.name);
+	n.history = gethistory(md,itemtype,n.name);
 	itemstruct(i) = n;
 end;
 

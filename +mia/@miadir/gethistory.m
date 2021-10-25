@@ -1,11 +1,11 @@
-function h = gethistory(atd, itemtype, itemname)
-% GETHISTORY - Get the history of an item from ATDIR directory
+function h = gethistory(md, itemtype, itemname)
+% GETHISTORY - Get the history of an item from MIADIR directory
 %  
-%  H = GETHISTORY(ATD, ITEMTYPE, ITEMNAME)
+%  H = GETHISTORY(MD, ITEMTYPE, ITEMNAME)
 %
 %  Returns the history structure of item ITEMNAME that is
 %  of type ITEMTYPE in the directory managed by the ATDIR 
-%  object ATD.
+%  object MD.
 % 
 %  If there is no history, H is an empty structure.
 %
@@ -26,7 +26,7 @@ function h = gethistory(atd, itemtype, itemname)
 h = emptystruct('parent','operation','parameters','description');
 
 try,
-	h = load([atd.pathname filesep itemtype filesep ...
+	h = load([md.pathname filesep itemtype filesep ...
 			itemname filesep 'history.mat']);
 	h = h.history;
 catch,

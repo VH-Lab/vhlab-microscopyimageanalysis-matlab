@@ -1,7 +1,7 @@
-function labeledroifilename = getlabeledroifilename(atd, itemname)
-% GETLABELEDROIFILENAME - get the image file from an ATDIR
+function labeledroifilename = getlabeledroifilename(md, itemname)
+% GETLABELEDROIFILENAME - get the image file from an MIADIR
 %
-%  ROIFILENAME = GETLABELEDROIFILENAME(ATD, ITEMNAME)
+%  ROIFILENAME = GETLABELEDROIFILENAME(MD, ITEMNAME)
 %
 %  Returns the labeled ROI filename associated with the ROI item name
 %  ITEMNAME.
@@ -10,9 +10,9 @@ function labeledroifilename = getlabeledroifilename(atd, itemname)
 labeledroifilename = '';
 
 dnames = {};
-d = dir([getpathname(atd) filesep 'ROIs' filesep itemname filesep '*L.mat']);
+d = dir([getpathname(md) filesep 'ROIs' filesep itemname filesep '*L.mat']);
 dnames = cat(1,dnames,d.name);
 
 if ~isempty(dnames),
-	labeledroifilename = [getpathname(atd) filesep 'ROIs' filesep itemname filesep dnames{1}];
+	labeledroifilename = [getpathname(md) filesep 'ROIs' filesep itemname filesep dnames{1}];
 end;

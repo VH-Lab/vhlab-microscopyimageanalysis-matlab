@@ -1,7 +1,7 @@
-function roifilename = getroifilename(atd, itemname)
-% GETROIFILENAME - get the image file from an ATDIR
+function roifilename = getroifilename(md, itemname)
+% GETROIFILENAME - get the image file from an MIADIR
 %
-%  ROIFILENAME = GETROIFILENAME(ATD, ITEMNAME)
+%  ROIFILENAME = GETROIFILENAME(MD, ITEMNAME)
 %
 %  Returns the filename associated with the ROI item name
 %  ITEMNAME.
@@ -10,13 +10,13 @@ function roifilename = getroifilename(atd, itemname)
 roifilename = '';
 
 dnames = {};
-d = dir([getpathname(atd) filesep 'ROIs' filesep itemname filesep '*ROI.mat']);
+d = dir([getpathname(md) filesep 'ROIs' filesep itemname filesep '*ROI.mat']);
 dnames = cat(1,dnames,d.name);
 
 if ~isempty(dnames),
-	roifilename = [getpathname(atd) filesep 'ROIs' filesep itemname filesep dnames{1}];
+	roifilename = [getpathname(md) filesep 'ROIs' filesep itemname filesep dnames{1}];
 end;
 
 if isempty(roifilename),
-	errordlg(['Could not locate the ROI file in ' [getpathname(atd) filesep 'ROIs' filesep itemname filesep] '; this directory should be deleted.']);
+	errordlg(['Could not locate the ROI file in ' [getpathname(md) filesep 'ROIs' filesep itemname filesep] '; this directory should be deleted.']);
 end

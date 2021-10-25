@@ -1,11 +1,11 @@
-function h = sethistory(atd, itemtype, itemname, h)
-% SETHISTORY - Set the history of an item from ATDIR directory
+function h = sethistory(md, itemtype, itemname, h)
+% SETHISTORY - Set the history of an item from MIADIR directory
 %  
-%  SETHISTORY(ATD, ITEMTYPE, ITEMNAME, H)
+%  SETHISTORY(MD, ITEMTYPE, ITEMNAME, H)
 %
 %  Sets the history structure of item ITEMNAME that is
-%  of type ITEMTYPE in the directory managed by the ATDIR 
-%  object ATD.
+%  of type ITEMTYPE in the directory managed by the MIADIR 
+%  object MD.
 % 
 %  ITEMNAME and ITEMTYPE must be valid directory names.
 %
@@ -23,6 +23,6 @@ function h = sethistory(atd, itemtype, itemname, h)
 
 history = h;
 
-save([atd.pathname filesep itemtype filesep ...
+save([md.pathname filesep itemtype filesep ...
 		itemname filesep 'history.mat'],'history');
 

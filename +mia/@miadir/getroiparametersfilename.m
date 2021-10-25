@@ -1,7 +1,7 @@
-function roipfilename = getroiparametersfilename(atd, itemname, showerror)
-% GETROIPARAMETERSFILENAME - get the image file from an ATDIR
+function roipfilename = getroiparametersfilename(md, itemname, showerror)
+% GETROIPARAMETERSFILENAME - get the image file from an MIADIR
 %
-%  ROIPFILENAME = GETROIFILENAME(ATD, ITEMNAME, SHOWERROR)
+%  ROIPFILENAME = GETROIFILENAME(MD, ITEMNAME, SHOWERROR)
 %
 %  Returns the filename associated with the ROI parameters for item name
 %  ITEMNAME.
@@ -14,15 +14,15 @@ end;
 roipfilename = '';
 
 dnames = {};
-d = dir([getpathname(atd) filesep 'ROIs' filesep itemname filesep '*ROI_roiparameters.mat']);
+d = dir([getpathname(md) filesep 'ROIs' filesep itemname filesep '*ROI_roiparameters.mat']);
 dnames = cat(1,dnames,d.name);
 
 if ~isempty(dnames),
-	roipfilename = [getpathname(atd) filesep 'ROIs' filesep itemname filesep dnames{1}];
+	roipfilename = [getpathname(md) filesep 'ROIs' filesep itemname filesep dnames{1}];
 end;
 
 if isempty(roipfilename),
 	if showerror,
-		errordlg(['Could not locate the ROI parameter file in ' [getpathname(atd) filesep 'ROIs' filesep itemname filesep] '; this directory should be deleted.']);
+		errordlg(['Could not locate the ROI parameter file in ' [getpathname(md) filesep 'ROIs' filesep itemname filesep] '; this directory should be deleted.']);
 	end;
 end;
