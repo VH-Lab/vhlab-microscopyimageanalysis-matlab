@@ -1,7 +1,7 @@
 classdef miadir
 % MIADIR - data directory management for Array Tomography data.
 %
-%  MD = MIA.MIADIR(PATHNAME)
+%  MD = MIADIR(PATHNAME)
 %
 %  Creates a data directory management object MD with full pathname
 %  PATHNAME.
@@ -25,7 +25,7 @@ classdef miadir
 %    colocalization/
 %
 %
-% See also: METHODS('MIA.MIADIR')
+% See also: METHODS('MIADIR')
 %
     properties 
         pathname
@@ -42,9 +42,9 @@ classdef miadir
                 end;
                 
                 md.S = struct('pathname',pathname);
+                
+                %md = class(S,'mia.miadir');
         end
-    end
-    methods (Static)
         addtag(ds, dir, tagname, value)
         deleteitem(md,itemtype,itemname)
         display(md)

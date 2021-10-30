@@ -14,11 +14,11 @@ end;
 roipfilename = '';
 
 dnames = {};
-d = dir([getpathname(md) filesep 'ROIs' filesep itemname filesep '*ROI_roiparameters.mat']);
+d = dir([mia.miadir.getpathname(md) filesep 'ROIs' filesep itemname filesep '*ROI_roiparameters.mat']);
 dnames = cat(1,dnames,d.name);
 
 if ~isempty(dnames),
-	roipfilename = [getpathname(md) filesep 'ROIs' filesep itemname filesep dnames{1}];
+	roipfilename = [mia.miadir.getpathname(md) filesep 'ROIs' filesep itemname filesep dnames{1}];
 end;
 
 if isempty(roipfilename),

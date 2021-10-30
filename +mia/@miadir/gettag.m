@@ -13,7 +13,7 @@ function tag = gettag(ds,dir)
 %  See also: ADDTAG, LOADSTRUCTARRAY
 %  
 
-wholedir = [getpathname(ds) filesep dir];
+wholedir = [mia.miadir.getpathname(ds) filesep dir];
 tagfilename = [wholedir filesep 'tags.txt'];
 
 if exist(tagfilename,'file')==2,

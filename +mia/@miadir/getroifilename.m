@@ -10,13 +10,13 @@ function roifilename = getroifilename(md, itemname)
 roifilename = '';
 
 dnames = {};
-d = dir([getpathname(md) filesep 'ROIs' filesep itemname filesep '*ROI.mat']);
+d = dir([mia.miadir.getpathname(md) filesep 'ROIs' filesep itemname filesep '*ROI.mat']);
 dnames = cat(1,dnames,d.name);
 
 if ~isempty(dnames),
-	roifilename = [getpathname(md) filesep 'ROIs' filesep itemname filesep dnames{1}];
+	roifilename = [mia.miadir.getpathname(md) filesep 'ROIs' filesep itemname filesep dnames{1}];
 end;
 
 if isempty(roifilename),
-	errordlg(['Could not locate the ROI file in ' [getpathname(md) filesep 'ROIs' filesep itemname filesep] '; this directory should be deleted.']);
+	errordlg(['Could not locate the ROI file in ' [mia.miadir.getpathname(md) filesep 'ROIs' filesep itemname filesep] '; this directory should be deleted.']);
 end

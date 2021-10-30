@@ -24,8 +24,8 @@ dirlist = dirlist_trimdots(dirlist);
 
 for i=1:length(dirlist),
 	n.name = dirlist{i};
-	n.parent = getparent(md,itemtype,n.name);
-	n.history = gethistory(md,itemtype,n.name);
+	n.parent = mia.miadir.getparent(md,itemtype,n.name);
+	n.history = mia.miadir.gethistory(md,itemtype,n.name);
 	itemstruct(i) = n;
 end;
 

@@ -7,7 +7,7 @@ function b = hastag(ds,dir,tagname)
 %  there is a tag with tagname TAGNAME, and 0 otherwise. 
 %  The tag information is stored in the file tags.txt inside DIR.
 
-tags = gettag(ds,dir);
+tags = mia.miadir.gettag(ds,dir);
 
 if ~isempty(tags),
 	b = any(strcmp(tagname,{tags.tagname}));

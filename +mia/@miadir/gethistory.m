@@ -4,7 +4,7 @@ function h = gethistory(md, itemtype, itemname)
 %  H = GETHISTORY(MD, ITEMTYPE, ITEMNAME)
 %
 %  Returns the history structure of item ITEMNAME that is
-%  of type ITEMTYPE in the directory managed by the ATDIR 
+%  of type ITEMTYPE in the directory managed by the MIADIR 
 %  object MD.
 % 
 %  If there is no history, H is an empty structure.

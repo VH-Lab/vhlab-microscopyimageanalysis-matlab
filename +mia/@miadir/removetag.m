@@ -10,11 +10,11 @@ function removetag(ds, dir, tagname)
 %
 %  See also: ADDTAG, GETTAG, SAVESTRUCTARRAY
 
-wholedir = [getpathname(ds) filesep dir];
+wholedir = [mia.miadir.getpathname(ds) filesep dir];
 tagfilename = [wholedir filesep 'tags.txt'];
 taglockfilename = [wholedir filesep 'tags-lock.txt'];
 
-tags = gettag(ds,dir);
+tags = mia.miadir.gettag(ds,dir);
 if ~isempty(tags),
 	tf = find(strcmp(tagname,{tags.tagname}));
 	if length(tf)>0,
