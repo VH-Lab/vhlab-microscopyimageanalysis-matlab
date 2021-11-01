@@ -63,7 +63,7 @@ try, mkdir([getpathname(atd) filesep 'ROIs' filesep output_itemname]); end;
 save(roi_out_file,'CC','-mat');
 save(L_out_file,'L','-mat');
 
-h = gethistory(atd,'images',input_itemname);
+h = mia.miadir.gethistory(atd,'images',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.roi.makers.connect','parameters',parameters,...
 	'description',['Found ' int2str(CC.NumObjects) ' ROIs with conn=' num2str(parameters.connectivity) ' to image ' input_itemname '.']);
 sethistory(atd,'ROIs',output_itemname,h);

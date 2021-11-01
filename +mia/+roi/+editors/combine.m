@@ -59,7 +59,7 @@ try, mkdir([getpathname(atd) filesep 'ROIs' filesep output_itemname]); end;
 save(roi_out_file,'CC','-mat');
 save(L_out_file,'L','-mat');
 
-h = gethistory(atd,'ROIs',input_itemname),
+h = mia.miadir.gethistory(atd,'ROIs',input_itemname),
 h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.combine','parameters',parameters,...
 	'description',['Combined ' int2str(oldobjects) ' ROIs into 1 from ' input_itemname '.']);
 sethistory(atd,'ROIs',output_itemname,h);

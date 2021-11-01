@@ -285,7 +285,7 @@ switch lower(command),
 				if ~isempty(z), % already there, leave it alone
 					plothandles_clalinetags = plothandles_clalinetags([1:z-1 z+1:end]);
 				else, % need to draw
-					cfile = getcolocalizationfilename(atd,itemstruct_parameters(i).itemname);
+					cfile = mia.miadir.getcolocalizationfilename(atd,itemstruct_parameters(i).itemname);
 					load(cfile);
 					[rois_to_draw,dummy] = find(colocalization_data.overlap_thresh);
 					if ~isfield(colocalization_data.parameters,'roi_set_1'),
@@ -349,7 +349,7 @@ switch lower(command),
 		for i=1:length(itemstruct_parameters),
 			if itemstruct_parameters(i).extracb,
 				%disp(['I should do something']);
-				cfile = getcolocalizationfilename(atd,itemstruct_parameters(i).itemname);
+				cfile = mia.miadir.getcolocalizationfilename(atd,itemstruct_parameters(i).itemname);
 				load(cfile);
 
 				[rois_to_draw,dummy] = find(colocalization_data.overlap_thresh);

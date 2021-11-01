@@ -2,7 +2,7 @@ function parameters = vh_filter2tbrightness(atd, inputname, outputname)
 % VH-FILTER2BRIGHTNESS
 %
 
-h = gethistory(atd,'ROIs',inputname);
+h = mia.miadir.gethistory(atd,'ROIs',inputname);
 
 if isempty(h),
 	error(['Could not load history for ROIs ' inputname '.']);

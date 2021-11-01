@@ -73,9 +73,9 @@ end
 [puncta_info] = mia.utilities.puncta_info(img_stack,CC);
 
 %% Get the threshold data
-hist = gethistory(atd,'ROIs',input_itemname);
+hist = mia.miadir.gethistory(atd,'ROIs',input_itemname);
 doublethreshname = hist(2).parent;
-hh = gethistory(atd,'images',doublethreshname);
+hh = mia.miadir.gethistory(atd,'images',doublethreshname);
 thresholdinfo = hh(end).parameters.thresholdinfo;
 
 threshold_to_meet = thresholdinfo(1);
@@ -109,7 +109,7 @@ end;
 save(roi_out_file,'CC','-mat');
 save(L_out_file,'L','-mat');
 
-h = gethistory(atd,'ROIs',input_itemname);
+h = mia.miadir.gethistory(atd,'ROIs',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.resegment','parameters',parameters,...
 	'description',['Pared down ' int2str(oldobjects) ' ROIs below ' int2str(parameters.num_above) ' pixels above peak threshold into ' int2str(newobjects) ' from ' input_itemname '.']);
 sethistory(atd,'ROIs',output_itemname,h);

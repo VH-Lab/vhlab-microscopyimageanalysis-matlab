@@ -125,7 +125,7 @@ try,
 	mkdir([getpathname(atd) filesep 'ROIs' filesep output_itemname]);
 end;
 
-h = gethistory(atd,'ROIs',input_itemname);
+h = mia.miadir.gethistory(atd,'ROIs',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.resegment','parameters',parameters,...
 	'description',['ROIs were pared down from ' int2str(oldobjects) ' to ' int2str(newobjects) ', rejecting non-prominent members from ' input_itemname '.']);
 sethistory(atd,'ROIs',output_itemname,h);

@@ -54,7 +54,7 @@ else,
 	filter_type_str = 'circular';
 end;
 
-h = gethistory(atd,'images',input_itemname);
+h = mia.miadir.gethistory(atd,'images',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.image.process.blur','parameters',parameters,...
 	'description',['Applied ' filter_type_str ' blur with radius ' num2str(parameters.radius) ' and filtersize ' num2str(parameters.filtersize) ' to image ' input_itemname '.']);
 

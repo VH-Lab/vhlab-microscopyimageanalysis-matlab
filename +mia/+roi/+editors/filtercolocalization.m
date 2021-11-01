@@ -57,7 +57,7 @@ include_overlaps = parameters.include_overlaps;
 end
 
 if ~isempty(parameters.colocalization_name), % DLW
-    cfile = getcolocalizationfilename(atd,parameters.colocalization_name);
+    cfile = mia.miadir.getcolocalizationfilename(atd,parameters.colocalization_name);
     load(cfile,'colocalization_data','-mat');
     
 elseif 0, % ask the user to choose it
@@ -112,7 +112,7 @@ end;
 save(roi_out_file,'CC','-mat');
 save(L_out_file,'L','-mat');
 
-h = gethistory(atd,'ROIs',input_itemname);
+h = mia.miadir.gethistory(atd,'ROIs',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.filtercolocalization','parameters',parameters,...
 	'description',['Filtered by colocalization: ' int2str(oldobjects) ' ROIs became ' int2str(newobjects) ' from ' input_itemname '.']);
 sethistory(atd,'ROIs',output_itemname,h);

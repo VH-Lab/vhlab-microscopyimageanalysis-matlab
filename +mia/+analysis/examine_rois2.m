@@ -29,8 +29,8 @@ for i=1:numel(d),
 		rois{3} = getroifilename(atd, roisetC);
 		L{3} = getlabeledroifilename(atd,roisetC);
 	end;
-	history_{1} = gethistory(atd, 'ROIs', roisetA);
-	history_{2} = gethistory(atd, 'ROIs', roisetB);
+	history_{1} = mia.miadir.gethistory(atd, 'ROIs', roisetA);
+	history_{2} = mia.miadir.gethistory(atd, 'ROIs', roisetB);
 
 	for j=1:numel(rois),
 		rois_{j} = load(rois{j},'-mat');
@@ -41,9 +41,9 @@ for i=1:numel(d),
 	end;
 
 	% load colocalizations
-	cfile{1} = getcolocalizationfilename(atd, claAonB);
+	cfile{1} = mia.miadir.getcolocalizationfilename(atd, claAonB);
 	if ~isempty(claAonC),
-		cfile{2} = getcolocalizationfilename(atd, claAonC);
+		cfile{2} = mia.miadir.getcolocalizationfilename(atd, claAonC);
 	end;
 	for j=1:numel(cfile),
 		cla{j} = load(cfile{j},'-mat');

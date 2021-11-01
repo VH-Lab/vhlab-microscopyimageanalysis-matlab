@@ -16,7 +16,7 @@ function [out,msg] = colocalization_summary(the_atdir, colocalization)
 % See also: ATDIR
 %
 
-cfname = getcolocalizationfilename(the_atdir, colocalization);
+cfname = mia.miadir.getcolocalizationfilename(the_atdir, colocalization);
 
 c = load(cfname,'-mat');
 

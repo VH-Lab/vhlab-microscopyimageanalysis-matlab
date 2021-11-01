@@ -62,7 +62,7 @@ if ischar(parameters),
 	return;
 end;
 
-h = gethistory(atd,'ROIs',input_itemname);
+h = mia.miadir.gethistory(atd,'ROIs',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.clusterfilter','parameters',parameters,...
 	'description',['Filtered all but ' int2str(numel(parameters.indexes_to_include)) ' of ROIS ' input_itemname '.']);
 

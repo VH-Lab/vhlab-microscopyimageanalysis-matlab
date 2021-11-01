@@ -101,22 +101,22 @@ vlt.data.assign(varargin{:});
 
 cla_list = getitems(atd, 'CLAs');
 
-cla_comp_mask_fname = getcolocalizationfilename(atd, [maskregion_rois '_x_' computer_rois '_CLA']);
+cla_comp_mask_fname = mia.miadir.getcolocalizationfilename(atd, [maskregion_rois '_x_' computer_rois '_CLA']);
 if isempty(cla_comp_mask_fname),
 	error(['No colocalization analysis ' [maskregion_rois '_x_' computer_rois '_CLA'] ' found. It needs to be computed before running this function.']);
 end;
-cla_comp_gt_fname = getcolocalizationfilename(atd, [groundtruth_rois '_x_' computer_rois '_CLA']);
+cla_comp_gt_fname = mia.miadir.getcolocalizationfilename(atd, [groundtruth_rois '_x_' computer_rois '_CLA']);
 if isempty(cla_comp_gt_fname),
 	error(['No colocalization analysis ' [groundtruth_rois '_x_' computer_rois '_CLA'] ' found. It needs to be computed before running this function.']);
 end;
 
-hist = gethistory(atd,'ROIs',computer_rois);
+hist = mia.miadir.gethistory(atd,'ROIs',computer_rois);
 
 thresholds = [];
 if ~isempty(hist),
 
 	doublethreshname = hist(2).parent;
-	hh = gethistory(atd,'images',doublethreshname);
+	hh = mia.miadir.gethistory(atd,'images',doublethreshname);
 	thresholdinfo = hh(end).parameters.thresholdinfo;
 
 	if isfield(hist(1).parameters,'threshold1'),

@@ -175,7 +175,7 @@ try, mkdir([getpathname(atd) filesep 'ROIs' filesep output_itemname]); end;
 save(roi_out_file,'CC','-mat');
 save(L_out_file,'L','-mat');
 
-h = gethistory(atd,'ROIs',input_itemname),
+h = mia.miadir.gethistory(atd,'ROIs',input_itemname),
 h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.xysizefilter','parameters',parameters,...
 	'description',['Filtered all but ' int2str(CC.NumObjects) ' ROIs with Max XY size between ' num2str(parameters.size_minimum) ' and ' num2str(parameters.size_maximum) ' of ROIS ' input_itemname '.']);
 sethistory(atd,'ROIs',output_itemname,h);

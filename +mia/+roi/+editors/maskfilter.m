@@ -53,7 +53,7 @@ load(L_in_file,'L','-mat');
 
 good_indexes = setdiff(unique(L(find(im>0))),0);
 
-h = gethistory(atd,'ROIs',input_itemname),
+h = mia.miadir.gethistory(atd,'ROIs',input_itemname),
 h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.maskfilter','parameters',parameters,...
 	'description',['Filtered all but ' int2str(numel(good_indexes)) ' ROIs based on ' parameters.mask_file ' of ROIS ' input_itemname '.']);
 

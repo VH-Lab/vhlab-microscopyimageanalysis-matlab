@@ -138,7 +138,7 @@ end;
 
  % perform the thresholding
 
-h = gethistory(atd,'images',input_itemname);
+h = mia.miadir.gethistory(atd,'images',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.image.process.threshold','parameters',parameters,...
 	'description',['Applied threshold of ' num2str(parameters.threshold) ' to image ' input_itemname '.']);
 

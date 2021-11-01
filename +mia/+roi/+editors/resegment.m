@@ -78,7 +78,7 @@ end;
 nvp = struct2namevaluepair(rmfield(parameters,'imagename'));
 
 if isempty(parameters.imagename), % choose it 
-	h = gethistory(atd,'ROIs',input_itemname);
+	h = mia.miadir.gethistory(atd,'ROIs',input_itemname);
 	parameters.imagename = h(1).parent;
 elseif 0, % ask the user to choose it
 	itemliststruct = getitems(atd,'images');
@@ -126,7 +126,7 @@ end;
 save(roi_out_file,'CC','-mat');
 save(L_out_file,'L','-mat');
 
-h = gethistory(atd,'ROIs',input_itemname);
+h = mia.miadir.gethistory(atd,'ROIs',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.resegment','parameters',parameters,...
 	'description',['Resegmented ' int2str(oldobjects) ' ROIs into ' int2str(newobjects) ' from ' input_itemname '.']);
 sethistory(atd,'ROIs',output_itemname,h);

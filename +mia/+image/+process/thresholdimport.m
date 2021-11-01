@@ -60,7 +60,7 @@ if isempty(parameters.input_filename),
 	error(['no file selected.']);
 end;
 
-h = gethistory(atd,'images',input_itemname);
+h = mia.miadir.gethistory(atd,'images',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.image.process.thresholdimport','parameters',parameters,...
 	'description',['Applied threshold using file ' parameters.input_filename ' to image ' input_itemname '.']);
 

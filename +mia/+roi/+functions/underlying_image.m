@@ -6,7 +6,7 @@ function [image_name,imagefilename] = underlying_image(atd,roi_name)
 % Return the raw image item that underlies the ROIs with name ROI_NAME.
 %
 
-h = gethistory(atd,'ROIs',roi_name);
+h = mia.miadir.gethistory(atd,'ROIs',roi_name);
 if isempty(h),
     error(['No history found.']);
 end;
