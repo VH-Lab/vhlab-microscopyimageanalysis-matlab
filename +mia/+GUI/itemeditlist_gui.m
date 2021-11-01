@@ -374,7 +374,7 @@ switch lower(command),
 
 		buttonname = questdlg(['Are you sure you want to delete the item ' itemname '?'],'Are you sure?','Yes','No','No');
 		if strcmp(lower(buttonname),'yes'),
-			deleteitem(ud.atd,ud.itemtype,itemname);
+			mia.miadir.deleteitem(ud.atd,ud.itemtype,itemname);
 			mia.GUI.itemeditlist_gui(name,'command',[name 'update_itemlist'],'fig',fig,'atd',ud.atd);
 		end;
 
