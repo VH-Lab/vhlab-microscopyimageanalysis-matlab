@@ -275,7 +275,6 @@ at_foreachdirdo(d_here,'vh_roicomparepipe(atd, ''VG_ROI_'', ''VG_DECsv9_roiresbf
 at_foreachdirdo(d_here,'vh_roicomparepipe(atd, ''spine_ROI_'', ''PSD_DECsv9_roiresbf'',''useRes'',0);')
 at_foreachdirdo(d_here,'vh_roicomparepipe(atd, ''spine_ROI_'', ''VG_DECsv9_roiresbf'',''useRes'',0);')
 
-at_foreachdirdo(d_here,'vh_coloc1(atd,''PSD_DECsv9_roiresbf'',''VG_DECsv9_roiresbf'',''PSD_DECsv9_roiresbf_X_VG_DECsv9_roiresbf'');');
 
 at_foreachdirdo(d_here([1:10 12]),'vh_groundtruthcompare(atd,''PSD_DECsv9_roiresbf'',''spine_ROI_DLW_ROI'',''PSD_ROI_'');');
 at_foreachdirdo(d_here([11 13:16]),'vh_groundtruthcompare(atd,''PSD_DECsv9_roiresbf'',''spine_ROI_SG_ROI'',''PSD_ROI_'');');
@@ -285,6 +284,7 @@ at_foreachdirdo(d_here([11 13:16]),'vh_groundtruthcompare(atd,''VG_DECsv9_roires
 at_foreachdirdo(d_here([17 18]),'vh_groundtruthcompare(atd,''VG_DECsv9_roiresbf'',''spine_ROI_KC_ROI'',''VG_ROI_'');');
 
 
+at_foreachdirdo(d_here,'vh_coloc1(atd,''PSD_DECsv9_roiresbf'',''VG_DECsv9_roiresbf'',''PSD_DECsv9_roiresbf_X_VG_DECsv9_roiresbf'');');
 at_foreachdirdo(d_here([1 3:6]),'vh_groundtruthcompareC(atd,''spine_ROI_DLW_ROI'', ''PSD_DECsv9_roiresbf'',''PSD_ROI_KC_ROIres'', ''VG_DECsv9_roiresbf'',''VG_ROI_KC_ROIres'');');
 at_foreachdirdo(d_here([17 18]),'vh_groundtruthcompareC(atd,''spine_ROI_KC_ROI'', ''PSD_DECsv9_roiresbf'',''PSD_ROI_KC_ROIres'', ''VG_DECsv9_roiresbf'',''VG_ROI_KC_ROIres'');');
 at_foreachdirdo(d_here([1:6]),'vh_groundtruthcompareC(atd,''spine_ROI_DLW_ROI'', ''PSD_DECsv9_roiresbf'',''PSD_ROI_SG_ROIres'', ''VG_DECsv9_roiresbf'',''VG_ROI_SG_ROIres'');');

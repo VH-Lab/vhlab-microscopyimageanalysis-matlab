@@ -38,6 +38,8 @@ channels = {'PSD','VG'};
 doROIfinding = 0;
 doit = 0;
 do_groundtruthanalysis = 0;
+do_groundtruthC = 0;
+do_setup_groundtruthC = 0;
 spacer = '_';
 
 label = {};
@@ -84,12 +86,12 @@ for c=1:numel(channels),
 					''',''plotthresholdestimate'',1,''t_levels'',' mat2str(tlevels{n(ni)}) ');'],
 			end;
 			if doit, at_foreachdirdo(d,evalstr); end;
-		end
 
-		% filter by the 1st threshold brightness
-		if n==112, str = 'vf'; else, str = ''; end;
-		evalstr = ['vh_filter2tbrightness(atd,''' channels{c} '_DEC' label{n(ni)} '_roires' str ''',''' channels{c} '_DEC' label{n(ni)} '_roiresbf'');'],
-		if doit, at_foreachdirdo(d,evalstr); end;
+			% filter by the 1st threshold brightness
+			if n==112, str = 'vf'; else, str = ''; end;
+			evalstr = ['vh_filter2tbrightness(atd,''' channels{c} '_DEC' label{n(ni)} '_roires' str ''',''' channels{c} '_DEC' label{n(ni)} '_roiresbf'');'],
+			if doit, at_foreachdirdo(d,evalstr); end;
+		end
 
 		if do_groundtruthanalysis,
 			evalstr = ['vh_roicomparepipe(atd, ''' channels{c} '_ROI_'', ''' channels{c} '_DEC' label{n(ni)} '_roiresbf'');'],
@@ -107,5 +109,33 @@ for c=1:numel(channels),
 	end;
 end
 
+if do_setup_groundtruthC,
+	evalstr = ['vh_coloc1(atd,''PSD_DEC' label{n(ni)} '_roiresbf'',''VG_DEC' label{n(ni)} '_roiresbf'',''PSD_DEC' label{n(ni)} '_roiresbf_X_VG_DEC' label{n(ni)} '_roiresbf'');']
+	if doit, at_foreachdirdo(d,evalstr); end;
+
+	evalstr = ['vh_roicomparepipe(atd,''PSD_ROI_'',''PSD_DEC' label{n(ni)} '_roiresbf'');']
+	if doit, at_foreachdirdo(d,evalstr); end;
+	evalstr = ['vh_roicomparepipe(atd,''VG_ROI_'',''VG_DEC' label{n(ni)} '_roiresbf'');']
+	if doit, at_foreachdirdo(d,evalstr); end;
+end;
+
+if do_groundtruthC,
+
+	evalstr = ['vh_groundtruthcompareC(atd,''spine_ROI_DLW_ROI'', ''PSD_DEC' label{n(ni)} '_roiresbf'',''PSD_ROI_KC_ROIres'', ''VG_DEC' label{n(ni)} '_roiresbf'',''VG_ROI_KC_ROIres'');']
+	if doit, at_foreachdirdo(d([1 3:6]),evalstr); end;
+
+	evalstr = ['vh_groundtruthcompareC(atd,''spine_ROI_KC_ROI'', ''PSD_DEC' label{n(ni)} '_roiresbf'',''PSD_ROI_KC_ROIres'', ''VG_DEC' label{n(ni)} '_roiresbf'',''VG_ROI_KC_ROIres'');']
+	if doit, at_foreachdirdo(d([17 18]),evalstr); end;
+
+	evalstr = ['vh_groundtruthcompareC(atd,''spine_ROI_DLW_ROI'', ''PSD_DEC' label{n(ni)} '_roiresbf'',''PSD_ROI_SG_ROIres'', ''VG_DEC' label{n(ni)} '_roiresbf'',''VG_ROI_SG_ROIres'');']
+	if doit, at_foreachdirdo(d([1:6]),evalstr); end;
+
+	evalstr = ['vh_groundtruthcompareC(atd,''spine_ROI_SG_ROI'', ''PSD_DEC' label{n(ni)} '_roiresbf'',''PSD_ROI_SG_ROIres'', ''VG_DEC' label{n(ni)} '_roiresbf'',''VG_ROI_SG_ROIres'');']
+	if doit, at_foreachdirdo(d([11 13:16]),evalstr); end;
+
+	evalstr = ['vh_groundtruthcompareC(atd,''spine_ROI_DLW_ROI'', ''PSD_DEC' label{n(ni)} '_roiresbf'',''PSD_ROI_DW_ROIres'', ''VG_DEC' label{n(ni)} '_roiresbf'',''VG_ROI_DW_ROIres'');']
+	if doit, at_foreachdirdo(d([7:10 12]),evalstr); end;
+
+end;
 
 

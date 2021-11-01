@@ -230,6 +230,10 @@ gt_hit = {};
 gt_miss = {};
 true_positive_rate = zeros(1,N_gt_detected_thresholds);
 
+disp(['Size of cla_gt_compA (gt x compA): ' int2str(size(cla_gt_compA.colocalization_data.overlap_ab)) '.']);
+disp(['Size of cla_compA_compB (compA x compB): ' int2str(size(cla_compAB.colocalization_data.overlap_ab)) '.']);
+
+
 for i=1:numel(os),
 	THRESHOLD = os(i);
 	compA_groundtruthA_colocalized = [full(sum(cla_gt_compA.colocalization_data.overlap_ab(groundtruthA_toconsider_indexes,compAB_colocalized_indexes)>=THRESHOLD,2))]>0;
