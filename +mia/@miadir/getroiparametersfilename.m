@@ -23,6 +23,6 @@ end;
 
 if isempty(roipfilename),
 	if showerror,
-		errordlg(['Could not locate the ROI parameter file in ' [getpathname(md) filesep 'ROIs' filesep itemname filesep] '; this directory should be deleted.']);
+		errordlg(['Could not locate the ROI parameter file in ' [mia.miadir.getpathname(md) filesep 'ROIs' filesep itemname filesep] '; this directory should be deleted.']);
 	end;
 end;
