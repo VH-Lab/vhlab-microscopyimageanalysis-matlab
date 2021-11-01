@@ -58,7 +58,7 @@ h = mia.miadir.gethistory(atd,'images',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.image.process.blur','parameters',parameters,...
 	'description',['Applied ' filter_type_str ' blur with radius ' num2str(parameters.radius) ' and filtersize ' num2str(parameters.filtersize) ' to image ' input_itemname '.']);
 
-im_in_file = getimagefilename(atd,input_itemname);
+im_in_file = mia.miadir.getimagefilename(atd,input_itemname);
 
 [dummy,image_raw_filename,ext] = fileparts(im_in_file);
 

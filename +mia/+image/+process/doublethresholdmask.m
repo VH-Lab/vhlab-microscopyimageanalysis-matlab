@@ -110,8 +110,8 @@ h(end+1) = struct('parent',input_itemname,'operation','mia.image.process.at_imag
 	'description',['Applied threshold1 of ' num2str(parameters.threshold1) ...
 	' and threshold2 of ' num2str(parameters.threshold2) ' with units ' parameters.threshold_units ' to image ' input_itemname ' with mask ' mask_itemname '.']);
 
-im_in_file = getimagefilename(atd,input_itemname);
-im_mask_file = getimagefilename(atd,mask_itemname);
+im_in_file = mia.miadir.getimagefilename(atd,input_itemname);
+im_mask_file = mia.miadir.getimagefilename(atd,mask_itemname);
 
 [dummy,image_raw_filename,ext] = fileparts(im_in_file);
 [dummy,image_mask_filename,ext] = fileparts(im_mask_file);

@@ -42,7 +42,7 @@ if ischar(parameters),
 end;
 
 
-im_in_file = getimagefilename(atd,input_itemname);
+im_in_file = mia.miadir.getimagefilename(atd,input_itemname);
 [dummy,image_raw_filename,ext]=fileparts(im_in_file);
 
 L_out_file = [getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_L' '.mat'];

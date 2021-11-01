@@ -98,7 +98,7 @@ if ischar(parameters),
 			f = figure;
 			pos = get(f,'position');
 			set(f,'position',[pos([1 2]) 500 500]);
-			imfile = getimagefilename(atd,input_itemname);
+			imfile = mia.miadir.getimagefilename(atd,input_itemname);
 			uidefs = basicuitools_defs;
 			row = 25;
 			uicontrol(uidefs.txt,'position',  [20 350-0*row 45 25],'string','Threshold1:');
@@ -190,7 +190,7 @@ h = mia.miadir.gethistory(atd,'images',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.image.process.at_image_doublethreshold','parameters',parameters,...
 	'description',['Applied threshold1 of ' num2str(parameters.threshold1) ' and threshold2 of ' num2str(parameters.threshold2) ' with units ' parameters.threshold_units ' to image ' input_itemname '.']);
 
-im_in_file = getimagefilename(atd,input_itemname);
+im_in_file = mia.miadir.getimagefilename(atd,input_itemname);
 
 [dummy,image_raw_filename,ext] = fileparts(im_in_file);
 

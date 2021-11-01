@@ -103,7 +103,7 @@ elseif 0, % ask the user to choose it
 	end;
 end;
 
-im_in_file = getimagefilename(atd,parameters.imagename);
+im_in_file = mia.miadir.getimagefilename(atd,parameters.imagename);
 [dummy,image_raw_filename,ext]=fileparts(im_in_file);
 input_finfo = imfinfo(im_in_file);
 

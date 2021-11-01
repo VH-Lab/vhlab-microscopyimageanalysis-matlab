@@ -141,7 +141,7 @@ switch lower(command),
 	case lower('ATGUI_DrawImage'), % NEEDS INPUT ARGUMENT theinput.itemname
                 handles = mia.GUI.gui2(name,'command',[name 'get_handles'],'fig',fig);
 		atd = atdir(ud.pathname);
-		imfile = getimagefilename(atd,theinput.itemname);
+		imfile = mia.miadir.getimagefilename(atd,theinput.itemname);
 		image_viewer_gui('IMv','command',['IMv' 'Set_Image'],'imfile',imfile);
 		mia.GUI.gui2(name,'command',[name 'ATGUI_ImageMoved'],'fig',fig);
 	case lower('ATGUI_DrawROIs'), % NEEDS INPUT ARGUMENT theinput.itemstruct_parameters

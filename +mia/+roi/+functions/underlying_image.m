@@ -11,6 +11,6 @@ if isempty(h),
     error(['No history found.']);
 end;
 image_name = h(1).parent;
-imagefilename = getimagefilename(atd,h(1).parent);
+imagefilename = mia.miadir.getimagefilename(atd,h(1).parent);
 
 
