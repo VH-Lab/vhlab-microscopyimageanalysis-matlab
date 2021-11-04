@@ -289,7 +289,7 @@ switch lower(command),
 					load(cfile);
 					[rois_to_draw,dummy] = find(colocalization_data.overlap_thresh);
 					if ~isfield(colocalization_data.parameters,'roi_set_1'),
-						colocalization_data.parameters.roi_set_1 = getparent(atd,'CLAs',itemstruct_parameters(i).itemname);
+						colocalization_data.parameters.roi_set_1 = mia.miadir.getparent(atd,'CLAs',itemstruct_parameters(i).itemname);
 					end
 					roifile = getroifilename(atd,colocalization_data.parameters.roi_set_1);
 					ROI = load([roifile],'-mat');
@@ -354,7 +354,7 @@ switch lower(command),
 
 				[rois_to_draw,dummy] = find(colocalization_data.overlap_thresh);
 				if ~isfield(colocalization_data.parameters,'roi_set_1'),
-					colocalization_data.parameters.roi_set_1 = getparent(atd,'CLAs',itemstruct_parameters(i).itemname);
+					colocalization_data.parameters.roi_set_1 = mia.miadir.getparent(atd,'CLAs',itemstruct_parameters(i).itemname);
 				end
 				roifile = getlabeledroifilename(atd,colocalization_data.parameters.roi_set_1);
 				ROI = load([roifile],'-mat');
