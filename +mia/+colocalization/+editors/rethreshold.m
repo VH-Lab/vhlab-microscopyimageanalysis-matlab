@@ -68,7 +68,7 @@ save(colocalization_out_file,'colocalization_data','-mat');
 h = mia.miadir.gethistory(atd,'CLAs',input_itemname),
 h(end+1) = struct('parent',input_itemname,'operation','mia.colocalization.editors.rethreshold','parameters',parameters,...
 	'description',['Rethresholded with new threshold ' num2str(parameters.threshold) '. Found ' int2str(overlapped_objects) ' CLs.' ]);
-sethistory(atd,'CLAs',output_itemname,h);
+mia.miadir.sethistory(atd,'CLAs',output_itemname,h);
 
 str2text([mia.miadir.getpathname(atd) filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 

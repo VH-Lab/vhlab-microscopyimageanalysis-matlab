@@ -229,7 +229,7 @@ end;
 
 str2text([mia.miadir.getpathname(atd) filesep 'images' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
-sethistory(atd,'images',output_itemname,h);
+mia.miadir.sethistory(atd,'images',output_itemname,h);
 
 out = 1;
 

@@ -173,7 +173,7 @@ save(L_out_file,'L','-mat');
 h = mia.miadir.gethistory(atd,'ROIs',input_itemname),
 h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.zspanfilter','parameters',parameters,...
 	'description',['Filtered all but ' int2str(CC.NumObjects) ' ROIs with z spans between ' num2str(parameters.z_span_minimum) ' and ' num2str(parameters.z_span_maximum) ' of ROIS ' input_itemname '.']);
-sethistory(atd,'ROIs',output_itemname,h);
+mia.miadir.sethistory(atd,'ROIs',output_itemname,h);
 
 str2text([mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 

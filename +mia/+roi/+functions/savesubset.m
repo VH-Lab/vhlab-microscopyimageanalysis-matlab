@@ -25,7 +25,7 @@ end;
 
 save(roi_out_file,'CC','-mat');
 save(L_out_file,'L','-mat');
-sethistory(atd,'ROIs',output_itemname,history);
+mia.miadir.sethistory(atd,'ROIs',output_itemname,history);
 str2text([mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
 roi_properties_input_file = mia.miadir.getroiparametersfilename(atd,input_itemname);

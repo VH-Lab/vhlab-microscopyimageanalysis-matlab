@@ -66,7 +66,7 @@ save(L_out_file,'L','-mat');
 h = mia.miadir.gethistory(atd,'images',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.roi.makers.connect','parameters',parameters,...
 	'description',['Found ' int2str(CC.NumObjects) ' ROIs with conn=' num2str(parameters.connectivity) ' to image ' input_itemname '.']);
-sethistory(atd,'ROIs',output_itemname,h);
+mia.miadir.sethistory(atd,'ROIs',output_itemname,h);
 
 str2text([mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 

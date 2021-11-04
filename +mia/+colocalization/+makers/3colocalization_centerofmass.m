@@ -197,7 +197,7 @@ h(end+1) = struct('parent',input_itemname,'operation','mia.colocalization.makers
 	'description',['Found ' int2str(overlapped_objects) ' CLs with distance threshold <= ' num2str(parameters.distance_threshold) ...
 	' pixels of ROI ' input_itemname ' onto ROI ' parameters.roi_set_2 ' and ROI ' parameters.roi_set_3 '.']);
 
-sethistory(atd,'CLAs',output_itemname,h);
+mia.miadir.sethistory(atd,'CLAs',output_itemname,h);
 
 str2text([mia.miadir.getpathname(atd) filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
