@@ -56,7 +56,7 @@ if ischar(parameters),
 end;
 
 %% Load or generate local background values & peak values
-ROIname = getroifilename(atd,input_itemname);
+ROIname = mia.miadir.getroifilename(atd,input_itemname);
 foldername = fileparts(ROIname);
 
 % [intensity_thresh,max_neg_slopes,cutoff,highest_pixel] = mia.roi.functions.secthreshslopes(atd,ROIname,parameters);
@@ -64,7 +64,7 @@ foldername = fileparts(ROIname);
 
 %% Load the ROIs in the set (both L and CC files from mia.GUI.archived_code.ATGUI code)
 L_in_file = getlabeledroifilename(atd,input_itemname);
-roi_in_file = getroifilename(atd,input_itemname);
+roi_in_file = mia.miadir.getroifilename(atd,input_itemname);
 load(roi_in_file,'CC','-mat');
 load(L_in_file,'L','-mat');
 oldobjects = CC.NumObjects;

@@ -74,7 +74,7 @@ end;
 
 if parameters.show_graphical_progress, progressbar('Setting up for ROI overlap calculation'); end;
 
-rois{1} = getroifilename(atd,input_itemname);
+rois{1} = mia.miadir.getroifilename(atd,input_itemname);
 L{1} = getlabeledroifilename(atd,input_itemname);
 try,
 	roipfilename{1} = getroiparametersfilename(atd, input_itemname);
@@ -86,7 +86,7 @@ end;
 
 if parameters.show_graphical_progress, progressbar(0.2); end;
 
-rois{2} = getroifilename(atd,parameters.roi_set_2);
+rois{2} = mia.miadir.getroifilename(atd,parameters.roi_set_2);
 L{2} = getlabeledroifilename(atd,parameters.roi_set_2);
 try,
 	roipfilename{2} = getroiparametersfilename(atd, parameters.roi_set_2);

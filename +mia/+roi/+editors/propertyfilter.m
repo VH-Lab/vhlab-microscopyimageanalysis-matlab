@@ -56,7 +56,7 @@ if ischar(parameters),
 
 			% plot histogram
 			L_in_file = getlabeledroifilename(atd,input_itemname);
-			roi_in_file = getroifilename(atd,input_itemname);
+			roi_in_file = mia.miadir.getroifilename(atd,input_itemname);
 			load(roi_in_file,'CC','-mat');
 
 			[roi_parentdir,roi_filename,roi_ext] = fileparts(roi_in_file);
@@ -171,7 +171,7 @@ end;
 
  % edit this part
 
-roi_in_file = getroifilename(atd,input_itemname);
+roi_in_file = mia.miadir.getroifilename(atd,input_itemname);
 load(roi_in_file,'CC','-mat');
 roi_properties_file = getroiparametersfilename(atd, input_itemname);
 load(roi_properties_file,'-mat');

@@ -55,7 +55,7 @@ end;
 %% Load or generate local background values & peak values
 % will gather these from the input image - they won't be saved in the new ROI
 % folder
-ROIname = getroifilename(atd,input_itemname);
+ROIname = mia.miadir.getroifilename(atd,input_itemname);
 foldername = fileparts(ROIname);
 if exist([foldername filesep input_itemname '_ROI_roiintparam.mat']) == 2    
     load([foldername filesep input_itemname '_ROI_roiintparam.mat'])
@@ -68,7 +68,7 @@ end
 
 %% Load the ROIs in the set (both L and CC files from mia.GUI.archived_code.ATGUI code)
 L_in_file = getlabeledroifilename(atd,input_itemname);
-roi_in_file = getroifilename(atd,input_itemname);
+roi_in_file = mia.miadir.getroifilename(atd,input_itemname);
 load(roi_in_file,'CC','-mat');
 load(L_in_file,'L','-mat');
 oldobjects = CC.NumObjects;

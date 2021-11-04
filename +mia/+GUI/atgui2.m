@@ -176,7 +176,7 @@ switch lower(command),
 				if ~isempty(z), % it is already here, leave it alone
 					plothandles_linetags = plothandles_linetags([1:z-1 z+1:end]);
 				else, % need to draw
-					roifile = getroifilename(atd,itemstruct_parameters(i).itemname);
+					roifile = mia.miadir.getroifilename(atd,itemstruct_parameters(i).itemname);
 					ROI = load([roifile],'-mat');
 					ROI_3dplot2d(ROI.CC,12,itemstruct_parameters(i).color,[itemstruct_parameters(i).itemname '_' int2str(zdim) '_line'],...
 						[itemstruct_parameters(i).itemname '_' int2str(zdim) '_text'],zdim);
@@ -291,7 +291,7 @@ switch lower(command),
 					if ~isfield(colocalization_data.parameters,'roi_set_1'),
 						colocalization_data.parameters.roi_set_1 = mia.miadir.getparent(atd,'CLAs',itemstruct_parameters(i).itemname);
 					end
-					roifile = getroifilename(atd,colocalization_data.parameters.roi_set_1);
+					roifile = mia.miadir.getroifilename(atd,colocalization_data.parameters.roi_set_1);
 					ROI = load([roifile],'-mat');
 					ROI.CC.PixelIdxList = ROI.CC.PixelIdxList(rois_to_draw);
 					ROI.CC.NumObjects = length(rois_to_draw);

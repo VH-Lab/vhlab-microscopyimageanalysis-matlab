@@ -54,7 +54,7 @@ if ischar(parameters),
 
 			% plot histogram
 			L_in_file = getlabeledroifilename(atd,input_itemname);
-			roi_in_file = getroifilename(atd,input_itemname);
+			roi_in_file = mia.miadir.getroifilename(atd,input_itemname);
 			load(roi_in_file,'CC','-mat');
 
 			ROI_sizes = ROI_3d_max_xy_size(CC, 'UseProgressBar', 1);
@@ -157,7 +157,7 @@ end;
  % edit this part
 
 L_in_file = getlabeledroifilename(atd,input_itemname);
-roi_in_file = getroifilename(atd,input_itemname);
+roi_in_file = mia.miadir.getroifilename(atd,input_itemname);
 load(roi_in_file,'CC','-mat');
 
 ROI_sizes = ROI_3d_max_xy_size(CC,'UseProgressBar',1);

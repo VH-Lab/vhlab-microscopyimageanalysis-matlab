@@ -14,7 +14,7 @@ function [rois_per_zframe] = roisperzframe(the_atdir, roiname)
 % See also: ATDIR 
 
 
-roifilename = getroifilename(the_atdir, roiname);
+roifilename = mia.miadir.getroifilename(the_atdir, roiname);
 roilabeledfilename = getlabeledroifilename(the_atdir, roiname);
 
 L = load(roilabeledfilename,'-mat');

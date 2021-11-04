@@ -19,14 +19,14 @@ for i=1:numel(d),
 	atd = atdir(d{i});
 
 	% load ROIs, L, props
-	rois{1} = getroifilename(atd, roisetA);
+	rois{1} = mia.miadir.getroifilename(atd, roisetA);
 	L{1} = getlabeledroifilename(atd, roisetA);
 	roiprop{1} = getroiparametersfilename(atd, roisetA);
-	rois{2} = getroifilename(atd, roisetB);
+	rois{2} = mia.miadir.getroifilename(atd, roisetB);
 	L{2} = getlabeledroifilename(atd, roisetB);
 	roiprop{2} = getroiparametersfilename(atd, roisetB);
 	if ~isempty(roisetC),
-		rois{3} = getroifilename(atd, roisetC);
+		rois{3} = mia.miadir.getroifilename(atd, roisetC);
 		L{3} = getlabeledroifilename(atd,roisetC);
 	end;
 	history_{1} = mia.miadir.gethistory(atd, 'ROIs', roisetA);

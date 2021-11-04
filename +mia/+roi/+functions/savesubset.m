@@ -9,7 +9,7 @@ function savesubset(atd, input_itemname, indexes, output_itemname, history)
 % 
 
 L_in_file = getlabeledroifilename(atd,input_itemname);
-roi_in_file = getroifilename(atd,input_itemname);
+roi_in_file = mia.miadir.getroifilename(atd,input_itemname);
 load(roi_in_file,'CC','-mat');
 
 CC.NumObjects = numel(indexes);
