@@ -23,7 +23,7 @@ disp('========= test getcolocalizationfilename function ============')
 
 %% test sethistory function
 disp('========= test sethistory function ============')
-newhistory = struct('parent',histitemname,'operation','copy','parameters','',...
+newhistory = struct('parent',itemname,'operation','copy','parameters','',...
 	'description',['This is a test of making the history']);
 history = mia.miadir.sethistory(md, 'images', histitemname, newhistory);
 disp('You set the history of the file to be: ')
@@ -59,6 +59,9 @@ for i=1:length(G_name)
 end
 %% test getlabeledroifilename function
 %% test getparent function
+disp('========= test getparent function ============')
+p = mia.miadir.getparent(md, 'images', histitemname);
+disp(p)
 %% test getpathname function
 disp('========= test getpathname function ============')
 fixed_pathname = fixpath(pathname);               % The miadir constructor called fixpath on pathname
