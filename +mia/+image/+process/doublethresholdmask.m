@@ -116,7 +116,7 @@ im_mask_file = mia.miadir.getimagefilename(atd,mask_itemname);
 [dummy,image_raw_filename,ext] = fileparts(im_in_file);
 [dummy,image_mask_filename,ext] = fileparts(im_mask_file);
 
-im_out_file = [getpathname(atd) filesep 'images' filesep output_itemname filesep output_itemname ext];
+im_out_file = [mia.miadir.getpathname(atd) filesep 'images' filesep output_itemname filesep output_itemname ext];
 
 input_finfo = imfinfo(im_in_file);
 mask_finfo = imfinfo(im_mask_file);
@@ -150,12 +150,12 @@ bin = vlt.image.doublethresholdresegment(im,t1,t2,parameters.connectivity,im_raw
 % write the new file
 
 for i=1:length(input_finfo),
-	if i==1, try, mkdir([getpathname(atd) filesep 'images' filesep output_itemname]); end; end;
+	if i==1, try, mkdir([mia.miadir.getpathname(atd) filesep 'images' filesep output_itemname]); end; end;
 	im_here = logical(bin(:,:,i));
 	imwrite(im_here,im_out_file,extra_args{1+double(i>1)}{:});
 end;
 
-str2text([getpathname(atd) filesep 'images' filesep output_itemname filesep 'parent.txt'], input_itemname);
+str2text([mia.miadir.getpathname(atd) filesep 'images' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
 sethistory(atd,'images',output_itemname,h);
 

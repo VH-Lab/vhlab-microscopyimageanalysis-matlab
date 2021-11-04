@@ -116,11 +116,11 @@ end;
 [CC,L] = ROI_resegment_all(CC, L, im, 'resegment_namevaluepairs', nvp,'UseProgressBar',1);
 newobjects = CC.NumObjects;
 
-L_out_file = [getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_L' '.mat'];
-roi_out_file = [getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_ROI' '.mat'];
+L_out_file = [mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_L' '.mat'];
+roi_out_file = [mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_ROI' '.mat'];
 
 try,
-	mkdir([getpathname(atd) filesep 'ROIs' filesep output_itemname]);
+	mkdir([mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname]);
 end;
 
 save(roi_out_file,'CC','-mat');
@@ -131,7 +131,7 @@ h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.resegment
 	'description',['Resegmented ' int2str(oldobjects) ' ROIs into ' int2str(newobjects) ' from ' input_itemname '.']);
 sethistory(atd,'ROIs',output_itemname,h);
 
-str2text([getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
+str2text([mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
 mia.roi.functions.parameters(atd,roi_out_file);
 

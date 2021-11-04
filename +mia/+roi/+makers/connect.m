@@ -45,8 +45,8 @@ end;
 im_in_file = mia.miadir.getimagefilename(atd,input_itemname);
 [dummy,image_raw_filename,ext]=fileparts(im_in_file);
 
-L_out_file = [getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_L' '.mat'];
-roi_out_file = [getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_ROI' '.mat'];
+L_out_file = [mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_L' '.mat'];
+roi_out_file = [mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_ROI' '.mat'];
 
 input_finfo = imfinfo(im_in_file);
 
@@ -59,7 +59,7 @@ end;
 CC = bwconncomp(im,parameters.connectivity);
 L = labelmatrix(CC);
 
-try, mkdir([getpathname(atd) filesep 'ROIs' filesep output_itemname]); end;
+try, mkdir([mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname]); end;
 save(roi_out_file,'CC','-mat');
 save(L_out_file,'L','-mat');
 
@@ -68,7 +68,7 @@ h(end+1) = struct('parent',input_itemname,'operation','mia.roi.makers.connect','
 	'description',['Found ' int2str(CC.NumObjects) ' ROIs with conn=' num2str(parameters.connectivity) ' to image ' input_itemname '.']);
 sethistory(atd,'ROIs',output_itemname,h);
 
-str2text([getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
+str2text([mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
 mia.roi.functions.parameters(atd,roi_out_file);
 

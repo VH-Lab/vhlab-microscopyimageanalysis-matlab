@@ -122,7 +122,7 @@ good_indexes = find(prominence >= parameters.prom_thresh);
 newobjects = size(good_indexes,2);
 
 try,
-	mkdir([getpathname(atd) filesep 'ROIs' filesep output_itemname]);
+	mkdir([mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname]);
 end;
 
 h = mia.miadir.gethistory(atd,'ROIs',input_itemname);

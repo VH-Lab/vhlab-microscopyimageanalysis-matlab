@@ -126,9 +126,9 @@ colocalization_data = var2struct('overlap_ab','overlap_ba','overlap_ac','overlap
 
  % step 3: save and add history
 
-colocalizationdata_out_file = [getpathname(atd) filesep 'CLAs' filesep output_itemname filesep output_itemname '_CLA' '.mat'];
+colocalizationdata_out_file = [mia.miadir.getpathname(atd) filesep 'CLAs' filesep output_itemname filesep output_itemname '_CLA' '.mat'];
 
-try, mkdir([getpathname(atd) filesep 'CLAs' filesep output_itemname]); end;
+try, mkdir([mia.miadir.getpathname(atd) filesep 'CLAs' filesep output_itemname]); end;
 save(colocalizationdata_out_file,'colocalization_data','-mat');
 
 overlapped_objects = sum(overlap_thresh(:));
@@ -139,7 +139,7 @@ h(end+1) = struct('parent',input_itemname,'operation','mia.colocalization.makers
 
 sethistory(atd,'CLAs',output_itemname,h);
 
-str2text([getpathname(atd) filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
+str2text([mia.miadir.getpathname(atd) filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
 out = 1;
 

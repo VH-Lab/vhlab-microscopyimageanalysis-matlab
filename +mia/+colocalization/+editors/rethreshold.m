@@ -60,9 +60,9 @@ colocalization_data.overlap_thresh = colocalization_data.overlap_ab >= parameter
 
 overlapped_objects = sum(colocalization_data.overlap_thresh(:));
 
-colocalization_out_file = [getpathname(atd) filesep 'CLAs' filesep output_itemname filesep output_itemname '_CLA' '.mat'];
+colocalization_out_file = [mia.miadir.getpathname(atd) filesep 'CLAs' filesep output_itemname filesep output_itemname '_CLA' '.mat'];
 
-try, mkdir([getpathname(atd) filesep 'CLAs' filesep output_itemname]); end;
+try, mkdir([mia.miadir.getpathname(atd) filesep 'CLAs' filesep output_itemname]); end;
 save(colocalization_out_file,'colocalization_data','-mat');
 
 h = mia.miadir.gethistory(atd,'CLAs',input_itemname),
@@ -70,7 +70,7 @@ h(end+1) = struct('parent',input_itemname,'operation','mia.colocalization.editor
 	'description',['Rethresholded with new threshold ' num2str(parameters.threshold) '. Found ' int2str(overlapped_objects) ' CLs.' ]);
 sethistory(atd,'CLAs',output_itemname,h);
 
-str2text([getpathname(atd) filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
+str2text([mia.miadir.getpathname(atd) filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
 out = 1;
 

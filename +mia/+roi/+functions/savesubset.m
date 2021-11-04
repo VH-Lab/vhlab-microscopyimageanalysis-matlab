@@ -16,20 +16,20 @@ CC.NumObjects = numel(indexes);
 CC.PixelIdxList = CC.PixelIdxList(indexes);
 L = labelmatrix(CC);
 
-L_out_file = [getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_L' '.mat'];
-roi_out_file = [getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_ROI' '.mat'];
+L_out_file = [mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_L' '.mat'];
+roi_out_file = [mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_ROI' '.mat'];
 
 try,
-	mkdir([getpathname(atd) filesep 'ROIs' filesep output_itemname]);
+	mkdir([mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname]);
 end;
 
 save(roi_out_file,'CC','-mat');
 save(L_out_file,'L','-mat');
 sethistory(atd,'ROIs',output_itemname,history);
-str2text([getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
+str2text([mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
 roi_properties_input_file = getroiparametersfilename(atd,input_itemname);
-roi_properties_output_file = [getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname 'ROI_roiparameters' '.mat'];
+roi_properties_output_file = [mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname 'ROI_roiparameters' '.mat'];
 
 if exist(roi_properties_input_file,'file'),
 	load(roi_properties_input_file);

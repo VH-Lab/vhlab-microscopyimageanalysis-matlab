@@ -68,7 +68,7 @@ im_in_file = parameters.input_filename;
 
 [dummy,image_raw_filename,ext] = fileparts(parameters.input_filename);
 
-im_out_file = [getpathname(atd) filesep 'images' filesep output_itemname filesep output_itemname ext];
+im_out_file = [mia.miadir.getpathname(atd) filesep 'images' filesep output_itemname filesep output_itemname ext];
 
 input_finfo = imfinfo(im_in_file);
 
@@ -80,12 +80,12 @@ for i=1:length(input_finfo),
 	im = imread(im_in_file,'index',i,'info',input_finfo);
 	if i==1,
 		try,
-			mkdir([getpathname(atd) filesep 'images' filesep output_itemname]);
+			mkdir([mia.miadir.getpathname(atd) filesep 'images' filesep output_itemname]);
 		end;
 	end;
 	im = logical(im > 0);
 	imwrite(im,im_out_file,extra_args{1+double(i>1)}{:});
-	str2text([getpathname(atd) filesep 'images' filesep output_itemname filesep 'parent.txt'], input_itemname);
+	str2text([mia.miadir.getpathname(atd) filesep 'images' filesep output_itemname filesep 'parent.txt'], input_itemname);
 end;
 
 sethistory(atd,'images',output_itemname,h);
