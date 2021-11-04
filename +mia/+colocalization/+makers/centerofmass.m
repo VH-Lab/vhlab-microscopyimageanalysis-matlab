@@ -77,11 +77,11 @@ if parameters.show_graphical_progress, progressbar('Setting up for ROI overlap c
 rois{1} = mia.miadir.getroifilename(atd,input_itemname);
 L{1} = getlabeledroifilename(atd,input_itemname);
 try,
-	roipfilename{1} = getroiparametersfilename(atd, input_itemname);
+	roipfilename{1} = mia.miadir.getroiparametersfilename(atd, input_itemname);
 	if isempty(roipfilename{1}), error('filename is empty.'); end;
 catch,
 	mia.roi.functions.parameters(atd,rois{1});
-	roipfilename{1} = getroiparametersfilename(atd, input_itemname);
+	roipfilename{1} = mia.miadir.getroiparametersfilename(atd, input_itemname);
 end;
 
 if parameters.show_graphical_progress, progressbar(0.2); end;
@@ -89,10 +89,10 @@ if parameters.show_graphical_progress, progressbar(0.2); end;
 rois{2} = mia.miadir.getroifilename(atd,parameters.roi_set_2);
 L{2} = getlabeledroifilename(atd,parameters.roi_set_2);
 try,
-	roipfilename{2} = getroiparametersfilename(atd, parameters.roi_set_2);
+	roipfilename{2} = mia.miadir.getroiparametersfilename(atd, parameters.roi_set_2);
 catch,
 	mia.roi.functions.parameters(atd,rois{2});
-	roipfilename{2} = getroiparametersfilename(atd, parameters.roi_set_2);
+	roipfilename{2} = mia.miadir.getroiparametersfilename(atd, parameters.roi_set_2);
 end
 
 if parameters.show_graphical_progress, progressbar(0.4); end;

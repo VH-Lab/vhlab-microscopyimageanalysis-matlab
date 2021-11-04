@@ -39,7 +39,7 @@ if ischar(parameters),
 			end;
 		case 'choose_graphical',
 			out = [];
-			roi_pfile = getroiparametersfilename(atd,input_itemname);
+			roi_pfile = mia.miadir.getroiparametersfilename(atd,input_itemname);
 			ROIp = load(roi_pfile,'-mat');
 			o = mia.roi.functions.parameters2struct(ROIp.ROIparameters);
 			

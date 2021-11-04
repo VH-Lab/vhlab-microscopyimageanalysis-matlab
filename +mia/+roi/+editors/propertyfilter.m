@@ -173,7 +173,7 @@ end;
 
 roi_in_file = mia.miadir.getroifilename(atd,input_itemname);
 load(roi_in_file,'CC','-mat');
-roi_properties_file = getroiparametersfilename(atd, input_itemname);
+roi_properties_file = mia.miadir.getroiparametersfilename(atd, input_itemname);
 load(roi_properties_file,'-mat');
 
 eval(['ROI_property = [ROIparameters.params' parameters.property_name(end) 'd.' parameters.property_name(1:end-1) '];']);

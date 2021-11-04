@@ -154,8 +154,8 @@ for i=1:length(os),
 	N_overlaps_comp_substantial_onto_gt(:,i) = [ full(sum(cla_comp_gt.colocalization_data.overlap_ba(comp_rois_substantially_in_mask,:)>os(i),2)) ];
 end;
 
-roi_comp_params_file = getroiparametersfilename(atd,cla_comp_gt.colocalization_data.parameters.roi_set_2);
-roi_gt_params_file = getroiparametersfilename(atd,cla_comp_gt.colocalization_data.parameters.roi_set_1);
+roi_comp_params_file = mia.miadir.getroiparametersfilename(atd,cla_comp_gt.colocalization_data.parameters.roi_set_2);
+roi_gt_params_file = mia.miadir.getroiparametersfilename(atd,cla_comp_gt.colocalization_data.parameters.roi_set_1);
 
 roi_comp_params = load(roi_comp_params_file,'-mat');
 roi_gt_params = load(roi_gt_params_file,'-mat');
@@ -189,7 +189,7 @@ false_positives = sum(N_overlaps_comp_substantial_onto_gt == 0);
 
 
  % non-resegmented ROIs
-nonres_roi_gt_params_file = getroiparametersfilename(atd,cla_comp_gt.colocalization_data.parameters.roi_set_1(1:end-3));
+nonres_roi_gt_params_file = mia.miadir.getroiparametersfilename(atd,cla_comp_gt.colocalization_data.parameters.roi_set_1(1:end-3));
 nonres_roi_gt_params = load(nonres_roi_gt_params_file,'-mat');
 nonres_vol_gt = [nonres_roi_gt_params.ROIparameters.params3d(:).Volume];
 nonres_maxbright_gt = [nonres_roi_gt_params.ROIparameters.params3d(:).MaxIntensity];
