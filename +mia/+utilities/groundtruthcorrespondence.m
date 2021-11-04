@@ -99,7 +99,7 @@ overlap_threshold_substantially_in_mask = 0.75;
 
 vlt.data.assign(varargin{:});
 
-cla_list = getitems(atd, 'CLAs');
+cla_list = mia.miadir.getitems(atd, 'CLAs');
 
 cla_comp_mask_fname = mia.miadir.getcolocalizationfilename(atd, [maskregion_rois '_x_' computer_rois '_CLA']);
 if isempty(cla_comp_mask_fname),

@@ -42,7 +42,7 @@ if ischar(parameters),
 				out = [];
 			else,
 				if isempty(parameters.roi_set_2),
-					itemliststruct = getitems(atd,'ROIs');
+					itemliststruct = mia.miadir.getitems(atd,'ROIs');
 					if ~isempty(itemliststruct), 
 						itemlist_names = {itemliststruct.name};
 					else,
@@ -64,7 +64,7 @@ if ischar(parameters),
 					end;
 				end;
 				if isempty(parameters.roi_set_3),
-					itemliststruct = getitems(atd,'ROIs');
+					itemliststruct = mia.miadir.getitems(atd,'ROIs');
 					if ~isempty(itemliststruct), 
 						itemlist_names = {itemliststruct.name};
 					else,

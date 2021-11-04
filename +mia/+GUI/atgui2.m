@@ -129,7 +129,7 @@ switch lower(command),
 			items = {'images','ROIs','CLAs'};
 			itemlists = {'IMl','ROIg','COLg'};
 			for i=1:length(items),
-				itemstruct = getitems(atd,items{i});
+				itemstruct = mia.miadir.getitems(atd,items{i});
 				mia.GUI.itemeditlist_gui(itemlists{i},'command',[itemlists{i} 'update_itemlist'],'atd',atd);
 			end;
 		else,

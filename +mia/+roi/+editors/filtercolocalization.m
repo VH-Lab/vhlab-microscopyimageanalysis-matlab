@@ -61,7 +61,7 @@ if ~isempty(parameters.colocalization_name), % DLW
     load(cfile,'colocalization_data','-mat');
     
 elseif 0, % ask the user to choose it
-	itemliststruct = getitems(atd,'CLAs');
+	itemliststruct = mia.miadir.getitems(atd,'CLAs');
 	if ~isempty(itemliststruct),
 		itemlist_names = {itemliststruct.name};
 	else,

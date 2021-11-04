@@ -81,7 +81,7 @@ if isempty(parameters.imagename), % choose it
 	h = mia.miadir.gethistory(atd,'ROIs',input_itemname);
 	parameters.imagename = h(1).parent;
 elseif 0, % ask the user to choose it
-	itemliststruct = getitems(atd,'images');
+	itemliststruct = mia.miadir.getitems(atd,'images');
 	if ~isempty(itemliststruct),
 		itemlist_names = {itemliststruct.name};
 	else,

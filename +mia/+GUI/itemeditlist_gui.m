@@ -244,7 +244,7 @@ switch lower(command),
 		end;
 
 	case 'update_itemlist', % requires atd
-		itemstruct = getitems(atd,ud.itemtype);
+		itemstruct = mia.miadir.getitems(atd,ud.itemtype);
 		[liststr,info] = mia.GUI.itemstruct2list(itemstruct);
 		ud.atd = atd;
 		handles = mia.GUI.itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);

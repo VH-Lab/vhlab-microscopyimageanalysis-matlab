@@ -49,7 +49,7 @@ cfile = mia.miadir.getcolocalizationfilename(atd,input_itemname);
 load(cfile,'colocalization_data','-mat');
 
 parent = getparent(atd, 'CLAs', input_itemname);
-allrois = getitems(atd, 'ROIs');
+allrois = mia.miadir.getitems(atd, 'ROIs');
 
 
 
