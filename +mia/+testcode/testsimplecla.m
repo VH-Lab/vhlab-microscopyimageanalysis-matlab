@@ -1,7 +1,7 @@
-function testsimpleimage(pathname, itemname, deleteitemname, histitemname)
-% TESTSIMPLEIMAGE - a test code for images in MIA.
+function testsimplecla(pathname, itemname, deleteitemname, histitemname)
+% TESTSIMPLECLA - a test code for CLAs in MIA.
 %
-%  MIA.TESTCODE.TESTSIMPLEIMAGE(PATHNAME, ITEMNAME, DELETEITEMNAME)
+%  MIA.TESTCODE.TESTSIMPLECLA(PATHNAME, ITEMNAME, DELETEITEMNAME)
 %
 %  Takes in the PATHNAME of the image location, the ITEMNAME of the image,
 %  and the folder DELETEITEMNAME to be deleted.
@@ -12,7 +12,7 @@ md = mia.miadir(pathname);
 
 %% test deleteitem function
 disp('========= test deleteitem function ============')
-%mia.miadir.deleteitem(md, 'images', deleteitemname);
+%mia.miadir.deleteitem(md, 'CLAs', deleteitemname);
 
 %% test display function
 disp('========= test display function ============')
@@ -20,18 +20,19 @@ mia.miadir.display(md);
 
 %% test getcolocalizationfilename function
 disp('========= test getcolocalizationfilename function ============')
-
+cfilename = mia.miadir.getcolocalizationfilename(md, itemname);
+disp(cfilename);
 %% test sethistory function
 disp('========= test sethistory function ============')
 newhistory = struct('parent',itemname,'operation','copy','parameters','',...
 	'description',['This is a test of making the history']);
-history = mia.miadir.sethistory(md, 'images', histitemname, newhistory);
+history = mia.miadir.sethistory(md, 'CLAs', histitemname, newhistory);
 disp('You set the history of the file to be: ')
 disp(newhistory);
 
 %% test gethistory function
 disp('========= test gethistory function ============')
-h = mia.miadir.gethistory(md, 'images', histitemname);
+h = mia.miadir.gethistory(md, 'CLAs', histitemname);
 disp('we get the history of the file as: ')
 disp(h);
 if h == newhistory
@@ -40,14 +41,9 @@ else
     disp('The history you set is different from the history we stored')
 end
 
-%% test getimagefilename function
-disp('========= test getimagefilename function ============');
-imfilename = mia.miadir.getimagefilename(md, itemname);
-disp(imfilename);
-
 %% test getitems function
 disp('========= test getitems function ============')
-G = mia.miadir.getitems(md, 'images');
+G = mia.miadir.getitems(md, 'CLAs');
 disp(G);
 G_name = {G(:).name};
 G_parent = {G(:).parent};
@@ -59,7 +55,7 @@ for i=1:length(G_name)
 end
 %% test getparent function
 disp('========= test getparent function ============')
-p = mia.miadir.getparent(md, 'images', histitemname);
+p = mia.miadir.getparent(md, 'CLAs', histitemname);
 disp(p)
 %% test getpathname function
 disp('========= test getpathname function ============')

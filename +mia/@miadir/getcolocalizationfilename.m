@@ -15,12 +15,12 @@ extensions = {'.mat'};
 
 dnames = {};
 for i=1:length(extensions),
-	d = dir([mia.miadir.getpathname(md) filesep 'CLAs' filesep itemname filesep '*_CLA' extensions{i}]);
+	d = dir([mia.miadir.getpathname(md) 'CLAs' filesep itemname filesep '*_CLA' extensions{i}]);
 	dnames = cat(1,dnames,d.name);
 	if ~isempty(dnames), break; end; % if we have a match it is good
 end;
 
 if ~isempty(dnames),
 	dnames = sort(dnames);
-	cfilename = [mia.miadir.getpathname(md) filesep 'CLAs' filesep itemname filesep dnames{1}];
+	cfilename = [mia.miadir.getpathname(md) 'CLAs' filesep itemname filesep dnames{1}];
 end;

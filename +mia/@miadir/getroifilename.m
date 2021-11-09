@@ -10,11 +10,11 @@ function roifilename = getroifilename(md, itemname)
 roifilename = '';
 
 dnames = {};
-d = dir([mia.miadir.getpathname(md) filesep 'ROIs' filesep itemname filesep '*ROI.mat']);
+d = dir([mia.miadir.getpathname(md) 'ROIs' filesep itemname filesep '*ROI.mat']);
 dnames = cat(1,dnames,d.name);
 
 if ~isempty(dnames),
-	roifilename = [mia.miadir.getpathname(md) filesep 'ROIs' filesep itemname filesep dnames{1}];
+	roifilename = [mia.miadir.getpathname(md) 'ROIs' filesep itemname filesep dnames{1}];
 end;
 
 if isempty(roifilename),

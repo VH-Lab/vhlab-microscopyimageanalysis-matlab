@@ -10,7 +10,7 @@ function labeledroifilename = getlabeledroifilename(md, itemname)
 labeledroifilename = '';
 
 dnames = {};
-d = dir([mia.miadir.getpathname(md) filesep 'ROIs' filesep itemname filesep '*L.mat']);
+d = dir([mia.miadir.getpathname(md) 'ROIs' filesep itemname filesep '*L.mat']);
 dnames = cat(1,dnames,d.name);
 
 if ~isempty(dnames),

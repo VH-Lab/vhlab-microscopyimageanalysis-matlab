@@ -14,15 +14,15 @@ end;
 roipfilename = '';
 
 dnames = {};
-d = dir([mia.miadir.getpathname(md) filesep 'ROIs' filesep itemname filesep '*ROI_roiparameters.mat']);
+d = dir([mia.miadir.getpathname(md) 'ROIs' filesep itemname filesep '*ROI_roiparameters.mat']);
 dnames = cat(1,dnames,d.name);
 
 if ~isempty(dnames),
-	roipfilename = [mia.miadir.getpathname(md) filesep 'ROIs' filesep itemname filesep dnames{1}];
+	roipfilename = [mia.miadir.getpathname(md) 'ROIs' filesep itemname filesep dnames{1}];
 end;
 
 if isempty(roipfilename),
 	if showerror,
-		errordlg(['Could not locate the ROI parameter file in ' [mia.miadir.getpathname(md) filesep 'ROIs' filesep itemname filesep] '; this directory should be deleted.']);
+		errordlg(['Could not locate the ROI parameter file in ' [mia.miadir.getpathname(md) 'ROIs' filesep itemname filesep] '; this directory should be deleted.']);
 	end;
 end;
