@@ -8,6 +8,6 @@ function deleteitem(md,itemtype,itemname)
 %
 %  There is no turning back, the item is gone forever.
 
-dirname = [mia.miadir.getpathname(md) filesep itemtype filesep itemname];
+dirname = [getpathname(md) filesep itemtype filesep itemname];
 
 rmdir(dirname,'s');

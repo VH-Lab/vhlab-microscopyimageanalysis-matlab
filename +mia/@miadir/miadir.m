@@ -51,7 +51,6 @@ classdef miadir
     end
     methods (Static)
         addtag(ds, dir, tagname, value)
-        deleteitem(md,itemtype,itemname)
         display(md)
         cfilename = getcolocalizationfilename(md, itemname)
         h = gethistory(md, itemtype, itemname)

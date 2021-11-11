@@ -27,10 +27,10 @@ classdef threshold < mia.creator
 				input_itemname = mia_image_threshold_obj.input_name;
 				output_itemname = mia_image_threshold_obj.output_name;
 
-				h = gethistory(mia_image_threshold_obj.mdir,'images',input_itemname);
+				h = mia_image_threshold_obj.mdir.gethistory('images',input_itemname);
 				h(end+1) = struct('parent',input_itemname,'operation','mia.creator.image.threshold','parameters',parameters,...
 					'description',['Applied threshold of ' num2str(parameters.threshold) ' to image ' input_itemname '.']);
-				im_in_file = getimagefilename(mia_image_threshold_obj.mdir,input_itemname);
+				im_in_file = mia_image_threshold_obj.mdir.getimagefilename(input_itemname);
 				[dummy,image_raw_filename,ext] = fileparts(im_in_file);
 				im_out_file = [getpathname(mia_image_threshold_obj.mdir) filesep ...
 					'images' filesep output_itemname filesep output_itemname ext];
@@ -53,7 +53,7 @@ classdef threshold < mia.creator
 				end;
 				str2text([getpathname(mia_image_threshold_obj.mdir) filesep ...
 					'images' filesep output_itemname filesep 'parent.txt'], input_itemname);
-				sethistory(mia_image_threshold_obj.mdir,'images',output_itemname,h);
+				mia_image_threshold_obj.mdir.sethistory('images',output_itemname,h);
 		end % make()
 
 		function f = build_gui_parameterwindow(mia_image_threshold_obj)
