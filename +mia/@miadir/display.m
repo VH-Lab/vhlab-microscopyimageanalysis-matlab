@@ -8,8 +8,8 @@ function display(md)
 %   See also: MIADIR
 
 if isempty(inputname(1)),
-	disp([inputname(1) '; manages directory ' mia.miadir.getpathname(md) ]);
+	disp([inputname(1) '; manages directory ' md.pathname ]);
 else,
-	disp([inputname(1) '; manages directory ' mia.miadir.getpathname(md) ]);
+	disp([inputname(1) '; manages directory ' md.pathname ]);
 end;
 

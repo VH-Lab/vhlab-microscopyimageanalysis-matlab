@@ -17,12 +17,12 @@ extensions = {'.tiff','.tif','.gif','.jpg','.jpeg'};
 
 dnames = {};
 for i=1:length(extensions),
-	d = dir([mia.miadir.getpathname(md) filesep 'images' filesep itemname filesep '*' extensions{i}]);
+	d = dir([md.pathname filesep 'images' filesep itemname filesep '*' extensions{i}]);
 	dnames = cat(1,dnames,d.name);
 	if ~isempty(dnames), break; end; % if we have a match it is good
 end;
 
 if ~isempty(dnames),
 	dnames = sort(dnames);
-	imfilename = [mia.miadir.getpathname(md) filesep 'images' filesep itemname filesep dnames{1}];
+	imfilename = [md.pathname filesep 'images' filesep itemname filesep dnames{1}];
 end;

@@ -64,7 +64,7 @@ disp(p)
 %% test getpathname function
 disp('========= test getpathname function ============')
 fixed_pathname = fixpath(pathname);               % The miadir constructor called fixpath on pathname
-temp_pathname = mia.miadir.getpathname(md);
+temp_pathname = md.pathname;
 disp(fixed_pathname);
 disp(temp_pathname);
 if (temp_pathname == fixed_pathname),

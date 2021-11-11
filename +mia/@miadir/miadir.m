@@ -44,6 +44,11 @@ classdef miadir
                 md.S = struct('pathname',pathname);
         end
     end
+    methods
+        function p = get.pathname(md)
+            p = md.pathname;
+        end
+    end
     methods (Static)
         addtag(ds, dir, tagname, value)
         deleteitem(md,itemtype,itemname)
@@ -54,7 +59,6 @@ classdef miadir
         itemstruct = getitems(md, itemtype)
         labeledroifilename = getlabeledroifilename(md, itemname)
         p = getparent(md, itemtype, itemname)
-        p = getpathname(md)
         roifilename = getroifilename(md, itemname)
         roipfilename = getroiparametersfilename(md, itemname, showerror)
         tag = gettag(ds,dir)
