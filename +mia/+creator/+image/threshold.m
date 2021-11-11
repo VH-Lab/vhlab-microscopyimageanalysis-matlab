@@ -10,7 +10,7 @@ classdef threshold < mia.creator
 			mia_image_threshold_obj.output_types = {'image'}; % abstract creator does not make any objects
 			mia_image_threshold_obj.iseditor = 1;
 			mia_image_threshold_obj.default_parameters = struct('threshold',100); 
-			mia_image_theshold_obj.parameter_list = {'threshold'};
+			mia_image_threshold_obj.parameter_list = {'threshold'};
 			mia_image_threshold_obj.parameter_descriptions = {'Threshold to apply to image to detect presence of objects (real number)'};
 			mia_image_threshold_obj.parameter_selection_methods = {'choose_inputdlg','choose_graphical'};
 		end % creator()

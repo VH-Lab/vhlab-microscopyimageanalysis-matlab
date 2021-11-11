@@ -17,7 +17,7 @@ extensions = {'.tiff','.tif','.gif','.jpg','.jpeg'};
 
 dnames = {};
 for i=1:length(extensions),
-	d = dir([md.pathname filesep 'images' filesep itemname filesep '*' extensions{i}]);
+	d = dir([md.pathname() filesep 'images' filesep itemname filesep '*' extensions{i}]);
 	dnames = cat(1,dnames,d.name);
 	if ~isempty(dnames), break; end; % if we have a match it is good
 end;

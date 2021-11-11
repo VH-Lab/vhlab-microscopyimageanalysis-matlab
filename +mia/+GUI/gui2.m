@@ -125,7 +125,7 @@ switch lower(command),
                 	mia.GUI.gui2(name,'command',[name 'set_vars'],'ud',ud);
 
 			% need to update lists here
-			atd = atdir(ud.pathname);
+			atd = mia.miadir(ud.pathname);
 			items = {'images','ROIs','CLAs'};
 			itemlists = {'IMl','ROIg','COLg'};
 			for i=1:length(items),
@@ -140,7 +140,7 @@ switch lower(command),
 		mia.GUI.itemeditlist_gui('COLg','command',['COLg' 'drawaction'],'fig',fig);
 	case lower('ATGUI_DrawImage'), % NEEDS INPUT ARGUMENT theinput.itemname
                 handles = mia.GUI.gui2(name,'command',[name 'get_handles'],'fig',fig);
-		atd = atdir(ud.pathname);
+		atd = mia.miadir(ud.pathname);
 		imfile = mia.miadir.getimagefilename(atd,theinput.itemname);
 		image_viewer_gui('IMv','command',['IMv' 'Set_Image'],'imfile',imfile);
 		mia.GUI.gui2(name,'command',[name 'ATGUI_ImageMoved'],'fig',fig);
@@ -152,7 +152,7 @@ switch lower(command),
 	case lower('ATGUI_DrawROILines'),% NEEDS INPUT ARGUMENT theinput.itemstruct_parameters
 		disp(['Got request to draw ROIs as lines and numbers.']);
                 handles = mia.GUI.gui2(name,'command',[name 'get_handles'],'fig',fig);
-		atd = atdir(ud.pathname);
+		atd = mia.miadir(ud.pathname);
 
 		itemstruct_parameters = theinput.itemstruct_parameters;
 
@@ -203,7 +203,7 @@ switch lower(command),
 		disp(['Got request to draw ROIs as overlay.']);
 
                 handles = mia.GUI.gui2(name,'command',[name 'get_handles'],'fig',fig);
-		atd = atdir(ud.pathname);
+		atd = mia.miadir(ud.pathname);
 
 		itemstruct_parameters = theinput.itemstruct_parameters;
 
@@ -262,7 +262,7 @@ switch lower(command),
 	case lower('ATGUI_DrawCLALines'),
 		disp(['Got request to draw CLAs as lines and numbers.']);
                 handles = mia.GUI.gui2(name,'command',[name 'get_handles'],'fig',fig);
-		atd = atdir(ud.pathname);
+		atd = mia.miadir(ud.pathname);
 		itemstruct_parameters = theinput.itemstruct_parameters;
 
 		% step 1 - get a lost of all the types
@@ -320,7 +320,7 @@ switch lower(command),
 		disp(['Got request to draw CLAs as overlay.']);
 
                 handles = mia.GUI.gui2(name,'command',[name 'get_handles'],'fig',fig);
-		atd = atdir(ud.pathname);
+		atd = mia.miadir(ud.pathname);
 
 		itemstruct_parameters = theinput.itemstruct_parameters;
 

@@ -59,10 +59,10 @@ classdef creator
 				parameter_selection_methods = mia_creator_obj.parameter_selection_methods;
 		end % parameter_details()
 
-		function parameters = getuserparameters(mia_creator_obj, method)
+		function parameters = getuserparameters(mia_creator_obj, method, input_name, output_name)
 			% GETUSERPARAMETERS - interactively obtain parameters from the user
 			%
-			% PARAMETERS = mia.creator.getuserparameters(METHOD)
+			% PARAMETERS = mia.creator.getuserparameters(METHOD, INPUT_NAME, OUTPUT_NAME)
 			%
 			% Interactively asks the user for parameters. If there is more than one
 			% PARAMETER_SELECTION_METHOD (see mia.creator.parameter_details), then
@@ -84,9 +84,9 @@ classdef creator
 							parameters = struct([]); % empty
 						end;
 					case 'choose_inputdlg',
-						parameters = mia_creator_obj.getuserparameters_choosedlg(mia_creator_obj);
+						parameters = mia_creator_obj.getuserparameters_choosedlg();
 					case 'choose_graphical',
-						parameters = mia_creator_obj.getuserparameters_graphical(mia_creator_obj);
+						parameters = mia_creator_obj.getuserparameters_graphical();
 					otherwise,
 						parameters = getuserparameters_nonstandard(mia_creator_obj, method);
 				
@@ -117,6 +117,7 @@ classdef creator
 			% If the user clicks cancel, PARAMETERS is empty.
 
 				[plist,pdesc,psel] = mia_creator_obj.parameter_details();
+				plist,pdesc,
 				parameters = dlg2struct('Choose parameters',plist,pdesc,mia_creator_obj.default_parameters);
 		end % getuserparameters_choosedlg(mia_creator_obj)
 
@@ -153,8 +154,8 @@ classdef creator
 				b = 0; % fails in abstract class
 		end % make()
 
-		function b = getuserparameters_and_make(mia_creator_obj, input_name, output_name)
-			p = getuserparameters(mia_creator_obj);
+		function b = getuserparameters_and_make(mia_creator_obj)
+			p = getuserparameters(mia_creator_obj, input_name, output_name);
 			if ~isempty(p),
 				b = mia_creator_obj.make(input_name,output_name,p);
 			else,
