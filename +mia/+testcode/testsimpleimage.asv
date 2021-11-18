@@ -1,11 +1,10 @@
 function testsimpleimage(pathname, itemname, deleteitemname, histitemname)
 % TESTSIMPLEIMAGE - a test code for images in MIA.
 %
-%  MIA.TESTCODE.TESTSIMPLEIMAGE(PATHNAME, ITEMNAME, DELETEITEMNAME, HISTITEMNAME)
+%  MIA.TESTCODE.TESTSIMPLEIMAGE(PATHNAME, ITEMNAME, DELETEITEMNAME)
 %
 %  Takes in the PATHNAME of the image location, the ITEMNAME of the image,
-%  the folder DELETEITEMNAME to be deleted, and the HISTITEMNAME to check
-%  its history.
+%  and the folder DELETEITEMNAME to be deleted.
 %  Display the outputs of each function under mia.miadir class. 
 % 
 %% create miadir object
@@ -26,7 +25,7 @@ disp('========= test getcolocalizationfilename function ============')
 disp('========= test sethistory function ============')
 newhistory = struct('parent',itemname,'operation','copy','parameters','',...
 	'description',['This is a test of making the history']);
-md.sethistory('images', histitemname, newhistory);
+history = md.sethistory('images', histitemname, newhistory);
 disp('You set the history of the file to be: ')
 disp(newhistory);
 

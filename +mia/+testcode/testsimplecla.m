@@ -1,10 +1,11 @@
 function testsimplecla(pathname, itemname, deleteitemname, histitemname)
 % TESTSIMPLECLA - a test code for CLAs in MIA.
 %
-%  MIA.TESTCODE.TESTSIMPLECLA(PATHNAME, ITEMNAME, DELETEITEMNAME)
+%  MIA.TESTCODE.TESTSIMPLECLA(PATHNAME, ITEMNAME, DELETEITEMNAME, HISTITEMNAME)
 %
-%  Takes in the PATHNAME of the image location, the ITEMNAME of the image,
-%  and the folder DELETEITEMNAME to be deleted.
+%  Takes in the PATHNAME of the CLA location, the ITEMNAME of the CLA,
+%  the folder DELETEITEMNAME to be deleted, and the HISTITEMNAME to check
+%  its history.
 %  Display the outputs of each function under mia.miadir class. 
 % 
 %% create miadir object
@@ -12,27 +13,27 @@ md = mia.miadir(pathname);
 
 %% test deleteitem function
 disp('========= test deleteitem function ============')
-%mia.miadir.deleteitem(md, 'CLAs', deleteitemname);
+md.deleteitem('CLAs', deleteitemname);
 
 %% test display function
 disp('========= test display function ============')
-mia.miadir.display(md);
+md.display();
 
 %% test getcolocalizationfilename function
 disp('========= test getcolocalizationfilename function ============')
-cfilename = mia.miadir.getcolocalizationfilename(md, itemname);
+cfilename = md.getcolocalizationfilename(itemname);
 disp(cfilename);
 %% test sethistory function
 disp('========= test sethistory function ============')
 newhistory = struct('parent',itemname,'operation','copy','parameters','',...
 	'description',['This is a test of making the history']);
-history = mia.miadir.sethistory(md, 'CLAs', histitemname, newhistory);
+md.sethistory('CLAs', histitemname, newhistory);
 disp('You set the history of the file to be: ')
 disp(newhistory);
 
 %% test gethistory function
 disp('========= test gethistory function ============')
-h = mia.miadir.gethistory(md, 'CLAs', histitemname);
+h = md.gethistory('CLAs', histitemname);
 disp('we get the history of the file as: ')
 disp(h);
 if h == newhistory
@@ -43,7 +44,7 @@ end
 
 %% test getitems function
 disp('========= test getitems function ============')
-G = mia.miadir.getitems(md, 'CLAs');
+G = md.getitems('CLAs');
 disp(G);
 G_name = {G(:).name};
 G_parent = {G(:).parent};
@@ -55,12 +56,12 @@ for i=1:length(G_name)
 end
 %% test getparent function
 disp('========= test getparent function ============')
-p = mia.miadir.getparent(md, 'CLAs', histitemname);
+p = md.getparent('CLAs', histitemname);
 disp(p)
 %% test getpathname function
 disp('========= test getpathname function ============')
 fixed_pathname = fixpath(pathname);               % The miadir constructor called fixpath on pathname
-temp_pathname = mia.miadir.getpathname(md);
+temp_pathname = md.getpathname();
 disp(fixed_pathname);
 disp(temp_pathname);
 if (temp_pathname == fixed_pathname),
