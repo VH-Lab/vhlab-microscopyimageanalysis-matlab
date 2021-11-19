@@ -117,7 +117,6 @@ classdef creator
 			% If the user clicks cancel, PARAMETERS is empty.
 
 				[plist,pdesc,psel] = mia_creator_obj.parameter_details();
-				plist,pdesc,
 				parameters = dlg2struct('Choose parameters',plist,pdesc,mia_creator_obj.default_parameters);
 		end % getuserparameters_choosedlg(mia_creator_obj)
 
@@ -134,8 +133,8 @@ classdef creator
 					uiwait();
 					success = process_gui_click(mia_creator_obj,f);
 				end;
-				if success>1,
-					parameters = gui2parameters(mia_creator_obj, f);
+				if success==1,
+					parameters = gui2parameters(mia_creator_obj,f);
 				else,
 					parameters = [];
 				end;
@@ -169,11 +168,14 @@ classdef creator
 		function success = process_gui_click(mia_creator_obj, f)
 			
 		end % process_gui_click()
-
-		function p = gui2parameters(mia_creator_obj)
+        
+        function p = gui2parameters(mia_creator_obj)
 		end % gui2parameters()
 
 	end % methods
+    
+    methods (Static)
+    end % static methods
 
 end % classdef
 

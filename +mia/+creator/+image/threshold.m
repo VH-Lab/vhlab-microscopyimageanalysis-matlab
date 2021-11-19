@@ -60,7 +60,7 @@ classdef threshold < mia.creator
 				f = figure;
 				pos = get(f,'position');
 				set(f,'position',[pos([1 2]) 500 500]);
-				imfile = getimagefilename(mia_image_threhsold_obj.mdir, mia_image_threshold_obj.input_itemname);
+				imfile = getimagefilename(mia_image_threshold_obj.mdir, mia_image_threshold_obj.input_name);
 				uidefs = vlt.ui.basicuitools_defs;
 				uicontrol(uidefs.txt,'position',  [20 350 45 25],'string','Threshold:');
 				uicontrol(uidefs.edit,'position', [20 325 45 25],'string','1000','tag',...
@@ -71,7 +71,7 @@ classdef threshold < mia.creator
 					'tag','CancelButton','callback',['set(gcbo,''userdata'',1); uiresume;']);
 
 				image_viewer_name = 'IM_threshold';
-				image_viewer_gui(image_viewer_name,'imfile',imfile,'imagemodifierfunc','mia.image.process.threshold(im);')
+				image_viewer_gui(image_viewer_name,'imfile',imfile,'imagemodifierfunc','mia.creator.image.threshold.process_threshold(im);')
 		end % build_gui_parameterwindow()
 
 		function success = process_gui_click(mia_image_threshold_obj, f)
@@ -86,7 +86,7 @@ classdef threshold < mia.creator
 					success = -1;
 				elseif threshedit | ok,
 					try,
-						p = mia_image_threshold_obj.gui2parameters(f);
+						p = gui2parameters(mia_image_threshold_obj,f);
 					catch,
 						errordlg(['Error in setting threshold: ' lasterr]);
 						set(findobj(gcf,'tag','OKButton'),'userdata',0);
@@ -101,7 +101,7 @@ classdef threshold < mia.creator
 						axes(handles.HistogramAxes);
 						hold on;
 						a = axis;
-						plot([threshold threshold],[a(3) a(4)],'g-','tag','histline');
+						plot([p.threshold p.threshold],[a(3) a(4)],'g-','tag','histline');
 						set(handles.HistogramAxes,'tag',[image_viewer_name 'HistogramAxes']);
 						axes(oldaxes);
 						image_viewer_gui(image_viewer_name,'command',[image_viewer_name 'draw_image']);
@@ -112,14 +112,20 @@ classdef threshold < mia.creator
 				end;
 			
 		end % process_gui_click()
-
-		function p = gui2parameters(mia_image_threshold_obj, f)
+        
+		function p = gui2parameters(mia_image_threshold_obj,f)
 			threshold_string = get(findobj(f,'tag','ThresholdEdit'),'string');
-			threshold = eval([threshold_string ';']);
+            if isempty(threshold_string),
+                threshold = [];
+            else,
+    			threshold = eval([threshold_string ';']);
+            end;
 			if isempty(threshold) | ~isnumeric(threshold),
 				error(['Syntax error in threshold: empty or not a number.']);
 			end;
-		end % gui2parameters()
+            p.threshold = threshold;
+		end % gui2parameters()        
+        
 
 	end % methods
 
@@ -129,8 +135,9 @@ classdef threshold < mia.creator
 			image_viewer_name = 'IM_threshold';
 			vars = image_viewer_gui(image_viewer_name,'command',[image_viewer_name 'get_vars']);
 
-			fig = gcbf;
-			p = gui2parameters(f);
+			fig = gcf;
+            dummy = mia.creator.image.threshold();
+			p = dummy.gui2parameters(fig);
 			
 			threshold = eval([get(findobj(fig,'tag','ThresholdEdit'),'string') ';']);
 
