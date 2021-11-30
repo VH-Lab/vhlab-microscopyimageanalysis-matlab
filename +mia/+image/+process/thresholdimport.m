@@ -1,4 +1,4 @@
-function out = thresholdimportimport(atd, input_itemname, output_itemname, parameters)
+function out = thresholdimport(atd, input_itemname, output_itemname, parameters)
 % THRESHOLDIMPORT - Import threshold data for an image from an external image
 %  
 %  OUT = THRESHOLDIMPOT(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
@@ -61,7 +61,7 @@ if isempty(parameters.input_filename),
 end;
 
 h = mia.miadir.gethistory(atd,'images',input_itemname);
-h(end+1) = struct('parent',input_itemname,'operation','mia.image.process.thresholdimport','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','mia.creator.image.thresholdimport','parameters',parameters,...
 	'description',['Applied threshold using file ' parameters.input_filename ' to image ' input_itemname '.']);
 
 im_in_file = parameters.input_filename;

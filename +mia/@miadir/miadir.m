@@ -160,7 +160,7 @@ classdef miadir
             imfilename = '';
             
             extensions = {'.tiff','.tif','.gif','.jpg','.jpeg'};
-            
+
             dnames = {};
             for i=1:length(extensions),
 	            d = dir([md.pathname 'images' filesep itemname filesep '*' extensions{i}]);

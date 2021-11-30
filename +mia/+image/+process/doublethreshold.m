@@ -1,7 +1,7 @@
-function out = at_image_doublethreshold(atd, input_itemname, output_itemname, parameters)
-% AT_IMAGE_DOUBLETHRESHOLD - Threshold an image and store results
+function out = doublethreshold(atd, input_itemname, output_itemname, parameters)
+% DOUBLETHRESHOLD - Threshold an image and store results
 %  
-%  OUT = MIA.IMAGE.PROCESS.AT_IMAGE_DOUBLETHRESHOLD(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.IMAGE.PROCESS.DOUBLETHRESHOLD(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the
 %  parameters is returned in OUT. OUT{1}{n} is the name of the nth parameter, and
@@ -73,17 +73,17 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = mia.image.process.at_image_doublethreshold;
+			out_choice = mia.image.process.doublethreshold;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.image.process.at_image_doublethreshold(atd,input_itemname,output_itemname,buttonname);
+				out = mia.image.process.doublethreshold(atd,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 		case {'choose_inputdlg'},
-			out_p = mia.image.process.at_image_doublethreshold;
+			out_p = mia.image.process.doublethreshold;
 			default_parameters.threshold1 = 95;
 			default_parameters.threshold2 = 75;
 			default_parameters.threshold_units = 'percentile';
@@ -92,7 +92,7 @@ if ischar(parameters),
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.image.process.at_image_doublethreshold(atd,input_itemname,output_itemname,parameters);
+				out = mia.image.process.doublethreshold(atd,input_itemname,output_itemname,parameters);
 			end;
 		case {'choose_graphical_notyet'},
 			f = figure;
@@ -110,7 +110,7 @@ if ischar(parameters),
 			uicontrol(uidefs.button,'position',[20 350-5*row 45 25],'string','OK', 'tag','OKButton','callback',['set(gcbo,''userdata'',1); uiresume;']);
 			uicontrol(uidefs.button,'position',[20 350-6*row 45 25],'string','Cancel','tag','CancelButton','callback',['set(gcbo,''userdata'',1); uiresume;']);
 
-			image_viewer_gui(image_viewer_name,'imfile',imfile,'imagemodifierfunc','mia.image.process.at_image_doublethreshold(im);')
+			image_viewer_gui(image_viewer_name,'imfile',imfile,'imagemodifierfunc','mia.image.process.doublethreshold(im);')
 
 			success = 0;
 
@@ -173,7 +173,7 @@ if ischar(parameters),
 					elseif ok,
 						parameters = struct('threshold1',threshold1,'threshold2',threshold2,'threshold_units',...
 							threshold_units_string(threshold_units_value));
-						out = mia.image.process.at_image_doublethreshold(atd,input_itemname,output_itemname,parameters);
+						out = mia.image.process.doublethreshold(atd,input_itemname,output_itemname,parameters);
 						success = 1;
 					end;
 				end;
@@ -187,7 +187,7 @@ end;
  % perform the thresholding
 
 h = mia.miadir.gethistory(atd,'images',input_itemname);
-h(end+1) = struct('parent',input_itemname,'operation','mia.image.process.at_image_doublethreshold','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','mia.image.process.doublethreshold','parameters',parameters,...
 	'description',['Applied threshold1 of ' num2str(parameters.threshold1) ' and threshold2 of ' num2str(parameters.threshold2) ' with units ' parameters.threshold_units ' to image ' input_itemname '.']);
 
 im_in_file = mia.miadir.getimagefilename(atd,input_itemname);

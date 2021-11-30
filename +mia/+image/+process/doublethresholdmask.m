@@ -8,7 +8,7 @@ function out = doublethresholdmask(atd, input_itemname, mask_itemname, output_it
 %  OUT{2}{n} is a human-readable description of the parameter.
 %  OUT{3} is a list of methods for user-guided selection of these parameters.
 %
-%  MIA.IMAGE.PROCESS.AT_IMAGE_DOUBLETHRESHOLD has several parameters:
+%  MIA.IMAGE.PROCESS.DOUBLETHRESHOLD has several parameters:
 %  | Parameter (default)                | Description                           |
 %  |------------------------------------|---------------------------------------|
 %  | threshold1 (95)                    | Value of threshold1                   |
@@ -76,17 +76,17 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = mia.image.process.at_image_doublethreshold;
+			out_choice = mia.image.process.doublethreshold;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.image.process.at_image_doublethreshold(atd,input_itemname,mask_itemname, output_itemname,buttonname);
+				out = mia.image.process.doublethreshold(atd,input_itemname,mask_itemname, output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 		case {'choose_inputdlg'},
-			out_p = mia.image.process.at_image_doublethreshold;
+			out_p = mia.image.process.doublethreshold;
 			default_parameters.threshold1 = 95;
 			default_parameters.threshold2 = 75;
 			default_parameters.threshold_units = 'percentile';
@@ -96,7 +96,7 @@ if ischar(parameters),
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.image.process.at_image_doublethreshold(atd,input_itemname,mask_itemname,output_itemname,parameters);
+				out = mia.image.process.doublethreshold(atd,input_itemname,mask_itemname,output_itemname,parameters);
 			end;
 		case {'choose_graphical_notyet'},
 	end;
@@ -106,7 +106,7 @@ end;
  % perform the thresholding
 
 h = mia.miadir.gethistory(atd,'images',input_itemname);
-h(end+1) = struct('parent',input_itemname,'operation','mia.image.process.at_image_doublethreshold','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','mia.image.process.doublethreshold','parameters',parameters,...
 	'description',['Applied threshold1 of ' num2str(parameters.threshold1) ...
 	' and threshold2 of ' num2str(parameters.threshold2) ' with units ' parameters.threshold_units ' to image ' input_itemname ' with mask ' mask_itemname '.']);
 
