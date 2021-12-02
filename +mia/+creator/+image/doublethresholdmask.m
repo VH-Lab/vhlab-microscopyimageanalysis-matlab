@@ -93,8 +93,54 @@ classdef doublethresholdmask < mia.creator
                 str2text([getpathname(mia_image_doublethresholdmask_obj.mdir) filesep ...
 					'images' filesep output_itemname filesep 'parent.txt'], input_itemname);
 				mia_image_doublethresholdmask_obj.mdir.sethistory('images',output_itemname,h);
-		end % make()       
+		end % make()
 
 	end % methods
+
+    methods (Static) % static methods
+
+		function im_out = process_double_threshold_mask(im) 
+			image_viewer_name = 'IM_double_threshold_mask';
+	        vars = image_viewer_gui(image_viewer_name,'command',[image_viewer_name 'get_vars']);
+
+			fig = gcf;
+            dummy = mia.creator.image.doublethresholdmask();
+			p = dummy.gui2parameters(fig);
+			
+	        threshold1 = eval([get(findobj(fig,'tag','ThresholdEdit1'),'string') ';']);
+	        threshold2 = eval([get(findobj(fig,'tag','ThresholdEdit2'),'string') ';']);
+	        threshold_units_list = get(findobj(fig,'tag','ThresholdUnitPopup'),'string');
+	        threshold_units_value = get(findobj(fig,'tag','ThresholdUnitPopup'),'value');
+	        threshold_units = threshold_units_list(threshold_units_value);
+        
+	        if strcmp(threshold_units,'percentile'),
+		        threshold1 = prctile(im(:),threshold1);
+		        threshold2 = prctile(im(:),threshold2);
+	        end;
+
+			threshold_channels = [];
+
+			above_indexes = [];
+
+            for i=1:size(im,3),
+	            threshold_channels(i) = rescale(threshold1,...
+		            [vars.ImageScaleParams.Min(i) vars.ImageScaleParams.Max(i)], ...
+		            [vars.ImageDisplayScaleParams.Min(i) vars.ImageDisplayScaleParams.Max(i)]);
+	            above_indexes = cat(1,above_indexes,find(im(:,:,i)>threshold1_channels(i)));
+            end;
+
+	        if size(im,3)==1,
+		        im_downscale = rescale(im,[vars.ImageDisplayScaleParams.Min(i) vars.ImageDisplayScaleParams.Max(i)],[0 1]);
+		        im_abovedownscale = im_downscale;
+		        im_abovedownscale(above_indexes) = 1;
+		        im3 = cat(3,im_abovedownscale,im_abovedownscale,im_downscale);
+	        else,
+		        im3 = above;
+	        end;
+
+			im_out = im3;
+        end % process_double_threshold_mask
+
+	end % static methods
 
 end % classdef

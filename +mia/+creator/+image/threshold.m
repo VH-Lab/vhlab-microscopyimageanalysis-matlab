@@ -32,7 +32,7 @@ classdef threshold < mia.creator
 					'description',['Applied threshold of ' num2str(parameters.threshold) ' to image ' input_itemname '.']);
 				im_in_file = mia_image_threshold_obj.mdir.getimagefilename(input_itemname);
 				[dummy,image_raw_filename,ext] = fileparts(im_in_file);
-				im_out_file = [getpathname(mia_image_threshold_obj.mdir) filesep ...
+				im_out_file = [mia_image_threshold_obj.mdir.getpathname() filesep ...
 					'images' filesep output_itemname filesep output_itemname ext];
 
 				input_finfo = imfinfo(im_in_file);
@@ -40,7 +40,7 @@ classdef threshold < mia.creator
 				extra_args{1} = {'WriteMode','overwrite'};
 				extra_args{2} = {'WriteMode','append'};
 
-				foldername = [getpathname(mia_image_threshold_obj.mdir) filesep 'images' filesep output_itemname];
+				foldername = [mia_image_threshold_obj.mdir.getpathname() filesep 'images' filesep output_itemname];
 				if ~isfolder(foldername),
 					mkdir(foldername);
 				end;
@@ -51,7 +51,7 @@ classdef threshold < mia.creator
 					imwrite(im,im_out_file,extra_args{1+double(i>1)}{:});
 					% really ought to have a setparent method
 				end;
-				str2text([getpathname(mia_image_threshold_obj.mdir) filesep ...
+				str2text([mia_image_threshold_obj.mdir.getpathname() filesep ...
 					'images' filesep output_itemname filesep 'parent.txt'], input_itemname);
 				mia_image_threshold_obj.mdir.sethistory('images',output_itemname,h);
 		end % make()
@@ -60,7 +60,7 @@ classdef threshold < mia.creator
 				f = figure;
 				pos = get(f,'position');
 				set(f,'position',[pos([1 2]) 500 500]);
-				imfile = getimagefilename(mia_image_threshold_obj.mdir, mia_image_threshold_obj.input_name);
+				imfile = mia_image_threshold_obj.mdir.getimagefilename(mia_image_threshold_obj.input_name);
 				uidefs = vlt.ui.basicuitools_defs;
 				uicontrol(uidefs.txt,'position',  [20 350 45 25],'string','Threshold:');
 				uicontrol(uidefs.edit,'position', [20 325 45 25],'string','1000','tag',...

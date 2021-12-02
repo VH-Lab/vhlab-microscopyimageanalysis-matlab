@@ -44,7 +44,7 @@ classdef thresholdimport < mia.creator
                 im_in_file = parameters.input_filename;
                 [dummy,image_raw_filename,ext] = fileparts(im_in_file);
 
-				im_out_file = [getpathname(mia_image_thresholdimport_obj.mdir) filesep ...
+				im_out_file = [mia_image_thresholdimport_obj.mdir.getpathname() filesep ...
 					'images' filesep output_itemname filesep output_itemname ext];
 
 				input_finfo = imfinfo(im_in_file);
@@ -57,12 +57,12 @@ classdef thresholdimport < mia.creator
 	                im = imread(im_in_file,'index',i,'info',input_finfo);
 	                if i==1,
 		                try,
-			                mkdir([getpathname(mia_image_thresholdimport_obj.mdir) filesep 'images' filesep output_itemname]);
+			                mkdir([mia_image_thresholdimport_obj.mdir.getpathname() filesep 'images' filesep output_itemname]);
 		                end;
 	                end;
 	                im = logical(im > 0);
 	                imwrite(im,im_out_file,extra_args{1+double(i>1)}{:});
-	                str2text([getpathname(mia_image_thresholdimport_obj.mdir) filesep 'images' filesep output_itemname filesep 'parent.txt'], input_itemname);
+	                str2text([mia_image_thresholdimport_obj.mdir.getpathname() filesep 'images' filesep output_itemname filesep 'parent.txt'], input_itemname);
                 end;
 
 				mia_image_thresholdimport_obj.mdir.sethistory('images',output_itemname,h);
