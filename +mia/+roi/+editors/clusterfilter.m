@@ -1,7 +1,7 @@
 function out = clusterfilter(atd, input_itemname, output_itemname, parameters)
 % VOLUMEFILTER - Filter ROIs by volume
 % 
-%  OUT = MIA.ROI.EDITORS.VOLUMEFILTER(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.ROI.EDITORS.CLUSTERFILTER(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -62,7 +62,7 @@ if ischar(parameters),
 	return;
 end;
 
-h = mia.miadir.gethistory(atd,'ROIs',input_itemname);
+h = atd.gethistory(atd,'ROIs',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.clusterfilter','parameters',parameters,...
 	'description',['Filtered all but ' int2str(numel(parameters.indexes_to_include)) ' of ROIS ' input_itemname '.']);
 
