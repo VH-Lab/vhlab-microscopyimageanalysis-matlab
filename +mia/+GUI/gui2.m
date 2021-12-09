@@ -233,7 +233,7 @@ switch lower(command),
 			if itemstruct_parameters(i).extracb,
 				%disp(['I should do something']);
 				didsomething = 1;
-				roifile = getlabeledroifilename(atd,itemstruct_parameters(i).itemname);
+				roifile = mia.miadir.getlabeledroifilename(atd,itemstruct_parameters(i).itemname);
 				ROI = load([roifile],'-mat');
 				BW_indexes = find(ROI.L(:,:,zdim)>0);
 				overlay_im1(BW_indexes) = itemstruct_parameters(i).color(1);
@@ -356,7 +356,7 @@ switch lower(command),
 				if ~isfield(colocalization_data.parameters,'roi_set_1'),
 					colocalization_data.parameters.roi_set_1 = mia.miadir.getparent(atd,'CLAs',itemstruct_parameters(i).itemname);
 				end
-				roifile = getlabeledroifilename(atd,colocalization_data.parameters.roi_set_1);
+				roifile = mia.miadir.getlabeledroifilename(atd,colocalization_data.parameters.roi_set_1);
 				ROI = load([roifile],'-mat');
 				didsomething = 1;
 				BW_indexes = find(ismember(ROI.L(:,:,zdim),rois_to_draw));

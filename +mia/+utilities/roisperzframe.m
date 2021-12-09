@@ -1,4 +1,4 @@
-function [rois_per_zframe] = roisperzframe(the_atdir, roiname)
+function [rois_per_zframe] = roisperzframe(atd, roiname)
 % ROISPERZFRAME - calculate the number of ROIs that intersect each Z frame of the stack
 %
 % ROIS_PER_ZFRAME = mia.utilities.roisperzframe(THE_ATDIR, ROINAME)
@@ -14,8 +14,8 @@ function [rois_per_zframe] = roisperzframe(the_atdir, roiname)
 % See also: ATDIR 
 
 
-roifilename = mia.miadir.getroifilename(the_atdir, roiname);
-roilabeledfilename = getlabeledroifilename(the_atdir, roiname);
+roifilename = mia.miadir.getroifilename(atd, roiname);
+roilabeledfilename = mia.miadir.getlabeledroifilename(atd, roiname);
 
 L = load(roilabeledfilename,'-mat');
 L = L.L;

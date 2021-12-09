@@ -53,7 +53,7 @@ if ischar(parameters),
 			handles.HistogramAxes = axes('units','pixels','position',[150 150 300 200],'tag','HistogramAxes');
 
 			% plot histogram
-			L_in_file = getlabeledroifilename(atd,input_itemname);
+			L_in_file = mia.miadir.getlabeledroifilename(atd,input_itemname);
 			roi_in_file = mia.miadir.getroifilename(atd,input_itemname);
 			load(roi_in_file,'CC','-mat');
 
@@ -146,7 +146,7 @@ end;
 
  % edit this part
 
-L_in_file = getlabeledroifilename(atd,input_itemname);
+L_in_file = mia.miadir.getlabeledroifilename(atd,input_itemname);
 roi_in_file = mia.miadir.getroifilename(atd,input_itemname);
 load(roi_in_file,'CC','-mat');
 

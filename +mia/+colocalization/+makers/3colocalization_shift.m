@@ -97,13 +97,13 @@ end;
  % step 1: load the data
 
 rois{1} = mia.miadir.getroifilename(atd,input_itemname);
-L{1} = getlabeledroifilename(atd,input_itemname);
+L{1} = mia.miadir.getlabeledroifilename(atd,input_itemname);
 
 rois{2} = mia.miadir.getroifilename(atd,parameters.roi_set_2);
-L{2} = getlabeledroifilename(atd,parameters.roi_set_2);
+L{2} = mia.miadir.getlabeledroifilename(atd,parameters.roi_set_2);
 
 rois{3} = mia.miadir.getroifilename(atd,parameters.roi_set_3);
-L{3} = getlabeledroifilename(atd,parameters.roi_set_3);
+L{3} = mia.miadir.getlabeledroifilename(atd,parameters.roi_set_3);
 
 rois_{1} = load(rois{1},'-mat');
 L_{1} = load(L{1},'-mat');

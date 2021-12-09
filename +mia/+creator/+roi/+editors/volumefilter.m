@@ -62,8 +62,8 @@ classdef volumefilter < mia.creator
 			    handles.HistogramAxes = axes('units','pixels','position',[150 150 300 200],'tag','HistogramAxes');
     
 			    % plot histogram
-			    L_in_file = getlabeledroifilename(atd,input_itemname);
-			    roi_in_file = mia.miadir.getroifilename(atd,input_itemname);
+			    L_in_file = mia_roi_editors_volumefilter_obj.mdir.getlabeledroifilename(atd,input_itemname);
+			    roi_in_file = mia_roi_editors_volumefilter_obj.mdir.getroifilename(atd,input_itemname);
 			    load(roi_in_file,'CC','-mat');
     
 			    ROI_sizes = [];
