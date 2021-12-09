@@ -75,7 +75,42 @@ classdef shift < mia.creator
                 mia_colocalization_makers_shift_obj.mdir.sethistory('CLAs',output_itemname,h);
                 
                 str2text([mia_colocalization_makers_shift_obj.mdir.getpathname() filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
+
         end % make()
+
+        function parameters = getuserparameters_choosedlg(mia_colocalization_makers_shift_obj)
+            % GETUSERPARAMETERS_CHOOSEDLG - obtain parameters through a standard dialog box
+            %
+            % PARAMETERS = mia.creator.getuserparameters_choosedlg(MIA_CREATOR_OBJ)
+            %
+            % Obtain parameters by asking the user questions in a dialog box.
+            %
+            % If the user clicks cancel, PARAMETERS is empty.
+
+                [plist,pdesc,psel] = mia_colocalization_makers_shift_obj.parameter_details();
+                parameters = dlg2struct('Choose parameters',plist,pdesc,mia_colocalization_makers_shift_obj.default_parameters);
+                if isempty(parameters.roi_set_2),
+                    itemliststruct = mia_colocalization_makers_shift_obj.mdir.getitems('ROIs');
+                    if ~isempty(itemliststruct),
+                        itemlist_names = {itemliststruct.name};
+                    else,
+                        itemlist_names = {};
+                    end;
+                    itemlist_names = setdiff(itemlist_names,input_itemname);
+                    if isempty(itemlist_names),
+                        errordlg(['No additional ROIs to choose for 2nd set.']);
+                        return;
+                    end;
+                    [selection,ok] = listdlg('PromptString','Select the 2nd ROI set:',...
+                        'SelectionMode','single','ListString',itemlist_names);
+                    if ok,
+                        parameters.roi_set_2 = itemlist_names{selection};
+                    else,
+                        return;
+                    end;
+                end;
+
+        end % getuserparameters_choosedlg(mia_colocalization_makers_shift_obj)
 
     end % methods
     

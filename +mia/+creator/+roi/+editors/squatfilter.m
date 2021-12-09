@@ -86,7 +86,7 @@ classdef squatfilter < mia.creator
                 end;
                 
                 h = mia_roi_editors_squatfilter_obj.mdir.gethistory('ROIs',input_itemname);
-                h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.resegment','parameters',parameters,...
+                h(end+1) = struct('parent',input_itemname,'operation','mia.creator.roi.editors.squatfilter','parameters',parameters,...
 	                'description',['ROIs were pared down from ' int2str(oldobjects) ' to ' int2str(newobjects) ', rejecting non-prominent members from ' input_itemname '.']);
                 mia_roi_editors_squatfilter_obj.mdir.sethistory('ROIs',output_itemname,h);
                 

@@ -84,7 +84,7 @@ classdef numabovethreshfilter < mia.creator
                 save(L_out_file,'L','-mat');
                 
                 h = mia_roi_editors_numabovethreshfilter_obj.mdir.gethistory('ROIs',input_itemname);
-                h(end+1) = struct('parent',input_itemname,'operation','mia.creator.roi.editors.resegment','parameters',parameters,...
+                h(end+1) = struct('parent',input_itemname,'operation','mia.creator.roi.editors.numabovethreshfilter','parameters',parameters,...
 	                'description',['Pared down ' int2str(oldobjects) ' ROIs below ' int2str(parameters.num_above) ' pixels above peak threshold into ' int2str(newobjects) ' from ' input_itemname '.']);
                 mia_roi_editors_numabovethreshfilter_obj.mdir.sethistory('ROIs',output_itemname,h);
                 
