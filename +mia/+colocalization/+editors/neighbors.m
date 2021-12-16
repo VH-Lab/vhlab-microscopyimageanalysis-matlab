@@ -1,7 +1,7 @@
-function out = neighbors(atd, input_itemname, output_itemname, parameters)
+function out = neighbors(mdir, input_itemname, output_itemname, parameters)
 % NEIGHBORS - Eliminate colocalizations that don't have at least N neighbors
 % 
-%  OUT = MIA.COLOCALIZATION.EDITORS.NEIGHBORS(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.COLOCALIZATION.EDITORS.NEIGHBORS(MDIR, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -24,7 +24,7 @@ if ischar(parameters),
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.colocalization.editors.neighbors(atd,input_itemname,output_itemname,buttonname);
+				out = mia.colocalization.editors.neighbors(mdir,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
@@ -35,7 +35,7 @@ if ischar(parameters),
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.colocalization.editors.neighbors(atd,input_itemname,output_itemname,parameters);
+				out = mia.colocalization.editors.neighbors(mdir,input_itemname,output_itemname,parameters);
 			end;
 
 	end;
@@ -44,12 +44,12 @@ end;
 
  % edit this part
 
-cfile = mia.miadir.getcolocalizationfilename(atd,input_itemname);
+cfile = mdir.getcolocalizationfilename(input_itemname);
 
 load(cfile,'colocalization_data','-mat');
 
-parent = mia.miadir.getparent(atd, 'CLAs', input_itemname);
-allrois = mia.miadir.getitems(atd, 'ROIs');
+parent = mdir.getparent('CLAs', input_itemname);
+allrois = mdir.getitems('ROIs');
 
 
 
@@ -79,16 +79,16 @@ histogram(multi_count)
 
 overlapped_objects = numel(multi_count);
 
-colocalization_out_file = [mia.miadir.getpathname(atd) filesep 'CLAs' filesep output_itemname filesep output_itemname '_CLA' '.mat'];
+colocalization_out_file = [mdir.getpathname() filesep 'CLAs' filesep output_itemname filesep output_itemname '_CLA' '.mat'];
 
-try, mkdir([mia.miadir.getpathname(atd) filesep 'CLAs' filesep output_itemname]); end;
+try, mkdir([mdir.getpathname() filesep 'CLAs' filesep output_itemname]); end;
 save(colocalization_out_file,'colocalization_data','-mat');
 
-h = mia.miadir.gethistory(atd,'CLAs',input_itemname),
+h = mdir.gethistory('CLAs',input_itemname),
 h(end+1) = struct('parent',input_itemname,'operation','mia.colocalization.editors.neighbors','parameters',parameters,...
 	'description',['Found number of neighbors at least ' num2str(parameters.number_neighbors) '. Found ' int2str(overlapped_objects) ' CLs.' ]);
-mia.miadir.sethistory(atd,'CLAs',output_itemname,h);
+mdir.sethistory('CLAs',output_itemname,h);
 
-str2text([mia.miadir.getpathname(atd) filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
+str2text([mdir.getpathname() filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
 out = 1;

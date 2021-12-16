@@ -6,9 +6,9 @@ classdef connect < mia.creator
 	methods
         function mia_roi_makers_connect_obj = connect(varargin)
 			mia_roi_makers_connect_obj = mia_roi_makers_connect_obj@mia.creator(varargin{:}); % call superclass constructor
-			mia_roi_makers_connect_obj.input_types = {'ROIs'};
+			mia_roi_makers_connect_obj.input_types = {'image'};
 			mia_roi_makers_connect_obj.output_types = {'ROIs'}; 
-			mia_roi_makers_connect_obj.iseditor = 1;
+			mia_roi_makers_connect_obj.iseditor = 0;
 			mia_roi_makers_connect_obj.default_parameters = struct('connectivity',6); 
 			mia_roi_makers_connect_obj.parameter_list = {'connectivity'};
 			mia_roi_makers_connect_obj.parameter_descriptions = {'Connectivity to examine, such as 6, 18, 26 (see help bwconncomp)'};

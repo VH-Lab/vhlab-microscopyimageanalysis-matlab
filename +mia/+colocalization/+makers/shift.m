@@ -1,7 +1,7 @@
-function out = shift(atd, input_itemname, output_itemname, parameters)
+function out = shift(mdir, input_itemname, output_itemname, parameters)
 % SHIFT - Use BWCONNCOMP to compute ROIs from thresholded image
 % 
-%  OUT = MIA.COLOCALIZATION.MAKERS.SHIFT(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.COLOCALIZATION.MAKERS.SHIFT(MDIR, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -26,7 +26,7 @@ if ischar(parameters),
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.colocalization.makers.shift(atd,input_itemname,output_itemname,buttonname);
+				out = mia.colocalization.makers.shift(mdir,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
@@ -40,7 +40,7 @@ if ischar(parameters),
 				out = [];
 			else,
 				if isempty(parameters.roi_set_2),
-					itemliststruct = mia.miadir.getitems(atd,'ROIs');
+					itemliststruct = mdir.getitems('ROIs');
 					if ~isempty(itemliststruct), 
 						itemlist_names = {itemliststruct.name};
 					else,
@@ -61,7 +61,7 @@ if ischar(parameters),
 						return;
 					end;
 				end;
-				out = mia.colocalization.makers.shift(atd,input_itemname,output_itemname,parameters);
+				out = mia.colocalization.makers.shift(mdir,input_itemname,output_itemname,parameters);
 			end;
 	end;
 	return;
@@ -71,11 +71,11 @@ end;
 
  % step 1: load the data
 
-rois{1} = mia.miadir.getroifilename(atd,input_itemname);
-L{1} = mia.miadir.getlabeledroifilename(atd,input_itemname);
+rois{1} = mdir.getroifilename(input_itemname);
+L{1} = mdir.getlabeledroifilename(input_itemname);
 
-rois{2} = mia.miadir.getroifilename(atd,parameters.roi_set_2);
-L{2} = mia.miadir.getlabeledroifilename(atd,parameters.roi_set_2);
+rois{2} = mdir.getroifilename(parameters.roi_set_2);
+L{2} = mdir.getlabeledroifilename(parameters.roi_set_2);
 
 rois_{1} = load(rois{1},'-mat');
 L_{1} = load(L{1},'-mat');
@@ -97,20 +97,20 @@ colocalization_data = var2struct('overlap_ab','overlap_ba','overlap_thresh','par
 
  % step 3: save and add history
 
-colocalizationdata_out_file = [mia.miadir.getpathname(atd) filesep 'CLAs' filesep output_itemname filesep output_itemname '_CLA' '.mat'];
+colocalizationdata_out_file = [mdir.getpathname() filesep 'CLAs' filesep output_itemname filesep output_itemname '_CLA' '.mat'];
 
-try, mkdir([mia.miadir.getpathname(atd) filesep 'CLAs' filesep output_itemname]); end;
+try, mkdir([mdir.getpathname() filesep 'CLAs' filesep output_itemname]); end;
 save(colocalizationdata_out_file,'colocalization_data','-mat');
 
 overlapped_objects = sum(overlap_thresh(:));
 
-h = mia.miadir.gethistory(atd,'images',input_itemname);
+h = mdir.gethistory('images',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.colocalization.makers.shift','parameters',parameters,...
 	'description',['Found ' int2str(overlapped_objects) ' CLs with threshold = ' num2str(parameters.threshold) ' of ROI ' input_itemname ' onto ROI ' parameters.roi_set_2 '.']);
 
-mia.miadir.sethistory(atd,'CLAs',output_itemname,h);
+mdir.sethistory('CLAs',output_itemname,h);
 
-str2text([mia.miadir.getpathname(atd) filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
+str2text([mdir.getpathname() filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
 out = 1;
 

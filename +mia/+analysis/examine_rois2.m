@@ -16,21 +16,21 @@ for i=1:numel(d),
 
 	figure;
 
-	atd = atdir(d{i});
+	mdir = mia.miadir(d{i});
 
 	% load ROIs, L, props
-	rois{1} = mia.miadir.getroifilename(atd, roisetA);
-	L{1} = mia.miadir.getlabeledroifilename(atd, roisetA);
-	roiprop{1} = mia.miadir.getroiparametersfilename(atd, roisetA);
-	rois{2} = mia.miadir.getroifilename(atd, roisetB);
-	L{2} = mia.miadir.getlabeledroifilename(atd, roisetB);
-	roiprop{2} = mia.miadir.getroiparametersfilename(atd, roisetB);
+	rois{1} = mdir.getroifilename(roisetA);
+	L{1} = mdir.getlabeledroifilename(roisetA);
+	roiprop{1} = mdir.getroiparametersfilename(roisetA);
+	rois{2} = mdir.getroifilename(roisetB);
+	L{2} = mdir.getlabeledroifilename(roisetB);
+	roiprop{2} = mdir.getroiparametersfilename(roisetB);
 	if ~isempty(roisetC),
-		rois{3} = mia.miadir.getroifilename(atd, roisetC);
-		L{3} = mia.miadir.getlabeledroifilename(atd,roisetC);
+		rois{3} = mdir.getroifilename(roisetC);
+		L{3} = mdir.getlabeledroifilename(roisetC);
 	end;
-	history_{1} = mia.miadir.gethistory(atd, 'ROIs', roisetA);
-	history_{2} = mia.miadir.gethistory(atd, 'ROIs', roisetB);
+	history_{1} = mdir.gethistory('ROIs', roisetA);
+	history_{2} = mdir.gethistory('ROIs', roisetB);
 
 	for j=1:numel(rois),
 		rois_{j} = load(rois{j},'-mat');
@@ -41,9 +41,9 @@ for i=1:numel(d),
 	end;
 
 	% load colocalizations
-	cfile{1} = mia.miadir.getcolocalizationfilename(atd, claAonB);
+	cfile{1} = mdir.getcolocalizationfilename(claAonB);
 	if ~isempty(claAonC),
-		cfile{2} = mia.miadir.getcolocalizationfilename(atd, claAonC);
+		cfile{2} = mdir.getcolocalizationfilename(claAonC);
 	end;
 	for j=1:numel(cfile),
 		cla{j} = load(cfile{j},'-mat');

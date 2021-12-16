@@ -21,11 +21,11 @@ function loopcoldepth(fname,depth,ch1,ch2)
 dirlist = dirlist_trimdots(dir(fname),0);
 for i=1:numel(dirlist),
     if strncmp(lower(dirlist{i}),'analysis',8) % then this folder is an experiment, so run it
-        atd = atdir([fname '\analysis']);
+        mdir = mia.miadir([fname '\analysis']);
         % find each channel with a CHANNEL_th file in it
         ROIsets = dirlist_trimdots(dir([fname '\analysis\ROIs']),0); % this is just a check in this version
         disp(['Beginning: ' fname])
-        colocw2channel(atd,ch1,ch2);
+        colocw2channel(mdir,ch1,ch2);
     else
         if depth>0,
             loopcoldepth(fullfile(fname,dirlist{i}), depth-1,ch1,ch2);
@@ -35,7 +35,7 @@ end
 end
 
 %% RUN THE PIPELINE
-function colocw2channel(atd,ch1,ch2)
+function colocw2channel(mdir,ch1,ch2)
 % Reciprocally colocalizes 2 ROI sets with each other, and also generates
 % the colocalized subset of ROIs for each channel.
 % Requires input as an analysis file, and a pair channel name. You have to
@@ -52,7 +52,7 @@ p.threshold = 0.01;
 p.roi_set_2 = [ch2 '_auto_pf'];
 coloc12input = [ch1 '_auto_pf'];
 coloc12output = [ch1 'autocolocw' ch2];
-mia.colocalization.makers.shiftxyz(atd,coloc12input,coloc12output,p);
+mia.colocalization.makers.shiftxyz(mdir,coloc12input,coloc12output,p);
 
 % Step 2: make the second colocalization
 disp(['Making second colocalization! (Ch2 -> Ch1)'])
@@ -64,7 +64,7 @@ p.threshold = 0.01;
 p.roi_set_2 = [ch1 '_auto_pf'];
 coloc21input = [ch2 '_auto_pf'];
 coloc21output = [ch2 'autocolocw' ch1];
-mia.colocalization.makers.shiftxyz(atd,coloc21input,coloc21output,p);
+mia.colocalization.makers.shiftxyz(mdir,coloc21input,coloc21output,p);
 
 % Step 3: find puncta in Ch1 that are colocalized with Ch2
 disp(['Making first colocalized filter!'])
@@ -73,7 +73,7 @@ p.colocalization_name = coloc12output;
 p.include_overlaps = 1;
 filter12input = [ch1 '_auto_pf'];
 filter12output = [ch1 '_colocw' ch2];
-mia.roi.editors.filtercolocalization(atd,filter12input,filter12output,p);
+mia.roi.editors.filtercolocalization(mdir,filter12input,filter12output,p);
 
 % Step 4: find puncta in Ch2 that are colocalized with Ch1
 disp(['Making second colocalized filter!'])
@@ -82,6 +82,6 @@ p.colocalization_name = coloc21output;
 p.include_overlaps = 1;
 filter21input = [ch2 '_auto_pf'];
 filter21output = [ch2 '_colocw' ch1];
-mia.roi.editors.filtercolocalization(atd,filter21input,filter21output,p);
+mia.roi.editors.filtercolocalization(mdir,filter21input,filter21output,p);
 
 end

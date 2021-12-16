@@ -1,7 +1,7 @@
-function out = resegment(atd, input_itemname, output_itemname, parameters)
+function out = resegment(mdir, input_itemname, output_itemname, parameters)
 % COMBINE - Filter ROIs by volume
 % 
-%  OUT = MIA.ROI.EDITORS.COMBINE(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.ROI.EDITORS.COMBINE(MDIR, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -30,7 +30,7 @@ if ischar(parameters),
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.roi.editors.resegment(atd,input_itemname,output_itemname,buttonname);
+				out = mia.roi.editors.resegment(mdir,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
@@ -46,7 +46,7 @@ if ischar(parameters),
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.roi.editors.resegment(atd,input_itemname,output_itemname,parameters);
+				out = mia.roi.editors.resegment(mdir,input_itemname,output_itemname,parameters);
 			end
 	end; % switch
 	return;
@@ -54,8 +54,8 @@ end;
 
  % edit this part
 
-L_in_file = mia.miadir.getlabeledroifilename(atd,input_itemname);
-roi_in_file = mia.miadir.getroifilename(atd,input_itemname);
+L_in_file = mdir.getlabeledroifilename(input_itemname);
+roi_in_file = mdir.getroifilename(input_itemname);
 load(roi_in_file,'CC','-mat');
 load(L_in_file,'L','-mat');
 
@@ -78,10 +78,10 @@ end;
 nvp = struct2namevaluepair(rmfield(parameters,'imagename'));
 
 if isempty(parameters.imagename), % choose it 
-	h = mia.miadir.gethistory(atd,'ROIs',input_itemname);
+	h = mdir.gethistory('ROIs',input_itemname);
 	parameters.imagename = h(1).parent;
 elseif 0, % ask the user to choose it
-	itemliststruct = mia.miadir.getitems(atd,'images');
+	itemliststruct = mdir.getitems('images');
 	if ~isempty(itemliststruct),
 		itemlist_names = {itemliststruct.name};
 	else,
@@ -103,7 +103,7 @@ elseif 0, % ask the user to choose it
 	end;
 end;
 
-im_in_file = mia.miadir.getimagefilename(atd,parameters.imagename);
+im_in_file = mdir.getimagefilename(parameters.imagename);
 [dummy,image_raw_filename,ext]=fileparts(im_in_file);
 input_finfo = imfinfo(im_in_file);
 
@@ -116,24 +116,24 @@ end;
 [CC,L] = ROI_resegment_all(CC, L, im, 'resegment_namevaluepairs', nvp,'UseProgressBar',1);
 newobjects = CC.NumObjects;
 
-L_out_file = [mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_L' '.mat'];
-roi_out_file = [mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_ROI' '.mat'];
+L_out_file = [mdir.getpathname() filesep 'ROIs' filesep output_itemname filesep output_itemname '_L' '.mat'];
+roi_out_file = [mdir.getpathname() filesep 'ROIs' filesep output_itemname filesep output_itemname '_ROI' '.mat'];
 
 try,
-	mkdir([mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname]);
+	mkdir([mdir.getpathname() filesep 'ROIs' filesep output_itemname]);
 end;
 
 save(roi_out_file,'CC','-mat');
 save(L_out_file,'L','-mat');
 
-h = mia.miadir.gethistory(atd,'ROIs',input_itemname);
+h = mdir.gethistory('ROIs',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.resegment','parameters',parameters,...
 	'description',['Resegmented ' int2str(oldobjects) ' ROIs into ' int2str(newobjects) ' from ' input_itemname '.']);
-mia.miadir.sethistory(atd,'ROIs',output_itemname,h);
+mdir.sethistory('ROIs',output_itemname,h);
 
-str2text([mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
+str2text([mdir.getpathname() filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
-mia.roi.functions.parameters(atd,roi_out_file);
+mia.roi.functions.parameters(mdir,roi_out_file);
 
 out = 1;
 

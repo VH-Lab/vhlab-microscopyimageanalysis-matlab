@@ -6,9 +6,9 @@ classdef colocalization_shiftxyz < mia.creator
 	methods
         function mia_colocalization_makers_colocalization_shiftxyz_obj = colocalization_shiftxyz(varargin)
 			mia_colocalization_makers_colocalization_shiftxyz_obj = mia_colocalization_makers_colocalization_shiftxyz_obj@mia.creator(varargin{:}); % call superclass constructor
-			mia_colocalization_makers_colocalization_shiftxyz_obj.input_types = {'CLAs'};
+			mia_colocalization_makers_colocalization_shiftxyz_obj.input_types = {'ROIs'};
 			mia_colocalization_makers_colocalization_shiftxyz_obj.output_types = {'CLAs'}; 
-			mia_colocalization_makers_colocalization_shiftxyz_obj.iseditor = 1;
+			mia_colocalization_makers_colocalization_shiftxyz_obj.iseditor = 0;
 			mia_colocalization_makers_colocalization_shiftxyz_obj.default_parameters = struct('shiftsX', -2:2, 'shiftsY', -2:2, 'shiftsZ', 0, 'threshold', 0.33, 'roi_set_2', ''); 
 			mia_colocalization_makers_colocalization_shiftxyz_obj.parameter_list = {'shiftsX','shiftsY','shiftsZ','threshold','roi_set_2'};
 			mia_colocalization_makers_colocalization_shiftxyz_obj.parameter_descriptions = {'Shifts in X to examine (such as [-2:2])',...

@@ -1,26 +1,26 @@
-function varargout = ATGUI(varargin)
-% ATGUI MATLAB code for ATGUI.fig
-%      mia.GUI.archived_code.ATGUI, by itself, creates a new mia.GUI.archived_code.ATGUI or raises the existing
+function varargout = GUI(varargin)
+% GUI MATLAB code for GUI.fig
+%      mia.GUI.archived_code.GUI, by itself, creates a new mia.GUI.archived_code.GUI or raises the existing
 %      singleton*.
 %
-%      H = mia.GUI.archived_code.ATGUI returns the handle to a new mia.GUI.archived_code.ATGUI or the handle to
+%      H = mia.GUI.archived_code.GUI returns the handle to a new mia.GUI.archived_code.GUI or the handle to
 %      the existing singleton*.
 %
-%      mia.GUI.archived_code.ATGUI('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in mia.GUI.archived_code.ATGUI.M with the given input arguments.
+%      mia.GUI.archived_code.GUI('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in mia.GUI.archived_code.GUI.M with the given input arguments.
 %
-%      mia.GUI.archived_code.ATGUI('Property','Value',...) creates a new mia.GUI.archived_code.ATGUI or raises the
+%      mia.GUI.archived_code.GUI('Property','Value',...) creates a new mia.GUI.archived_code.GUI or raises the
 %      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the mia.GUI.archived_code.ATGUIUI.archived_code.ATGUI before ATGUI_OpeningFcn gets called.  An
+%      applied to the mia.GUI.archived_code.GUIUI.archived_code.GUI before GUI_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to ATGUI_OpeningFcn via varargin.
+%      stop.  All inputs are passed to GUI_OpeningFcn via varargin.
 %
-%      *See mia.GUI.archived_code.ATGUI Options on GUIDE's Tools menu.  Choose "mia.GUI.archived_code.ATGUI allows only one
+%      *See mia.GUI.archived_code.GUI Options on GUIDE's Tools menu.  Choose "mia.GUI.archived_code.GUI allows only one
 %      instance to run (singleton)".
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help mia.GUI.archived_code.ATGUI
+% Edit the above text to modify the response to help mia.GUI.archived_code.GUI
 
 % Last Modified by GUIDE v2.5 23-Jul-2014 14:21:30
 
@@ -28,8 +28,8 @@ function varargout = ATGUI(varargin)
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @ATGUI_OpeningFcn, ...
-                   'gui_OutputFcn',  @ATGUI_OutputFcn, ...
+                   'gui_OpeningFcn', @GUI_OpeningFcn, ...
+                   'gui_OutputFcn',  @GUI_OutputFcn, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -44,26 +44,26 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before mia.GUI.archived_code.ATGUI is made visible.
-function ATGUI_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before mia.GUI.archived_code.GUI is made visible.
+function GUI_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to mia.GUI.archived_code.ATGUI (see VARARGIN)
+% varargin   command line arguments to mia.GUI.archived_code.GUI (see VARARGIN)
 
-% Choose default command line output for mia.GUI.archived_code.ATGUI
+% Choose default command line output for mia.GUI.archived_code.GUI
 handles.output = hObject;
 
 % Update handles structure
 guidata(hObject, handles);
 
-% UIWAIT makes mia.GUI.archived_code.ATGUI wait for user response (see UIRESUME)
+% UIWAIT makes mia.GUI.archived_code.GUI wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = ATGUI_OutputFcn(hObject, eventdata, handles) 
+function varargout = GUI_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB

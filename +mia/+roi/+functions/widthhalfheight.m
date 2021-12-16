@@ -1,7 +1,7 @@
 %% Local Background
-function [local_bg,whh,highest_pixel]= widthhalfheight(atd,filename,varargin)
-% [local_bg,highest_pixel] = MIA.ROI.FUNCTIONS.LOCBACGR(ATD,FILENAME,VARARGIN) 
-% atd should be a directory culminating in an "analysis" file for mia.GUI.archived_code.ATGUI
+function [local_bg,whh,highest_pixel]= widthhalfheight(mdir,filename,varargin)
+% [local_bg,highest_pixel] = MIA.ROI.FUNCTIONS.LOCBACGR(MDIR,FILENAME,VARARGIN) 
+% mdir should be a directory culminating in an "analysis" file for mia.GUI.archived_code.GUI
 % code.
 % filename is the full path to an ROI dataset, including the ".mat"
 % exension 
@@ -33,7 +33,7 @@ if isempty(itemnamecutoff),
 	error(['Could not identiy ROI name!']);
 end;
 itemname = itemfilename(1:itemnamecutoff(1)-1);
-[dummy,im_fname] = mia.roi.functions.underlying_image(atd,itemname);
+[dummy,im_fname] = mia.roi.functions.underlying_image(mdir,itemname);
 
 %% Convert information into DLW formats
 [num_images,img_stack] = mia.loadscaledstack(im_fname);

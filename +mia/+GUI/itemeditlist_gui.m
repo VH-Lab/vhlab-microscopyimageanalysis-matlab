@@ -19,7 +19,7 @@ function out = itemeditlist_gui(name,varargin)
 %   Units ('pixels')             | The units we will use
 %   LowerLeftPoint ([0 0])       | The lower left point to use in drawing, in units of "units"
 %   UpperRightPoint ([400 300])  | The upper right point to use in drawing, in units of "units"
-%   itemtype ('images')          | The name of type of items to be managed (known to atdir)
+%   itemtype ('images')          | The name of type of items to be managed (known to mdir)
 %   itemtype_singular ('image')  | The English name of type of items to be managed (singular)
 %   itemtype_plural ('images')   | The plural of the type
 %   itemstruct ([])              | If calling command='update_itemlist', an itemstruct should be
@@ -42,7 +42,7 @@ function out = itemeditlist_gui(name,varargin)
 %  edit_functions ({})           | Functions that can be called from the "Edit [item]" pull down menu
 %  edit_items ('')               | The AT_ITEMLIST_GUI name to be used for the item list for edit functions. If empty,
 %                                |   then the current AT_ITEMLIST_GUI is used.
-%  atd ([])                      | ATDIR that manages the data directory
+%  mdir ([])                     | MIADIR that manages the data directory
 %  extracbstring (' ')           | String for the optional extra checkbox ui control
 %  useextracb (0)                | 0/1 Should we use the extra checkbox ui control?
 %  extracbcallsdrawaction (1)    | 0/1 Should the extra checkbox ui control call drawaction?
@@ -82,7 +82,7 @@ new_functions = {};
 new_items = '';
 edit_functions = {};
 edit_items = '';
-atd = [];
+mdir = [];
 extracbstring = ' ';
 useextracb = 0;
 extracbcallsdrawaction = 1;
@@ -92,7 +92,7 @@ fig = gcf;
 
 varlist = {'sizeparams','LowerLeftPoint','UpperRightPoint','itemtype','itemtype_singular','itemtype_plural','itemstruct',...
 		'viewselectiononly','itemstruct_parameters','usevisible','visiblecbstring','useedit',...
-		'drawaction','drawaction_userinputs','new_functions','edit_functions','atd','new_items','edit_items','extracbstring','useextracb','extracbcallsdrawaction'};
+		'drawaction','drawaction_userinputs','new_functions','edit_functions','mdir','new_items','edit_items','extracbstring','useextracb','extracbcallsdrawaction'};
 
 assign(varargin{:});
 
@@ -243,10 +243,10 @@ switch lower(command),
 			out=setfield(out,handle_base_names{i},findobj(fig,'tag',[name handle_base_names{i}]));
 		end;
 
-	case 'update_itemlist', % requires atd
-		itemstruct = mia.miadir.getitems(atd,ud.itemtype);
+	case 'update_itemlist', % requires mdir
+		itemstruct = mdir.getitems(ud.itemtype);
 		[liststr,info] = mia.GUI.itemstruct2list(itemstruct);
-		ud.atd = atd;
+		ud.mdir = mdir;
 		handles = mia.GUI.itemeditlist_gui(name,'command',[name 'get_handles'],'fig',fig);
 		set(handles.ItemList,'string',liststr,'value',1);
 
@@ -331,8 +331,8 @@ switch lower(command),
 				good = ~any(ismember(liststr,answer{1}));
 				if ~good, errordlg(['Item name ' answer{1} ' already exists. Please choose another.']); end;
 			end;
-			feval(menustr{menuval},ud.atd,liststr{listval},answer{1},'choose');
-			mia.GUI.itemeditlist_gui(name,'command',[name 'update_itemlist'],'fig',fig,'atd',ud.atd);
+			feval(menustr{menuval},ud.mdir,liststr{listval},answer{1},'choose');
+			mia.GUI.itemeditlist_gui(name,'command',[name 'update_itemlist'],'fig',fig,'mdir',ud.mdir);
 		end;
 
 	case 'edititempopup',
@@ -360,8 +360,8 @@ switch lower(command),
 				good = ~any(ismember(liststr,answer{1}));
 				if ~good, errordlg(['Item name ' answer{1} ' already exists. Please choose another.']); end;
 			end;
-			feval(menustr{menuval},ud.atd,liststr{listval},answer{1},'choose');
-			mia.GUI.itemeditlist_gui(name,'command',[name 'update_itemlist'],'fig',fig,'atd',ud.atd);
+			feval(menustr{menuval},ud.mdir,liststr{listval},answer{1},'choose');
+			mia.GUI.itemeditlist_gui(name,'command',[name 'update_itemlist'],'fig',fig,'mdir',ud.mdir);
 		end;
 
 	case 'deletebt',
@@ -374,8 +374,8 @@ switch lower(command),
 
 		buttonname = questdlg(['Are you sure you want to delete the item ' itemname '?'],'Are you sure?','Yes','No','No');
 		if strcmp(lower(buttonname),'yes'),
-			mia.miadir.deleteitem(ud.atd,ud.itemtype,itemname);
-			mia.GUI.itemeditlist_gui(name,'command',[name 'update_itemlist'],'fig',fig,'atd',ud.atd);
+			mia.miadir.deleteitem(ud.mdir,ud.itemtype,itemname);
+			mia.GUI.itemeditlist_gui(name,'command',[name 'update_itemlist'],'fig',fig,'mdir',ud.mdir);
 		end;
 
 	case 'visiblecb',

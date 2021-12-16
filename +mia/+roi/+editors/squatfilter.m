@@ -1,10 +1,10 @@
 %% PROMINENCY FILTER
-function out = squatfilter (atd, input_itemname, output_itemname, parameters)
-% out = AT_ROI_SQUAT FILTER (ATD,INPUT_ITEMANME,OUTPUT_ITEMNAME,PARAMETERS) 
-% atd should be a directory culminating in an "analysis" file for mia.GUI.archived_code.ATGUI
+function out = squatfilter (mdir, input_itemname, output_itemname, parameters)
+% out = ROI_SQUAT FILTER (MDIR,INPUT_ITEMANME,OUTPUT_ITEMNAME,PARAMETERS) 
+% atd should be a directory culminating in an "analysis" file for mia.GUI.archived_code.GUI
 % code.
-% input_itemname is specified in at_gui as a selected ROI set
-% output_itemname is also specified in at_gui, and entered as you wish
+% input_itemname is specified in gui as a selected ROI set
+% output_itemname is also specified in gui, and entered as you wish
 % this filter has one parameter, the threshold of prominence needed to
 % consider a punctum sufficiently prominent over its local background - the
 % logic being that if it not prominent, it is unlikely to be real.
@@ -14,7 +14,7 @@ function out = squatfilter (atd, input_itemname, output_itemname, parameters)
 % parameters.CV_thresh (default 0.01).
 % 
 % EXAMPLE PARAMETERS (for troubleshooting)
-% atd = atdir(['C:\Users\Derek\Desktop\Analysis 4, ground truth of ROIs\2 24 VV CTRL 2\analysis']);
+% mdir = mia.miadir(['C:\Users\Derek\Desktop\Analysis 4, ground truth of ROIs\2 24 VV CTRL 2\analysis']);
 % input_itemname = 'PSD_test_th_roi';
 % output_itemname = 'PSD_test_th_roi_pf';
 % parameters.imagename = '';
@@ -36,7 +36,7 @@ if ischar(parameters),
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.roi.editors.squatfilter(atd,input_itemname,output_itemname,buttonname);
+				out = mia.roi.editors.squatfilter(mdir,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
@@ -49,29 +49,29 @@ if ischar(parameters),
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.roi.editors.squatfilter(atd,input_itemname,output_itemname,parameters);
+				out = mia.roi.editors.squatfilter(mdir,input_itemname,output_itemname,parameters);
 			end
 	end; % switch
 	return;
 end;
 
 %% Load or generate local background values & peak values
-ROIname = mia.miadir.getroifilename(atd,input_itemname);
+ROIname = mdir.getroifilename(input_itemname);
 foldername = fileparts(ROIname);
 
 % [intensity_thresh,max_neg_slopes,cutoff,highest_pixel] = mia.roi.functions.secthreshslopes(atd,ROIname,parameters);
-[local_bg,whh,highest_pixel]= mia.roi.functions.widthhalfheight(atd,ROIname,parameters);
+[local_bg,whh,highest_pixel]= mia.roi.functions.widthhalfheight(mdir,ROIname,parameters);
 
 %% Load the ROIs in the set (both L and CC files from mia.GUI.archived_code.ATGUI code)
-L_in_file = mia.miadir.getlabeledroifilename(atd,input_itemname);
-roi_in_file = mia.miadir.getroifilename(atd,input_itemname);
+L_in_file = mdir.getlabeledroifilename(input_itemname);
+roi_in_file = mdir.getroifilename(input_itemname);
 load(roi_in_file,'CC','-mat');
 load(L_in_file,'L','-mat');
 oldobjects = CC.NumObjects;
 
 %% Load the original image
 if isempty(parameters.imagename), % choose it 
-    [dummy,im_fname] = mia.roi.functions.underlying_image(atd,input_itemname);
+    [dummy,im_fname] = mia.roi.functions.underlying_image(mdir,input_itemname);
     parameters.imagename = im_fname;
 end
 
@@ -108,15 +108,15 @@ good_indexes = find(slenderness >= cutoff);
 newobjects = size(good_indexes,2);
 
 try,
-	mkdir([mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname]);
+	mkdir([mdir.getpathname() filesep 'ROIs' filesep output_itemname]);
 end;
 
-h = mia.miadir.gethistory(atd,'ROIs',input_itemname);
+h = mdir.gethistory('ROIs',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.resegment','parameters',parameters,...
 	'description',['ROIs were pared down from ' int2str(oldobjects) ' to ' int2str(newobjects) ', rejecting non-prominent members from ' input_itemname '.']);
-mia.miadir.sethistory(atd,'ROIs',output_itemname,h);
+mdir.sethistory('ROIs',output_itemname,h);
 
-mia.roi.functions.savesubset(atd,input_itemname, good_indexes, output_itemname, h);
+mia.roi.functions.savesubset(mdir,input_itemname, good_indexes, output_itemname, h);
 
 out = 1;
 end

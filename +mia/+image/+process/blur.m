@@ -1,7 +1,7 @@
-function out = blur(atd, input_itemname, output_itemname, parameters)
+function out = blur(mdir, input_itemname, output_itemname, parameters)
 % BLUR - Threshold an image and store results
 %  
-%  OUT = MIA.IMAGE.PROCESS.BLUR(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.IMAGE.PROCESS.BLUR(MDIR, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the
 %  parameters is returned in OUT. OUT{1}{n} is the name of the nth parameter, and
@@ -26,7 +26,7 @@ if ischar(parameters),
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.image.process.blur(atd,input_itemname,output_itemname,buttonname);
+				out = mia.image.process.blur(mdir,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
@@ -40,7 +40,7 @@ if ischar(parameters),
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.image.process.blur(atd,input_itemname,output_itemname,parameters);
+				out = mia.image.process.blur(mdir,input_itemname,output_itemname,parameters);
 			end;
 	end;
 	return;
@@ -54,15 +54,15 @@ else,
 	filter_type_str = 'circular';
 end;
 
-h = mia.miadir.gethistory(atd,'images',input_itemname);
+h = mdir.gethistory('images',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.image.process.blur','parameters',parameters,...
 	'description',['Applied ' filter_type_str ' blur with radius ' num2str(parameters.radius) ' and filtersize ' num2str(parameters.filtersize) ' to image ' input_itemname '.']);
 
-im_in_file = mia.miadir.getimagefilename(atd,input_itemname);
+im_in_file = mdir.getimagefilename(input_itemname);
 
 [dummy,image_raw_filename,ext] = fileparts(im_in_file);
 
-im_out_file = [mia.miadir.getpathname(atd) filesep 'images' filesep output_itemname filesep output_itemname ext];
+im_out_file = [mdir.getpathname() filesep 'images' filesep output_itemname filesep output_itemname ext];
 
 input_finfo = imfinfo(im_in_file);
 
@@ -71,13 +71,13 @@ extra_args{2} = {'WriteMode','append'};
 
 for i=1:length(input_finfo),
 	im = imread(im_in_file,'index',i,'info',input_finfo);         % Reads the image
-	if i==1, try, mkdir([mia.miadir.getpathname(atd) filesep 'images' filesep output_itemname]); end; end; % Makes new folder if needs too
+	if i==1, try, mkdir([mdir.getpathname() filesep 'images' filesep output_itemname]); end; end; % Makes new folder if needs too
 	im_out = vlt.image.circular_filter(im,parameters.useGaussian, parameters.radius, parameters.filtersize);     % Calls the circular_filter function and applies threshold to the image.
 	imwrite(im_out,im_out_file,extra_args{1+double(i>1)}{:});
-	str2text([mia.miadir.getpathname(atd) filesep 'images' filesep output_itemname filesep 'parent.txt'], input_itemname);
+	str2text([mdir.getpathname() filesep 'images' filesep output_itemname filesep 'parent.txt'], input_itemname);
 end;
 
-mia.miadir.sethistory(atd,'images',output_itemname,h);
+mdir.sethistory('images',output_itemname,h);
 
 out = 1;
 

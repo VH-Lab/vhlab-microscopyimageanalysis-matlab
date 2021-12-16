@@ -1,7 +1,7 @@
-function out = doublethreshold(atd, input_itemname, output_itemname, parameters)
+function out = doublethreshold(mdir, input_itemname, output_itemname, parameters)
 % DOUBLETHRESHOLD - Threshold an image and store results
 %  
-%  OUT = MIA.IMAGE.PROCESS.DOUBLETHRESHOLD(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.IMAGE.PROCESS.DOUBLETHRESHOLD(MDIR, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the
 %  parameters is returned in OUT. OUT{1}{n} is the name of the nth parameter, and
@@ -31,7 +31,7 @@ if nargin==0,
 	return;
 elseif nargin==1, % it means it is an image preview call
 
-	im = atd;
+	im = mdir;
 	vars = image_viewer_gui(image_viewer_name,'command',[image_viewer_name 'get_vars']);
 
 	fig = gcf;
@@ -78,7 +78,7 @@ if ischar(parameters),
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.image.process.doublethreshold(atd,input_itemname,output_itemname,buttonname);
+				out = mia.image.process.doublethreshold(mdir,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
@@ -92,13 +92,13 @@ if ischar(parameters),
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.image.process.doublethreshold(atd,input_itemname,output_itemname,parameters);
+				out = mia.image.process.doublethreshold(mdir,input_itemname,output_itemname,parameters);
 			end;
 		case {'choose_graphical_notyet'},
 			f = figure;
 			pos = get(f,'position');
 			set(f,'position',[pos([1 2]) 500 500]);
-			imfile = mia.miadir.getimagefilename(atd,input_itemname);
+			imfile = mdir.getimagefilename(input_itemname);
 			uidefs = basicuitools_defs;
 			row = 25;
 			uicontrol(uidefs.txt,'position',  [20 350-0*row 45 25],'string','Threshold1:');
@@ -173,7 +173,7 @@ if ischar(parameters),
 					elseif ok,
 						parameters = struct('threshold1',threshold1,'threshold2',threshold2,'threshold_units',...
 							threshold_units_string(threshold_units_value));
-						out = mia.image.process.doublethreshold(atd,input_itemname,output_itemname,parameters);
+						out = mia.image.process.doublethreshold(mdir,input_itemname,output_itemname,parameters);
 						success = 1;
 					end;
 				end;
@@ -186,15 +186,15 @@ end;
 
  % perform the thresholding
 
-h = mia.miadir.gethistory(atd,'images',input_itemname);
+h = mdir.gethistory('images',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.image.process.doublethreshold','parameters',parameters,...
 	'description',['Applied threshold1 of ' num2str(parameters.threshold1) ' and threshold2 of ' num2str(parameters.threshold2) ' with units ' parameters.threshold_units ' to image ' input_itemname '.']);
 
-im_in_file = mia.miadir.getimagefilename(atd,input_itemname);
+im_in_file = mdir.getimagefilename(input_itemname);
 
 [dummy,image_raw_filename,ext] = fileparts(im_in_file);
 
-im_out_file = [mia.miadir.getpathname(atd) filesep 'images' filesep output_itemname filesep output_itemname ext];
+im_out_file = [mdir.getpathname() filesep 'images' filesep output_itemname filesep output_itemname ext];
 
 input_finfo = imfinfo(im_in_file);
 
@@ -222,14 +222,14 @@ bin = vlt.image.doublethreshold(im,t1,t2,26);
 % write the new file
 
 for i=1:length(input_finfo),
-	if i==1, try, mkdir([mia.miadir.getpathname(atd) filesep 'images' filesep output_itemname]); end; end;
+	if i==1, try, mkdir([mdir.getpathname() filesep 'images' filesep output_itemname]); end; end;
 	im_here = logical(bin(:,:,i));
 	imwrite(im_here,im_out_file,extra_args{1+double(i>1)}{:});
 end;
 
-str2text([mia.miadir.getpathname(atd) filesep 'images' filesep output_itemname filesep 'parent.txt'], input_itemname);
+str2text([mdir.getpathname() filesep 'images' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
-mia.miadir.sethistory(atd,'images',output_itemname,h);
+mdir.sethistory('images',output_itemname,h);
 
 out = 1;
 

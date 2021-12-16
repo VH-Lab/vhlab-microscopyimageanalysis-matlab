@@ -125,12 +125,12 @@ switch lower(command),
                 	mia.GUI.gui2(name,'command',[name 'set_vars'],'ud',ud);
 
 			% need to update lists here
-			atd = mia.miadir(ud.pathname);
+			mdir = mia.miadir(ud.pathname);
 			items = {'images','ROIs','CLAs'};
 			itemlists = {'IMl','ROIg','COLg'};
 			for i=1:length(items),
-				itemstruct = mia.miadir.getitems(atd,items{i});
-				mia.GUI.itemeditlist_gui(itemlists{i},'command',[itemlists{i} 'update_itemlist'],'atd',atd);
+				itemstruct = mdir.getitems(items{i});
+				mia.GUI.itemeditlist_gui(itemlists{i},'command',[itemlists{i} 'update_itemlist'],'mdir',mdir);
 			end;
 		else,
 			error(['New pathname ' newpath ' does not exist.']);
@@ -140,8 +140,8 @@ switch lower(command),
 		mia.GUI.itemeditlist_gui('COLg','command',['COLg' 'drawaction'],'fig',fig);
 	case lower('ATGUI_DrawImage'), % NEEDS INPUT ARGUMENT theinput.itemname
                 handles = mia.GUI.gui2(name,'command',[name 'get_handles'],'fig',fig);
-		atd = mia.miadir(ud.pathname);
-		imfile = mia.miadir.getimagefilename(atd,theinput.itemname);
+		mdir = mia.miadir(ud.pathname);
+		imfile = mdir.getimagefilename(theinput.itemname);
 		image_viewer_gui('IMv','command',['IMv' 'Set_Image'],'imfile',imfile);
 		mia.GUI.gui2(name,'command',[name 'ATGUI_ImageMoved'],'fig',fig);
 	case lower('ATGUI_DrawROIs'), % NEEDS INPUT ARGUMENT theinput.itemstruct_parameters
@@ -152,7 +152,7 @@ switch lower(command),
 	case lower('ATGUI_DrawROILines'),% NEEDS INPUT ARGUMENT theinput.itemstruct_parameters
 		disp(['Got request to draw ROIs as lines and numbers.']);
                 handles = mia.GUI.gui2(name,'command',[name 'get_handles'],'fig',fig);
-		atd = mia.miadir(ud.pathname);
+		mdir = mia.miadir(ud.pathname);
 
 		itemstruct_parameters = theinput.itemstruct_parameters;
 
@@ -176,7 +176,7 @@ switch lower(command),
 				if ~isempty(z), % it is already here, leave it alone
 					plothandles_linetags = plothandles_linetags([1:z-1 z+1:end]);
 				else, % need to draw
-					roifile = mia.miadir.getroifilename(atd,itemstruct_parameters(i).itemname);
+					roifile = mdir.getroifilename(itemstruct_parameters(i).itemname);
 					ROI = load([roifile],'-mat');
 					ROI_3dplot2d(ROI.CC,12,itemstruct_parameters(i).color,[itemstruct_parameters(i).itemname '_' int2str(zdim) '_line'],...
 						[itemstruct_parameters(i).itemname '_' int2str(zdim) '_text'],zdim);
@@ -203,7 +203,7 @@ switch lower(command),
 		disp(['Got request to draw ROIs as overlay.']);
 
                 handles = mia.GUI.gui2(name,'command',[name 'get_handles'],'fig',fig);
-		atd = mia.miadir(ud.pathname);
+		mdir = mia.miadir(ud.pathname);
 
 		itemstruct_parameters = theinput.itemstruct_parameters;
 
@@ -233,7 +233,7 @@ switch lower(command),
 			if itemstruct_parameters(i).extracb,
 				%disp(['I should do something']);
 				didsomething = 1;
-				roifile = mia.miadir.getlabeledroifilename(atd,itemstruct_parameters(i).itemname);
+				roifile = mdir.getlabeledroifilename(itemstruct_parameters(i).itemname);
 				ROI = load([roifile],'-mat');
 				BW_indexes = find(ROI.L(:,:,zdim)>0);
 				overlay_im1(BW_indexes) = itemstruct_parameters(i).color(1);
@@ -262,7 +262,7 @@ switch lower(command),
 	case lower('ATGUI_DrawCLALines'),
 		disp(['Got request to draw CLAs as lines and numbers.']);
                 handles = mia.GUI.gui2(name,'command',[name 'get_handles'],'fig',fig);
-		atd = mia.miadir(ud.pathname);
+		mdir = mia.miadir(ud.pathname);
 		itemstruct_parameters = theinput.itemstruct_parameters;
 
 		% step 1 - get a lost of all the types
@@ -285,13 +285,13 @@ switch lower(command),
 				if ~isempty(z), % already there, leave it alone
 					plothandles_clalinetags = plothandles_clalinetags([1:z-1 z+1:end]);
 				else, % need to draw
-					cfile = mia.miadir.getcolocalizationfilename(atd,itemstruct_parameters(i).itemname);
+					cfile = mdir.getcolocalizationfilename(itemstruct_parameters(i).itemname);
 					load(cfile);
 					[rois_to_draw,dummy] = find(colocalization_data.overlap_thresh);
 					if ~isfield(colocalization_data.parameters,'roi_set_1'),
-						colocalization_data.parameters.roi_set_1 = mia.miadir.getparent(atd,'CLAs',itemstruct_parameters(i).itemname);
+						colocalization_data.parameters.roi_set_1 = mdir.getparent('CLAs',itemstruct_parameters(i).itemname);
 					end
-					roifile = mia.miadir.getroifilename(atd,colocalization_data.parameters.roi_set_1);
+					roifile = mdir.getroifilename(colocalization_data.parameters.roi_set_1);
 					ROI = load([roifile],'-mat');
 					ROI.CC.PixelIdxList = ROI.CC.PixelIdxList(rois_to_draw);
 					ROI.CC.NumObjects = length(rois_to_draw);
@@ -320,7 +320,7 @@ switch lower(command),
 		disp(['Got request to draw CLAs as overlay.']);
 
                 handles = mia.GUI.gui2(name,'command',[name 'get_handles'],'fig',fig);
-		atd = mia.miadir(ud.pathname);
+		mdir = mia.miadir(ud.pathname);
 
 		itemstruct_parameters = theinput.itemstruct_parameters;
 
@@ -349,14 +349,14 @@ switch lower(command),
 		for i=1:length(itemstruct_parameters),
 			if itemstruct_parameters(i).extracb,
 				%disp(['I should do something']);
-				cfile = mia.miadir.getcolocalizationfilename(atd,itemstruct_parameters(i).itemname);
+				cfile = mdir.getcolocalizationfilename(itemstruct_parameters(i).itemname);
 				load(cfile);
 
 				[rois_to_draw,dummy] = find(colocalization_data.overlap_thresh);
 				if ~isfield(colocalization_data.parameters,'roi_set_1'),
-					colocalization_data.parameters.roi_set_1 = mia.miadir.getparent(atd,'CLAs',itemstruct_parameters(i).itemname);
+					colocalization_data.parameters.roi_set_1 = mdir.getparent('CLAs',itemstruct_parameters(i).itemname);
 				end
-				roifile = mia.miadir.getlabeledroifilename(atd,colocalization_data.parameters.roi_set_1);
+				roifile = mdir.getlabeledroifilename(colocalization_data.parameters.roi_set_1);
 				ROI = load([roifile],'-mat');
 				didsomething = 1;
 				BW_indexes = find(ismember(ROI.L(:,:,zdim),rois_to_draw));

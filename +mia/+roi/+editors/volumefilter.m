@@ -1,7 +1,7 @@
-function out = volumefilter(atd, input_itemname, output_itemname, parameters)
+function out = volumefilter(mdir, input_itemname, output_itemname, parameters)
 % VOLUMEFILTER - Filter ROIs by volume
 % 
-%  OUT = MIA.ROI.EDITORS.VOLUMEFILTER(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.ROI.EDITORS.VOLUMEFILTER(MDIR, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -24,7 +24,7 @@ if ischar(parameters),
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.roi.editors.volumefilter(atd,input_itemname,output_itemname,buttonname);
+				out = mia.roi.editors.volumefilter(mdir,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
@@ -36,7 +36,7 @@ if ischar(parameters),
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.roi.editors.volumefilter(atd,input_itemname,output_itemname,parameters);
+				out = mia.roi.editors.volumefilter(mdir,input_itemname,output_itemname,parameters);
 			end;
 		case 'choose_graphical',
 			f = figure;
@@ -53,8 +53,8 @@ if ischar(parameters),
 			handles.HistogramAxes = axes('units','pixels','position',[150 150 300 200],'tag','HistogramAxes');
 
 			% plot histogram
-			L_in_file = mia.miadir.getlabeledroifilename(atd,input_itemname);
-			roi_in_file = mia.miadir.getroifilename(atd,input_itemname);
+			L_in_file = mdir.getlabeledroifilename(input_itemname);
+			roi_in_file = mdir.getroifilename(input_itemname);
 			load(roi_in_file,'CC','-mat');
 
 			ROI_sizes = [];
@@ -143,7 +143,7 @@ if ischar(parameters),
 					elseif ok,
 						%disp('here');
 						parameters = struct('volume_minimum',minvol,'volume_maximum',maxvol);
-						out = mia.roi.editors.volumefilter(atd,input_itemname,output_itemname,parameters);
+						out = mia.roi.editors.volumefilter(mdir,input_itemname,output_itemname,parameters);
 						success = 1;
                                         end;
                                 end;
@@ -159,8 +159,8 @@ end;
 
  % edit this part
 
-L_in_file = mia.miadir.getlabeledroifilename(atd,input_itemname);
-roi_in_file = mia.miadir.getroifilename(atd,input_itemname);
+L_in_file = mdir.getlabeledroifilename(input_itemname);
+roi_in_file = mdir.getroifilename(input_itemname);
 load(roi_in_file,'CC','-mat');
 
 ROI_sizes = [];
@@ -169,11 +169,11 @@ for i=1:length(CC.PixelIdxList),
 end;
 
 good_indexes = find( (ROI_sizes >= parameters.volume_minimum) & (ROI_sizes <= parameters.volume_maximum) );
-h = mia.miadir.gethistory(atd,'ROIs',input_itemname);
+h = mdir.gethistory('ROIs',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.volumefilter','parameters',parameters,...
 	'description',['Filtered all but ' int2str(numel(good_indexes)) ' ROIs between ' num2str(parameters.volume_minimum) ' and ' num2str(parameters.volume_maximum) ' of ROIS ' input_itemname '.']);
 
-mia.roi.functions.savesubset(atd,input_itemname, good_indexes, output_itemname, h);
+mia.roi.functions.savesubset(mdir,input_itemname, good_indexes, output_itemname, h);
 
 out = 1;
 

@@ -9,15 +9,15 @@ function testsimpleroi(pathname, itemname, deleteitemname, histitemname)
 %  Display the outputs of each function under mia.miadir class. 
 % 
 %% create miadir object
-md = mia.miadir(pathname);
+mdir = mia.miadir(pathname);
 
 %% test deleteitem function
 disp('========= test deleteitem function ============')
-md.deleteitem('ROIs', deleteitemname);
+mdir.deleteitem('ROIs', deleteitemname);
 
 %% test display function
 disp('========= test display function ============')
-md.display();
+mdir.display();
 
 %% test getcolocalizationfilename function
 disp('========= test getcolocalizationfilename function ============')
@@ -26,13 +26,13 @@ disp('========= test getcolocalizationfilename function ============')
 disp('========= test sethistory function ============')
 newhistory = struct('parent',itemname,'operation','copy','parameters','',...
 	'description',['This is a test of making the history']);
-md.sethistory('ROIs', histitemname, newhistory);
+mdir.sethistory('ROIs', histitemname, newhistory);
 disp('You set the history of the file to be: ')
 disp(newhistory);
 
 %% test gethistory function
 disp('========= test gethistory function ============')
-h = md.gethistory('ROIs', histitemname);
+h = mdir.gethistory('ROIs', histitemname);
 disp('we get the history of the file as: ')
 disp(h);
 if h == newhistory
@@ -43,7 +43,7 @@ end
 
 %% test getitems function
 disp('========= test getitems function ============')
-G = md.getitems('ROIs');
+G = mdir.getitems('ROIs');
 disp(G);
 G_name = {G(:).name};
 G_parent = {G(:).parent};
@@ -56,18 +56,18 @@ end
 
 %% test getlabeledroifilename function
 disp('========= test getlabeledroifilename function ============')
-labeledroifilename = md.getlabeledroifilename(itemname);
+labeledroifilename = mdir.getlabeledroifilename(itemname);
 disp(labeledroifilename);
 
 %% test getparent function
 disp('========= test getparent function ============')
-p = md.getparent('ROIs', histitemname);
+p = mdir.getparent('ROIs', histitemname);
 disp(p)
 
 %% test getpathname function
 disp('========= test getpathname function ============')
 fixed_pathname = fixpath(pathname);               % The miadir constructor called fixpath on pathname
-temp_pathname = md.getpathname();
+temp_pathname = mdir.getpathname();
 disp(fixed_pathname);
 disp(temp_pathname);
 if (temp_pathname == fixed_pathname),
@@ -78,10 +78,10 @@ end;
 
 %% test getroifilename function
 disp('========= test getroifilename function ============')
-roifilename = md.getroifilename(itemname);
+roifilename = mdir.getroifilename(itemname);
 disp(roifilename)
 
 %% test getroiparametersfilename function
 disp('========= test getroiparametersfilename function ============')
-roipfilename = md.getroiparametersfilename(itemname, true);
+roipfilename = mdir.getroiparametersfilename(itemname, true);
 disp(roipfilename);

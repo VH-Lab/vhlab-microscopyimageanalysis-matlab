@@ -1,7 +1,7 @@
-function out = threshold(atd, input_itemname, output_itemname, parameters)
+function out = threshold(mdir, input_itemname, output_itemname, parameters)
 % THRESHOLD - Threshold an image and store results
 %  
-%  OUT = MIA.IMAGE.PROCESS.THRESHOLD(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.IMAGE.PROCESS.THRESHOLD(MDIR, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the
 %  parameters is returned in OUT. OUT{1}{n} is the name of the nth parameter, and
@@ -18,7 +18,7 @@ if nargin==0,
 	return;
 elseif nargin==1, % it means it is an image preview call
 
-	im = atd;
+	im = mdir;
 	vars = image_viewer_gui(image_viewer_name,'command',[image_viewer_name 'get_vars']);
 
 	fig = gcf;
@@ -56,7 +56,7 @@ if ischar(parameters),
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.image.process.threshold(atd,input_itemname,output_itemname,buttonname);
+				out = mia.image.process.threshold(mdir,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
@@ -68,13 +68,13 @@ if ischar(parameters),
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.image.process.threshold(atd,input_itemname,output_itemname,parameters);
+				out = mia.image.process.threshold(mdir,input_itemname,output_itemname,parameters);
 			end;
 		case {'choose_graphical'},
 			f = figure;
 			pos = get(f,'position');
 			set(f,'position',[pos([1 2]) 500 500]);
-			imfile = mia.miadir.getimagefilename(atd,input_itemname);
+			imfile = mdir.getimagefilename(input_itemname);
 			uidefs = basicuitools_defs;
 			uicontrol(uidefs.txt,'position',  [20 350 45 25],'string','Threshold:');
 			uicontrol(uidefs.edit,'position', [20 325 45 25],'string','1000','tag','ThresholdEdit','userdata',1,'callback',['set(gcbo,''userdata'',1); uiresume;']);
@@ -125,7 +125,7 @@ if ischar(parameters),
 						set(findobj(gcf,'tag','ThresholdEdit'),'userdata',0);
 					elseif ok,
 						parameters = struct('threshold',threshold);
-						out = mia.image.process.threshold(atd,input_itemname,output_itemname,parameters);
+						out = mia.image.process.threshold(mdir,input_itemname,output_itemname,parameters);
 						success = 1;
 					end;
 				end;
@@ -138,15 +138,15 @@ end;
 
  % perform the thresholding
 
-h = mia.miadir.gethistory(atd,'images',input_itemname);
+h = mdir.gethistory('images',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.image.process.threshold','parameters',parameters,...
 	'description',['Applied threshold of ' num2str(parameters.threshold) ' to image ' input_itemname '.']);
 
-im_in_file = mia.miadir.getimagefilename(atd,input_itemname);
+im_in_file = mdir.getimagefilename(input_itemname);
 
 [dummy,image_raw_filename,ext] = fileparts(im_in_file);
 
-im_out_file = [mia.miadir.getpathname(atd) filesep 'images' filesep output_itemname filesep output_itemname ext];
+im_out_file = [mdir.getpathname() filesep 'images' filesep output_itemname filesep output_itemname ext];
 
 input_finfo = imfinfo(im_in_file);
 
@@ -155,13 +155,13 @@ extra_args{2} = {'WriteMode','append'};
 
 for i=1:length(input_finfo),
 	im = imread(im_in_file,'index',i,'info',input_finfo);
-	if i==1, try, mkdir([mia.miadir.getpathname(atd) filesep 'images' filesep output_itemname]); end; end;
+	if i==1, try, mkdir([mdir.getpathname() filesep 'images' filesep output_itemname]); end; end;
 	im = logical(im > parameters.threshold);
 	imwrite(im,im_out_file,extra_args{1+double(i>1)}{:});
-	str2text([mia.miadir.getpathname(atd) filesep 'images' filesep output_itemname filesep 'parent.txt'], input_itemname);
+	str2text([mdir.getpathname() filesep 'images' filesep output_itemname filesep 'parent.txt'], input_itemname);
 end;
 
-mia.miadir.sethistory(atd,'images',output_itemname,h);
+mdir.sethistory('images',output_itemname,h);
 
 out = 1;
 

@@ -1,14 +1,14 @@
-function reportvolumes(atd,input_itemname)
+function reportvolumes(mdir,input_itemname)
 %% COMPARES PSD ROIs TO VG ROIs
 
 % Get the Image
-[dummy,im_fname] = mia.roi.functions.underlying_image(atd,input_itemname);
+[dummy,im_fname] = mia.roi.functions.underlying_image(mdir,input_itemname);
 parameters.imagename = im_fname;
 [num_images,img_stack] = mia.loadscaledstack(parameters.imagename);
 
 % Get the ROIs
-L_in_file = mia.miadir.getlabeledroifilename(atd,input_itemname);
-roi_in_file = mia.miadir.getroifilename(atd,input_itemname);
+L_in_file = mdir.getlabeledroifilename(input_itemname);
+roi_in_file = mdir.getroifilename(input_itemname);
 load(roi_in_file,'CC','-mat');
 load(L_in_file,'L','-mat');
 

@@ -24,7 +24,7 @@ function loopdepth(fname,depth,exclude_channel)
 dirlist = dirlist_trimdots(dir(fname),0);
 for i=1:numel(dirlist),
     if strncmp(lower(dirlist{i}),'analysis',8) % then this folder is an experiment, so run it
-        atd = atdir([fname '\analysis']);
+        mdir = mia.miadir([fname '\analysis']);
         % find each channel with a CHANNEL_th file in it
         imgs = dirlist_trimdots(dir([fname '\analysis\images']),0);
         for k = 1:numel(imgs),
@@ -33,7 +33,7 @@ for i=1:numel(dirlist),
             if numel(this_image) > 3 & strncmp(lower(this_image(end-2:end)),'_th',3) & ~strncmp(lower(this_image(1:scansize)),lower(exclude_channel),scansize)
                 threshed_img_name = imgs(k);
                 disp(['Now gathering data from ' fname '...']);
-                mia.utilities.automate.makefinalroi(atd,threshed_img_name);
+                mia.utilities.automate.makefinalroi(mdir,threshed_img_name);
             end
         end
     else
@@ -45,7 +45,7 @@ end
 end
 
 %% RUN THE PIPELINE
-function mia.utilities.automate.makefinalroi(atd,threshed_img_name)
+function mia.utilities.automate.makefinalroi(mdir,threshed_img_name)
 % Goes through the steps for my ROI analysis as of early October 2020.
 % Requires input as a file name with the suffix _th (case sensitive).
 which_img = cell2mat(threshed_img_name);
@@ -58,7 +58,7 @@ disp(['Making original ROIs!'])
 clear p;
 p.connectivity = 6;
 S1_rois_output_name = [name_root '_auto_roi'];
-mia.roi.makers.connect(atd, which_img, S1_rois_output_name, p);
+mia.roi.makers.connect(mdir, which_img, S1_rois_output_name, p);
 
 % Step 2: resegment ROIs
 disp(['Watershed resegmentation!'])
@@ -70,7 +70,7 @@ p.use_bwdist = 0;
 p.imagename = ''; % should use "default in history"
 p.assignborders = 1;
 S2_res_output_name = [name_root '_auto_res'];
-mia.roi.editors.resegment(atd, S1_rois_output_name, S2_res_output_name, p);
+mia.roi.editors.resegment(mdir, S1_rois_output_name, S2_res_output_name, p);
 
 % Step 3: second threshold on ROIs
 disp(['Second threshold!'])
@@ -79,7 +79,7 @@ p.dist_cardinal = 50;
 p.CV_binsize = 5;
 p.imagename = '';
 S3_sth_output_name = [name_root '_auto_sth'];
-mia.roi.editors.secondthresh (atd, S2_res_output_name, S3_sth_output_name, p)
+mia.roi.editors.secondthresh (mdir, S2_res_output_name, S3_sth_output_name, p)
 
 % Step 4: volume filter
 disp(['Volume filter!'])
@@ -106,7 +106,7 @@ else
     disp(['... but for now, defaulting to 8-512 pixel volume'])
 end
 S4_vf_output_name = [name_root '_auto_vf'];
-mia.roi.editors.volumefilter(atd, S3_sth_output_name, S4_vf_output_name, p);
+mia.roi.editors.volumefilter(mdir, S3_sth_output_name, S4_vf_output_name, p);
 
 % Step 5: prominency filter
 disp(['Prominency filter!'])
@@ -116,6 +116,6 @@ p.dist_cardinal = 50;
 p.CV_binsize = 5;
 p.imagename = '';
 S5_pf_output_name = [name_root '_auto_pf'];
-mia.roi.editors.prominencyfilter(atd, S4_vf_output_name, S5_pf_output_name, p);
+mia.roi.editors.prominencyfilter(mdir, S4_vf_output_name, S5_pf_output_name, p);
 
 end

@@ -1,7 +1,7 @@
-function out = maskfilter(atd, input_itemname, output_itemname, parameters)
+function out = maskfilter(mdir, input_itemname, output_itemname, parameters)
 % VOLUMEFILTER - Filter ROIs by volume
 % 
-%  OUT = MIA.ROI.EDITORS.VOLUMEFILTER(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.ROI.EDITORS.VOLUMEFILTER(MDIR, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -19,7 +19,7 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out = mia.roi.editors.maskfilter(atd,input_itemname,output_itemname,'choose_inputdlg');
+			out = mia.roi.editors.maskfilter(mdir,input_itemname,output_itemname,'choose_inputdlg');
 		case 'choose_inputdlg',
 			out_p = mia.roi.editors.maskfilter;
 			default_parameters.mask_file = '';
@@ -27,7 +27,7 @@ if ischar(parameters),
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.roi.editors.maskfilter(atd,input_itemname,output_itemname,parameters);
+				out = mia.roi.editors.maskfilter(mdir,input_itemname,output_itemname,parameters);
 			end;
 	end;
 	return;
@@ -46,18 +46,18 @@ for i=1:numel(input_finfo),
 	im = cat(3,im,imread(parameters.mask_file,'index',i,'info',input_finfo));
 end;
 
-L_in_file = mia.miadir.getlabeledroifilename(atd,input_itemname);
-roi_in_file = mia.miadir.getroifilename(atd,input_itemname);
+L_in_file = mdir.getlabeledroifilename(input_itemname);
+roi_in_file = mdir.getroifilename(input_itemname);
 load(roi_in_file,'CC','-mat');
 load(L_in_file,'L','-mat');
 
 good_indexes = setdiff(unique(L(find(im>0))),0);
 
-h = mia.miadir.gethistory(atd,'ROIs',input_itemname),
+h = mdir.gethistory('ROIs',input_itemname),
 h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.maskfilter','parameters',parameters,...
 	'description',['Filtered all but ' int2str(numel(good_indexes)) ' ROIs based on ' parameters.mask_file ' of ROIS ' input_itemname '.']);
 
-mia.roi.functions.savesubset(atd,input_itemname, good_indexes, output_itemname, h);
+mia.roi.functions.savesubset(mdir,input_itemname, good_indexes, output_itemname, h);
 
 out = 1;
 

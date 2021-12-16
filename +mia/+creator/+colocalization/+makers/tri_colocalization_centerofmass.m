@@ -6,9 +6,9 @@ classdef tri_colocalization_centerofmass < mia.creator
 	methods
         function mia_colocalization_makers_tri_colocalization_centerofmass_obj = tri_colocalization_centerofmass(varargin)
 			mia_colocalization_makers_tri_colocalization_centerofmass_obj = mia_colocalization_makers_tri_colocalization_centerofmass_obj@mia.creator(varargin{:}); % call superclass constructor
-			mia_colocalization_makers_tri_colocalization_centerofmass_obj.input_types = {'CLAs'};
+			mia_colocalization_makers_tri_colocalization_centerofmass_obj.input_types = {'ROIs'};
 			mia_colocalization_makers_tri_colocalization_centerofmass_obj.output_types = {'CLAs'}; 
-			mia_colocalization_makers_tri_colocalization_centerofmass_obj.iseditor = 1;
+			mia_colocalization_makers_tri_colocalization_centerofmass_obj.iseditor = 0;
 			mia_colocalization_makers_tri_colocalization_centerofmass_obj.default_parameters = struct('distance_threshold', 5, 'distance_infinity', 50, 'show_graphical_progress', 1, 'roi_set_2', '', 'roi_set_3', ''); 
 			mia_colocalization_makers_tri_colocalization_centerofmass_obj.parameter_list = {'distance_threshold','distance_infinity', 'show_graphical_progress', 'roi_set_2', 'roi_set_3'};
 			mia_colocalization_makers_tri_colocalization_centerofmass_obj.parameter_descriptions = {'Distance threshold (pixels) that determines when 2 ROIs will be considered colocalized.' , ...

@@ -1,7 +1,7 @@
-function out = centerofmass(atd, input_itemname, output_itemname, parameters)
+function out = centerofmass(mdir, input_itemname, output_itemname, parameters)
 % CENTEROFMASS - Estimate colocalization by center-of-mass distance
 % 
-%  OUT = MIA.COLOCALIZATION.MAKERS.CENTEROFMASS(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.COLOCALIZATION.MAKERS.CENTEROFMASS(MDIR, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -24,7 +24,7 @@ if ischar(parameters),
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.colocalization.makers.centerofmass(atd,input_itemname,output_itemname,buttonname);
+				out = mia.colocalization.makers.centerofmass(mdir,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
@@ -39,7 +39,7 @@ if ischar(parameters),
 				out = [];
 			else,
 				if isempty(parameters.roi_set_2),
-					itemliststruct = mia.miadir.getitems(atd,'ROIs');
+					itemliststruct = mdir.getitems('ROIs');
 					if ~isempty(itemliststruct), 
 						itemlist_names = {itemliststruct.name};
 					else,
@@ -60,7 +60,7 @@ if ischar(parameters),
 						return;
 					end;
 				end;
-				out = mia.colocalization.makers.centerofmass(atd,input_itemname,output_itemname,parameters);
+				out = mia.colocalization.makers.centerofmass(mdir,input_itemname,output_itemname,parameters);
 			end;
 	end;
 	return;
@@ -74,25 +74,25 @@ end;
 
 if parameters.show_graphical_progress, progressbar('Setting up for ROI overlap calculation'); end;
 
-rois{1} = mia.miadir.getroifilename(atd,input_itemname);
-L{1} = mia.miadir.getlabeledroifilename(atd,input_itemname);
+rois{1} = mdir.getroifilename(input_itemname);
+L{1} = mdir.getlabeledroifilename(input_itemname);
 try,
-	roipfilename{1} = mia.miadir.getroiparametersfilename(atd, input_itemname);
+	roipfilename{1} = mdir.getroiparametersfilename(input_itemname);
 	if isempty(roipfilename{1}), error('filename is empty.'); end;
 catch,
-	mia.roi.functions.parameters(atd,rois{1});
-	roipfilename{1} = mia.miadir.getroiparametersfilename(atd, input_itemname);
+	mia.roi.functions.parameters(mdir,rois{1});
+	roipfilename{1} = mdir.getroiparametersfilename(input_itemname);
 end;
 
 if parameters.show_graphical_progress, progressbar(0.2); end;
 
-rois{2} = mia.miadir.getroifilename(atd,parameters.roi_set_2);
-L{2} = mia.miadir.getlabeledroifilename(atd,parameters.roi_set_2);
+rois{2} = mdir.getroifilename(parameters.roi_set_2);
+L{2} = mdir.getlabeledroifilename(parameters.roi_set_2);
 try,
-	roipfilename{2} = mia.miadir.getroiparametersfilename(atd, parameters.roi_set_2);
+	roipfilename{2} = mdir.getroiparametersfilename(parameters.roi_set_2);
 catch,
-	mia.roi.functions.parameters(atd,rois{2});
-	roipfilename{2} = mia.miadir.getroiparametersfilename(atd, parameters.roi_set_2);
+	mia.roi.functions.parameters(mdir,rois{2});
+	roipfilename{2} = mdir.getroiparametersfilename(parameters.roi_set_2);
 end
 
 if parameters.show_graphical_progress, progressbar(0.4); end;
@@ -131,21 +131,21 @@ colocalization_data = var2struct('distances','overlap_thresh','parameters');
 
  % step 3: save and add history
 
-colocalizationdata_out_file = [mia.miadir.getpathname(atd) filesep 'CLAs' filesep output_itemname filesep output_itemname '_CLA' '.mat'];
+colocalizationdata_out_file = [mdir.getpathname() filesep 'CLAs' filesep output_itemname filesep output_itemname '_CLA' '.mat'];
 
-try, mkdir([mia.miadir.getpathname(atd) filesep 'CLAs' filesep output_itemname]); end;
+try, mkdir([mdir.getpathname() filesep 'CLAs' filesep output_itemname]); end;
 save(colocalizationdata_out_file,'colocalization_data','-mat');
 
 overlapped_objects = numel(overlaps);
 
-h = mia.miadir.gethistory(atd,'images',input_itemname);
+h = mdir.gethistory('images',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.colocalization.makers.centerofmass','parameters',parameters,...
 	'description',['Found ' int2str(overlapped_objects) ' CLs with distance threshold <= ' num2str(parameters.distance_threshold) ...
 	' pixels of ROI ' input_itemname ' onto ROI ' parameters.roi_set_2 '.']);
 
-mia.miadir.sethistory(atd,'CLAs',output_itemname,h);
+mdir.sethistory('CLAs',output_itemname,h);
 
-str2text([mia.miadir.getpathname(atd) filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
+str2text([mdir.getpathname() filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
 out = 1;
 

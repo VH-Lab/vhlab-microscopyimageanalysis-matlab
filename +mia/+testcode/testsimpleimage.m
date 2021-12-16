@@ -9,15 +9,15 @@ function testsimpleimage(pathname, itemname, deleteitemname, histitemname)
 %  Display the outputs of each function under mia.miadir class. 
 % 
 %% create miadir object
-md = mia.miadir(pathname);
+mdir = mia.miadir(pathname);
 
 %% test deleteitem function
 disp('========= test deleteitem function ============')
-md.deleteitem('images', deleteitemname);
+mdir.deleteitem('images', deleteitemname);
 
 %% test display function
 disp('========= test display function ============')
-md.display();
+mdir.display();
 
 %% test getcolocalizationfilename function
 disp('========= test getcolocalizationfilename function ============')
@@ -26,13 +26,13 @@ disp('========= test getcolocalizationfilename function ============')
 disp('========= test sethistory function ============')
 newhistory = struct('parent',itemname,'operation','copy','parameters','',...
 	'description',['This is a test of making the history']);
-md.sethistory('images', histitemname, newhistory);
+mdir.sethistory('images', histitemname, newhistory);
 disp('You set the history of the file to be: ')
 disp(newhistory);
 
 %% test gethistory function
 disp('========= test gethistory function ============')
-h = md.gethistory('images', histitemname);
+h = mdir.gethistory('images', histitemname);
 disp('we get the history of the file as: ')
 disp(h);
 if h == newhistory
@@ -43,12 +43,12 @@ end
 
 %% test getimagefilename function
 disp('========= test getimagefilename function ============');
-imfilename = md.getimagefilename(itemname);
+imfilename = mdir.getimagefilename(itemname);
 disp(imfilename);
 
 %% test getitems function
 disp('========= test getitems function ============')
-G = md.getitems('images');
+G = mdir.getitems('images');
 disp(G);
 G_name = {G(:).name};
 G_parent = {G(:).parent};
@@ -60,12 +60,12 @@ for i=1:length(G_name)
 end
 %% test getparent function
 disp('========= test getparent function ============')
-p = md.getparent('images', histitemname);
+p = mdir.getparent('images', histitemname);
 disp(p)
 %% test getpathname function
 disp('========= test getpathname function ============')
 fixed_pathname = fixpath(pathname);               % The miadir constructor called fixpath on pathname
-temp_pathname = md.pathname;
+temp_pathname = mdir.pathname;
 disp(fixed_pathname);
 disp(temp_pathname);
 if (temp_pathname == fixed_pathname),

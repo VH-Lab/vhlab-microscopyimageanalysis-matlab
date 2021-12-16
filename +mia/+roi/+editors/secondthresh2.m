@@ -1,9 +1,9 @@
 %% SECOND THRESHOLD
-function out = secondthresh (atd, input_itemname, output_itemname, parameters)
-% out = MIA.ROI.EDITORS.SECONDTHRESH(ATD,INPUT_ITEMANME,OUTPUT_ITEMNAME,PARAMETERS) 
-% atd should be a directory culminating in an "analysis" file for mia.GUI.archived_code.ATGUI
+function out = secondthresh (mdir, input_itemname, output_itemname, parameters)
+% out = MIA.ROI.EDITORS.SECONDTHRESH(MDIR,INPUT_ITEMANME,OUTPUT_ITEMNAME,PARAMETERS) 
+% atd should be a directory culminating in an "analysis" file for mia.GUI.archived_code.GUI
 % code.
-% input_itemname is specified in at_gui as a selected ROI set
+% input_itemname is specified in gui as a selected ROI set
 % output_itemname is also specified in at_gui, and entered as you wish
 % this transformation has one parameter, the % threshold for second thresh.
 % second thresh is the percentage of intensity falloff from the ROI peak to
@@ -31,7 +31,7 @@ if ischar(parameters),
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.roi.editors.secondthresh2(atd,input_itemname,output_itemname,buttonname);
+				out = mia.roi.editors.secondthresh2(mdir,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
@@ -46,7 +46,7 @@ if ischar(parameters),
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.roi.editors.secondthresh2(atd,input_itemname,output_itemname,parameters);
+				out = mia.roi.editors.secondthresh2(mdir,input_itemname,output_itemname,parameters);
 			end
 	end; % switch
 	return;
@@ -55,23 +55,23 @@ end;
 %% Load or generate local background values & peak values
 % will gather these from the input image - they won't be saved in the new ROI
 % folder
-ROIname = mia.miadir.getroifilename(atd,input_itemname);
+ROIname = mdir.getroifilename(input_itemname);
 foldername = fileparts(ROIname);
 
 disp(['Calculating ROI ID slope properties!'])
-[intensity_thresh,max_neg_slopes,cutoff,highest_pixel] = mia.roi.functions.secthreshslopes(atd,ROIname,parameters);
+[intensity_thresh,max_neg_slopes,cutoff,highest_pixel] = mia.roi.functions.secthreshslopes(mdir,ROIname,parameters);
 
 
 %% Load the ROIs in the set (both L and CC files from mia.GUI.archived_code.ATGUI code)
-L_in_file = mia.miadir.getlabeledroifilename(atd,input_itemname);
-roi_in_file = mia.miadir.getroifilename(atd,input_itemname);
+L_in_file = mdir.getlabeledroifilename(input_itemname);
+roi_in_file = mdir.getroifilename(input_itemname);
 load(roi_in_file,'CC','-mat');
 load(L_in_file,'L','-mat');
 oldobjects = CC.NumObjects;
 
 %% Load the original image
 if isempty(parameters.imagename), % choose it 
-    [dummy,im_fname] = mia.roi.functions.underlying_image(atd,input_itemname);
+    [dummy,im_fname] = mia.roi.functions.underlying_image(mdir,input_itemname);
     parameters.imagename = im_fname;
 end
 
@@ -126,23 +126,23 @@ L = labelmatrix(CC);
 %% Save the new CC, L and parameter files
 newobjects = CC.NumObjects;
 
-L_out_file = [mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_L' '.mat'];
-roi_out_file = [mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_ROI' '.mat'];
+L_out_file = [mdir.getpathname() filesep 'ROIs' filesep output_itemname filesep output_itemname '_L' '.mat'];
+roi_out_file = [mdir.getpathname() filesep 'ROIs' filesep output_itemname filesep output_itemname '_ROI' '.mat'];
 
 try,
-	mkdir([mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname]);
+	mkdir([mdir.getpathname() filesep 'ROIs' filesep output_itemname]);
 end;
 
 save(roi_out_file,'CC','-mat');
 save(L_out_file,'L','-mat');
 
-h = mia.miadir.gethistory(atd,'ROIs',input_itemname);
+h = mdir.gethistory('ROIs',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.resegment','parameters',parameters,...
 	'description',['Second threshold took ' int2str(oldobjects) ' ROIs, and transformed into ' int2str(newobjects) ' from ' input_itemname '.']);
-mia.miadir.sethistory(atd,'ROIs',output_itemname,h);
+mdir.sethistory('ROIs',output_itemname,h);
 
-str2text([mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
-mia.roi.functions.parameters(atd,roi_out_file);
+str2text([mdir.getpathname() filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
+mia.roi.functions.parameters(mdir,roi_out_file);
 
 out = 1;
 end

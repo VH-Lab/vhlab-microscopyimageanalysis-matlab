@@ -1,7 +1,7 @@
-function out = zspanfilter(atd, input_itemname, output_itemname, parameters)
+function out = zspanfilter(mdir, input_itemname, output_itemname, parameters)
 % ZSPANFILTER - Filter ROIs by Z span
 % 
-%  OUT = MIA.ROI.EDITORS.ZSPANFILTER(ATD, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.ROI.EDITORS.ZSPANFILTER(MDIR, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -24,7 +24,7 @@ if ischar(parameters),
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.roi.editors.zspanfilter(atd,input_itemname,output_itemname,buttonname);
+				out = mia.roi.editors.zspanfilter(mdir,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
@@ -36,7 +36,7 @@ if ischar(parameters),
 			if isempty(parameters),
 				out = [];
 			else,
-				out = mia.roi.editors.zspanfilter(atd,input_itemname,output_itemname,parameters);
+				out = mia.roi.editors.zspanfilter(mdir,input_itemname,output_itemname,parameters);
 			end;
 		case 'choose_graphical',
 			f = figure;
@@ -53,8 +53,8 @@ if ischar(parameters),
 			handles.HistogramAxes = axes('units','pixels','position',[150 150 300 200],'tag','HistogramAxes');
 
 			% plot histogram
-			L_in_file = mia.miadir.getlabeledroifilename(atd,input_itemname);
-			roi_in_file = mia.miadir.getroifilename(atd,input_itemname);
+			L_in_file = mdir.getlabeledroifilename(input_itemname);
+			roi_in_file = mdir.getroifilename(input_itemname);
 			load(roi_in_file,'CC','-mat');
 
 			ROI_z_spans = [];
@@ -131,7 +131,7 @@ if ischar(parameters),
 					elseif ok,
 						%disp('here');
 						parameters = struct('z_span_minimum',minzspan,'z_span_maximum',maxzspan);
-						out = mia.roi.editors.zspanfilter(atd,input_itemname,output_itemname,parameters);
+						out = mia.roi.editors.zspanfilter(mdir,input_itemname,output_itemname,parameters);
 						success = 1;
                                         end;
                                 end;
@@ -146,8 +146,8 @@ end;
 
  % edit this part
 
-L_in_file = mia.miadir.getlabeledroifilename(atd,input_itemname);
-roi_in_file = mia.miadir.getroifilename(atd,input_itemname);
+L_in_file = mdir.getlabeledroifilename(input_itemname);
+roi_in_file = mdir.getroifilename(input_itemname);
 load(roi_in_file,'CC','-mat');
 
 ROI_zspans = [];
@@ -163,19 +163,19 @@ CC.NumObjects = length(good_indexes);
 CC.PixelIdxList = CC.PixelIdxList(good_indexes);
 L = labelmatrix(CC);
 
-L_out_file = [mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_L' '.mat'];
-roi_out_file = [mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep output_itemname '_ROI' '.mat'];
+L_out_file = [mdir.getpathname() filesep 'ROIs' filesep output_itemname filesep output_itemname '_L' '.mat'];
+roi_out_file = [mdir.getpathname() filesep 'ROIs' filesep output_itemname filesep output_itemname '_ROI' '.mat'];
 
-try, mkdir([mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname]); end;
+try, mkdir([mdir.getpathname() filesep 'ROIs' filesep output_itemname]); end;
 save(roi_out_file,'CC','-mat');
 save(L_out_file,'L','-mat');
 
-h = mia.miadir.gethistory(atd,'ROIs',input_itemname),
+h = mdir.gethistory('ROIs',input_itemname),
 h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.zspanfilter','parameters',parameters,...
 	'description',['Filtered all but ' int2str(CC.NumObjects) ' ROIs with z spans between ' num2str(parameters.z_span_minimum) ' and ' num2str(parameters.z_span_maximum) ' of ROIS ' input_itemname '.']);
-mia.miadir.sethistory(atd,'ROIs',output_itemname,h);
+mdir.sethistory('ROIs',output_itemname,h);
 
-str2text([mia.miadir.getpathname(atd) filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
+str2text([mdir.getpathname() filesep 'ROIs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
 
 out = 1;
