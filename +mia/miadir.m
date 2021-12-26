@@ -206,6 +206,17 @@ classdef miadir
             end;
         end % getitems
 
+	function b = isitem(md, itemtype, itemname)
+		% ISITEM - is there an item with a particular name?
+		%
+		% B = ISITEM(MD, ITEMTYPE, ITEMNAME)
+
+			i = md.getitems(itemtype);
+			b = any(strcmp(itemname,{i.name}));
+			
+	end; % isitem()
+		
+
         function labeledroifilename = getlabeledroifilename(md, itemname)
         % GETLABELEDROIFILENAME - get the image file from an MIADIR
             %

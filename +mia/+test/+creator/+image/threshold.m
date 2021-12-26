@@ -1,7 +1,7 @@
-function test_creator_image_threshold(dirname,graphical)
-% TEST_CREATOR_IMAGE_THRESHOLD - test mia.creator.image.threshold
+function threshold(dirname,graphical)
+% mia.test.creator.image.threshold test mia.creator.image.threshold
 % 
-% mia.testcode.test_creator_image_threshold(DIRNAME, GRAPHICAL)
+% mia.test.creator.image.threshold(DIRNAME, GRAPHICAL)
 %
 % Tests mia.creator.image.threshold on test data in the specified
 % DIRNAME, or uses [MIADIR]/testdata/simple by default if is empty or not
@@ -42,3 +42,5 @@ if graphical,
     p=t.getuserparameters_choosedlg()
     p=t.getuserparameters_graphical()
 end;
+
+
