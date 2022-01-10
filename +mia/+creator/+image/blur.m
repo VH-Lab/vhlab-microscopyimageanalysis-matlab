@@ -7,7 +7,7 @@ classdef blur < mia.creator
 		function mia_image_blur_obj = blur(varargin)
 			mia_image_blur_obj = mia_image_blur_obj@mia.creator(varargin{:}); % call superclass constructor
 			mia_image_blur_obj.input_types = {'image'};
-			mia_image_blur_obj.output_types = {'image'}; % abstract creator does not make any objects
+			mia_image_blur_obj.output_types = {'image'}; 
 			mia_image_blur_obj.iseditor = 1;
 			mia_image_blur_obj.default_parameters = struct('useGaussian',1, 'radius', 20, 'filtersize', 100); 
 			mia_image_blur_obj.parameter_list = {'useGaussian', 'radius','filtersize'};

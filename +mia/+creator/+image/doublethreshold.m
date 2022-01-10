@@ -7,7 +7,7 @@ classdef doublethreshold < mia.creator
 		function mia_image_doublethreshold_obj = doublethreshold(varargin)
 			mia_image_doublethreshold_obj = mia_image_doublethreshold_obj@mia.creator(varargin{:}); % call superclass constructor
 			mia_image_doublethreshold_obj.input_types = {'image'};
-			mia_image_doublethreshold_obj.output_types = {'image'}; % abstract creator does not make any objects
+			mia_image_doublethreshold_obj.output_types = {'image'}; 
 			mia_image_doublethreshold_obj.iseditor = 1;
 			mia_image_doublethreshold_obj.default_parameters = struct('threshold1',95, 'threshold2', 75, 'threshold_units', 'percentile', 'connectivity', 26); 
 			mia_image_doublethreshold_obj.parameter_list = {'threshold1', 'threshold2', 'threshold_units', 'connectivity' };

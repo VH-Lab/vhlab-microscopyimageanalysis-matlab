@@ -7,7 +7,7 @@ classdef threshold < mia.creator
 		function mia_image_threshold_obj = threshold(varargin)
 			mia_image_threshold_obj = mia_image_threshold_obj@mia.creator(varargin{:}); % call superclass constructor
 			mia_image_threshold_obj.input_types = {'image'};
-			mia_image_threshold_obj.output_types = {'image'}; % abstract creator does not make any objects
+			mia_image_threshold_obj.output_types = {'image'}; 
 			mia_image_threshold_obj.iseditor = 1;
 			mia_image_threshold_obj.default_parameters = struct('threshold',100); 
 			mia_image_threshold_obj.parameter_list = {'threshold'};

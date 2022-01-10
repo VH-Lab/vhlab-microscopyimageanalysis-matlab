@@ -7,7 +7,7 @@ classdef doublethresholdmask < mia.creator
 		function mia_image_doublethresholdmask_obj = doublethresholdmask(varargin)
 			mia_image_doublethresholdmask_obj = mia_image_doublethresholdmask_obj@mia.creator(varargin{:}); % call superclass constructor
 			mia_image_doublethresholdmask_obj.input_types = {'image'};
-			mia_image_doublethresholdmask_obj.output_types = {'image'}; % abstract creator does not make any objects
+			mia_image_doublethresholdmask_obj.output_types = {'image'}; 
 			mia_image_doublethresholdmask_obj.iseditor = 1;
 			mia_image_doublethresholdmask_obj.default_parameters = struct('threshold1',95, 'threshold2', 75, 'threshold_units', 'percentile','mask_pixels_set_in_image', 65e3, 'connectivity', 26, 'mask_itemname', ''); 
 			mia_image_doublethresholdmask_obj.parameter_list = {'threshold1', 'threshold2', 'threshold_units', 'mask_pixels_set_in_image', 'connectivity', 'mask_itemname' };
