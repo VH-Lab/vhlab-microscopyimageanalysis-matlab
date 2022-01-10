@@ -48,7 +48,7 @@ classdef threshold < mia.creator
 				for i=1:length(input_finfo),
 					im = imread(im_in_file,'index',i,'info',input_finfo);
 					im = logical(im > parameters.threshold);
-					imwrite(im,im_out_file,extra_args{1+double(i>1)}{:});
+                    imwrite(uint8(im),im_out_file,extra_args{1+double(i>1)}{:});
 					% really ought to have a setparent method
 				end;
 				str2text([mia_image_threshold_obj.mdir.getpathname() filesep ...

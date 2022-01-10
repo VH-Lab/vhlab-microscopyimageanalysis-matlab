@@ -1,17 +1,18 @@
-function connect(dirname,graphical)
-% mia.test.creator.roi.connect - test mia.creator.roi.connect
+function maskfilter(dirname,graphical)
+% mia.test.creator.roi.maskfilter - test mia.creator.roi.maskfilter
 % 
-% mia.test.creator.roi.connect(DIRNAME, GRAPHICAL)
+% mia.test.creator.roi.maskfilter(DIRNAME, GRAPHICAL)
 %
-% Tests mia.creator.roi.connect test data in the specified
+% Tests mia.creator.roi.maskfilter test data in the specified
 % DIRNAME, or uses [MIADIR]/testdata/simple by default if is empty or not
-% provided. The mia directory must have an image called 'ch1_bw' and a 
-% thresholded image called 'ch1_bw_imagethreshold'
+% provided. The mia directory must have an image called 'ch1_bw', a 
+% thresholded image called 'ch1_bw_imagethreshold' and an roi called
+% 'ch1_bw_roi'
 %
 % If GRAPHICAL is provided and is 1, then parameter input by interactive
 % graphical methods are also tested.
 % 
-% See also: mia.miadir, mia.creator.roi.connect
+% See also: mia.miadir, mia.creator.roi.maskfilter
 %
 
 if nargin<1 | isempty(dirname),
@@ -26,20 +27,20 @@ end;
 
 mdir = mia.miadir(dirname);
 
-test_input_image = 'ch1_bw_imagethreshold';
-test_output_roi = 'ch1_bw_roi';
+test_input_roi = 'ch1_bw_roi';
+test_output_roi = 'ch1_bw_roimaskfilter';
 
-if ~mdir.isitem('images',test_input_image),
-	mia.test.creator.image.threshold(dirname);
+if ~mdir.isitem('ROIs',test_input_roi),
+	mia.test.creator.roi.connect(dirname);
 end;
 
 try,
     mdir.deleteitem('ROIs',test_output_roi);
 end;
 
-t = mia.creator.roi.connect(mdir, test_input_image, test_output_roi); 
+t = mia.creator.roi.maskfilter(mdir, test_input_roi, test_output_roi); 
 
-parameters = struct('connectivity',26);
+parameters = struct('mask_file','');
 
 t.make(parameters);
 
@@ -47,6 +48,7 @@ t.make(parameters);
  
 if graphical,
     p=t.getuserparameters_choosedlg()
+    p=t.getuserparameters_graphical()
 end;
 
 
