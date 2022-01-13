@@ -52,12 +52,16 @@ classdef blur < mia.creator
 					mkdir(foldername);
 				end;
 
+				disp(['Does the file exist?']);
+				isfile(im_in_file),
+
 				for i=1:length(input_finfo),
-	                im = imread(im_in_file,'index',i,'info',input_finfo);         % Reads the image
-	                im_out = vlt.image.circular_filter(im,parameters.useGaussian, parameters.radius, parameters.filtersize);     % Calls the circular_filter function and applies threshold to the image.
-	                imwrite(im_out,im_out_file,extra_args{1+double(i>1)}{:});
-	                str2text([mia_image_blur_obj.mdir.getpathname() filesep 'images' filesep output_itemname filesep 'parent.txt'], input_itemname);
-                end;
+					im = imread(im_in_file,'index',i,'info',input_finfo);         % Reads the image
+					size(im),
+					im_out = vlt.image.circular_filter(im,parameters.useGaussian, parameters.radius, parameters.filtersize);     % Calls the circular_filter function and applies threshold to the image.
+					imwrite(im_out,im_out_file,extra_args{1+double(i>1)}{:});
+				end;
+				str2text([mia_image_blur_obj.mdir.getpathname() filesep 'images' filesep output_itemname filesep 'parent.txt'], input_itemname);
 				mia_image_blur_obj.mdir.sethistory('images',output_itemname,h);
 		end % make()
 
