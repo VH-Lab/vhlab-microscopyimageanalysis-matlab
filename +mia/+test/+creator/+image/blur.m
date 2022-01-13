@@ -32,7 +32,7 @@ try,
     mdir.deleteitem('images',test_image_name);
 end;
 
-t = mia.creator.image.threshold(mdir, test_input_image,test_image_name);
+t = mia.creator.image.blur(mdir, test_input_image,test_image_name);
 
 parameters = struct('useGaussian',1, 'radius', 20, 'filtersize', 100);
 

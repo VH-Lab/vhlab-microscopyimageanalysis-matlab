@@ -28,6 +28,7 @@ classdef connect < mia.creator
 				output_itemname = mia_roi_makers_connect_obj.output_name;
 
 				im_in_file = mia_roi_makers_connect_obj.mdir.getimagefilename(input_itemname);
+                display(im_in_file);
 				[dummy,image_raw_filename,ext]=fileparts(im_in_file);
                 
 				L_out_file = [mia_roi_makers_connect_obj.mdir.getpathname() filesep 'ROIs' filesep ...
@@ -36,10 +37,11 @@ classdef connect < mia.creator
 					output_itemname filesep output_itemname '_ROI' '.mat'];
                 
 				input_finfo = imfinfo(im_in_file);
-                
+                display(input_finfo)
 				im = logical([]);
 				for i=1:length(input_finfo)
 					newim = logical(imread(im_in_file,'index',i,'info',input_finfo));
+                    disp(newim)
 					im(:,:,i) = newim;
 				end;
                 

@@ -33,7 +33,7 @@ try,
     mdir.deleteitem('images',test_image_name);
 end;
 
-t = mia.creator.image.threshold(mdir, test_input_image,test_image_name);
+t = mia.creator.image.thresholdimport(mdir, test_input_image,test_image_name);
 
 parameters = struct('input_filename',''); 
 

@@ -61,7 +61,7 @@ classdef thresholdimport < mia.creator
 		                end;
 	                end;
 	                im = logical(im > 0);
-	                imwrite(im,im_out_file,extra_args{1+double(i>1)}{:});
+                    imwrite(uint8(im),im_out_file,extra_args{1+double(i>1)}{:});
 	                str2text([mia_image_thresholdimport_obj.mdir.getpathname() filesep 'images' filesep output_itemname filesep 'parent.txt'], input_itemname);
                 end;
 
