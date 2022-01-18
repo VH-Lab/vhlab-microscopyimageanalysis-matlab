@@ -19,7 +19,7 @@ L = labelmatrix(CC);
 L_out_file = [mdir.getpathname() filesep 'ROIs' filesep output_itemname filesep output_itemname '_L' '.mat'];
 roi_out_file = [mdir.getpathname() filesep 'ROIs' filesep output_itemname filesep output_itemname '_ROI' '.mat'];
 
-try,
+if ~isfolder([mdir.getpathname() filesep 'ROIs' filesep output_itemname]),
     mkdir([mdir.getpathname() filesep 'ROIs' filesep output_itemname]);
 end;
 
