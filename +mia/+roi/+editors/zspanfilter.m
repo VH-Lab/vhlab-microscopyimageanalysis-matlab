@@ -170,7 +170,7 @@ try, mkdir([mdir.getpathname() filesep 'ROIs' filesep output_itemname]); end;
 save(roi_out_file,'CC','-mat');
 save(L_out_file,'L','-mat');
 
-h = mdir.gethistory('ROIs',input_itemname),
+h = mdir.gethistory('ROIs',input_itemname);
 h(end+1) = struct('parent',input_itemname,'operation','mia.roi.editors.zspanfilter','parameters',parameters,...
 	'description',['Filtered all but ' int2str(CC.NumObjects) ' ROIs with z spans between ' num2str(parameters.z_span_minimum) ' and ' num2str(parameters.z_span_maximum) ' of ROIS ' input_itemname '.']);
 mdir.sethistory('ROIs',output_itemname,h);

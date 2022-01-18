@@ -20,7 +20,7 @@ L_out_file = [mdir.getpathname() filesep 'ROIs' filesep output_itemname filesep 
 roi_out_file = [mdir.getpathname() filesep 'ROIs' filesep output_itemname filesep output_itemname '_ROI' '.mat'];
 
 try,
-	mkdir([mdir.getpathname() filesep 'ROIs' filesep output_itemname]);
+    mkdir([mdir.getpathname() filesep 'ROIs' filesep output_itemname]);
 end;
 
 save(roi_out_file,'CC','-mat');

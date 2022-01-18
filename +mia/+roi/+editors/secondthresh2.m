@@ -1,5 +1,5 @@
 %% SECOND THRESHOLD
-function out = secondthresh (mdir, input_itemname, output_itemname, parameters)
+function out = secondthresh2 (mdir, input_itemname, output_itemname, parameters)
 % out = MIA.ROI.EDITORS.SECONDTHRESH(MDIR,INPUT_ITEMANME,OUTPUT_ITEMNAME,PARAMETERS) 
 % atd should be a directory culminating in an "analysis" file for mia.GUI.archived_code.GUI
 % code.
