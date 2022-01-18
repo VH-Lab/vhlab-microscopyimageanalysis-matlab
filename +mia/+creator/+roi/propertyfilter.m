@@ -9,7 +9,7 @@ classdef propertyfilter < mia.creator
             mia_roi_editors_propertyfilter_obj.input_types = {'ROIs'};
             mia_roi_editors_propertyfilter_obj.output_types = {'ROIs'};
             mia_roi_editors_propertyfilter_obj.iseditor = 1;
-            mia_roi_editors_propertyfilter_obj.default_parameters = struct('property_name','','min_property',Inf,'max_property',Inf);
+            mia_roi_editors_propertyfilter_obj.default_parameters = struct('property_name','area2','min_property',-Inf,'max_property',Inf);
             mia_roi_editors_propertyfilter_obj.parameter_list = {'property_name','min_property','max_property'};
             mia_roi_editors_propertyfilter_obj.parameter_descriptions = {'property name (can be solidity3, solidity2, area2, volume3, eccentricity2, MaxIntensity3)',...
                 'Minimum value of property to allow', ...
@@ -36,6 +36,9 @@ classdef propertyfilter < mia.creator
             roi_properties_file = mia_roi_editors_propertyfilter_obj.mdir.getroiparametersfilename(input_itemname);
             load(roi_properties_file,'-mat');
 
+            if isempty(parameters.property_name),
+                error(['Property_name parameter cannot be empty; must be property name like area2, solidity3, etc.']);
+            end;
             eval(['ROI_property = [ROIparameters.params' parameters.property_name(end) 'd.' parameters.property_name(1:end-1) '];']);
             good_indexes = find( (ROI_property >= parameters.min_property) & (ROI_property <= parameters.max_property) );
 
