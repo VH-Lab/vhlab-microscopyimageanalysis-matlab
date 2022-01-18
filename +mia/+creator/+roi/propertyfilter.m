@@ -9,9 +9,9 @@ classdef propertyfilter < mia.creator
             mia_roi_editors_propertyfilter_obj.input_types = {'ROIs'};
             mia_roi_editors_propertyfilter_obj.output_types = {'ROIs'};
             mia_roi_editors_propertyfilter_obj.iseditor = 1;
-            mia_roi_editors_propertyfilter_obj.default_parameters = struct('property_name','area2','min_property',-Inf,'max_property',Inf);
+            mia_roi_editors_propertyfilter_obj.default_parameters = struct('property_name','Area2','min_property',-Inf,'max_property',Inf);
             mia_roi_editors_propertyfilter_obj.parameter_list = {'property_name','min_property','max_property'};
-            mia_roi_editors_propertyfilter_obj.parameter_descriptions = {'property name (can be solidity3, solidity2, area2, volume3, eccentricity2, MaxIntensity3)',...
+            mia_roi_editors_propertyfilter_obj.parameter_descriptions = {'property name (can be Solidity3, Solidity2, Area2, Volume3, Eccentricity2, MaxIntensity3)',...
                 'Minimum value of property to allow', ...
                 'Maximum value to allow'};
             mia_roi_editors_propertyfilter_obj.parameter_selection_methods = {'choose_inputdlg'};
@@ -35,10 +35,6 @@ classdef propertyfilter < mia.creator
             load(roi_in_file,'CC','-mat');
             roi_properties_file = mia_roi_editors_propertyfilter_obj.mdir.getroiparametersfilename(input_itemname);
             load(roi_properties_file,'-mat');
-
-ROIparameters
-ROIparameters.params2d,
-ROIparameters.params3d,
 
             if isempty(parameters.property_name),
                 error(['Property_name parameter cannot be empty; must be property name like area2, solidity3, etc.']);
