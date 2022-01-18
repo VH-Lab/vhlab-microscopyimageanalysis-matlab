@@ -36,6 +36,10 @@ classdef propertyfilter < mia.creator
             roi_properties_file = mia_roi_editors_propertyfilter_obj.mdir.getroiparametersfilename(input_itemname);
             load(roi_properties_file,'-mat');
 
+ROIparameters
+ROIparameters.params2d,
+ROIparameters.params3d,
+
             if isempty(parameters.property_name),
                 error(['Property_name parameter cannot be empty; must be property name like area2, solidity3, etc.']);
             end;
