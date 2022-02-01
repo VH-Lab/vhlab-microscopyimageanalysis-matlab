@@ -71,7 +71,7 @@ classdef tri_shift < mia.creator
                 
                 overlapped_objects = sum(overlap_thresh(:));
                 
-                h = mia_colocalization_makers_tri_shift_obj.mdir.gethistory('images',input_itemname);
+                h = mia_colocalization_makers_tri_shift_obj.mdir.gethistory('images',input_itemname),
                 h(end+1) = struct('parent',input_itemname,'operation','mia.creator.colocalization.makers.tri_shift','parameters',parameters,...
 	                'description',['Found ' int2str(overlapped_objects) ' CLs with threshold = ' num2str(parameters.threshold) ' of ROI ' input_itemname ' onto ROI set ' parameters.roi_set_2 ' and ROI set ' parameters.roi_set_3 '.']);
                 

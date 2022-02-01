@@ -33,8 +33,8 @@ classdef rethreshold < mia.creator
                 
                 load(cfile,'colocalization_data','-mat');
                 
-                parent = mia_colocalization_editors_rethreshold_obj.getparent('CLAs', input_itemname);
-                allrois = mia_colocalization_editors_rethreshold_obj.getitems('ROIs');
+                parent = mia_colocalization_editors_rethreshold_obj.mdir.getparent('CLAs', input_itemname);
+                allrois = mia_colocalization_editors_rethreshold_obj.mdir.getitems('ROIs');
                 
                 if ~isfield(colocalization_data.parameters,'roi_set_1') & ~isempty(intersect(parent,{allrois.name})),
 	                colocalization_data.parameters.roi_set_1 = parent;
@@ -45,17 +45,17 @@ classdef rethreshold < mia.creator
                 
                 overlapped_objects = sum(colocalization_data.overlap_thresh(:));
                 
-                colocalization_out_file = [mia_colocalization_editors_rethreshold_obj.getpathname() filesep 'CLAs' filesep output_itemname filesep output_itemname '_CLA' '.mat'];
+                colocalization_out_file = [mia_colocalization_editors_rethreshold_obj.mdir.getpathname() filesep 'CLAs' filesep output_itemname filesep output_itemname '_CLA' '.mat'];
                 
-                try, mkdir([mia_colocalization_editors_rethreshold_obj.getpathname() filesep 'CLAs' filesep output_itemname]); end;
+                try, mkdir([mia_colocalization_editors_rethreshold_obj.mdir.getpathname() filesep 'CLAs' filesep output_itemname]); end;
                 save(colocalization_out_file,'colocalization_data','-mat');
                 
-                h = mia_colocalization_editors_rethreshold_obj.gethistory('CLAs',input_itemname),
+                h = mia_colocalization_editors_rethreshold_obj.mdir.gethistory('CLAs',input_itemname),
                 h(end+1) = struct('parent',input_itemname,'operation','mia.creator.colocalization.editors.rethreshold','parameters',parameters,...
 	                'description',['Rethresholded with new threshold ' num2str(parameters.threshold) '. Found ' int2str(overlapped_objects) ' CLs.' ]);
-                mia_colocalization_editors_rethreshold_obj.sethistory('CLAs',output_itemname,h);
+                mia_colocalization_editors_rethreshold_obj.mdir.sethistory('CLAs',output_itemname,h);
                 
-                str2text([mia_colocalization_editors_rethreshold_obj.getpathname() filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
+                str2text([mia_colocalization_editors_rethreshold_obj.mdir.getpathname() filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
 		end % make()
 

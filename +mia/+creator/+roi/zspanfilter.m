@@ -63,6 +63,9 @@ classdef zspanfilter < mia.creator
         end % make()
 
         function f = build_gui_parameterwindow(mia_roi_editors_zspanfilter_obj)
+            input_itemname = mia_roi_editors_zspanfilter_obj.input_name;
+            output_itemname = mia_roi_editors_zspanfilter_obj.output_name;
+            
             f = figure;
             pos = get(f,'position');
             set(f,'position',[pos([1 2]) 500 500]);

@@ -40,6 +40,9 @@ classdef clusterfilter < mia.creator
             %
             % Opens a graphical user interface window to allow the user to graphically choose the parameters.
             %
+
+            input_itemname = mia_roi_editors_clusterfilter_obj.input_name;
+            
             out = [];
             roi_pfile = mia_roi_editors_clusterfilter_obj.mdir.getroiparametersfilename(input_itemname);
             ROIp = load(roi_pfile,'-mat');

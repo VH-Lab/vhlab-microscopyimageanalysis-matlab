@@ -48,6 +48,9 @@ classdef volumefilter < mia.creator
         end % make()
 
         function f = build_gui_parameterwindow(mia_roi_editors_volumefilter_obj)
+            input_itemname = mia_roi_editors_volumefilter_obj.input_name;
+            output_itemname = mia_roi_editors_volumefilter_obj.output_name;
+
             f = figure;
             pos = get(f,'position');
             set(f,'position',[pos([1 2]) 500 500]);
@@ -62,8 +65,8 @@ classdef volumefilter < mia.creator
             handles.HistogramAxes = axes('units','pixels','position',[150 150 300 200],'tag','HistogramAxes');
 
             % plot histogram
-            L_in_file = mia_roi_editors_volumefilter_obj.mdir.getlabeledroifilename(atd,input_itemname);
-            roi_in_file = mia_roi_editors_volumefilter_obj.mdir.getroifilename(atd,input_itemname);
+            L_in_file = mia_roi_editors_volumefilter_obj.mdir.getlabeledroifilename(input_itemname);
+            roi_in_file = mia_roi_editors_volumefilter_obj.mdir.getroifilename(input_itemname);
             load(roi_in_file,'CC','-mat');
 
             ROI_sizes = [];
