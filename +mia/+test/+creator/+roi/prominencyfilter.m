@@ -16,8 +16,8 @@ function prominencyfilter(dirname,graphical)
 %
 
 if nargin<1 | isempty(dirname),
-    %     dirname = [userpath filesep 'tools' filesep 'vhlab-ArrayTomography-matlab' filesep 'testdata' filesep 'simple'];
-    dirname = 'C:\Users\cxyka\OneDrive - brandeis.edu\Brandeis\research\2021 fall\vhlab-ArrayTomography-matlab\+mia\+testData\simple';
+    dirname = [userpath filesep 'tools' filesep 'vhlab-ArrayTomography-matlab' filesep '+mia' filesep '+testData' filesep 'simple'];
+    %dirname = 'C:\Users\cxyka\OneDrive - brandeis.edu\Brandeis\research\2021 fall\vhlab-ArrayTomography-matlab\+mia\+testData\simple';
 
 end;
 

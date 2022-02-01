@@ -64,7 +64,7 @@ classdef prominencyfilter < mia.creator
             if parameters.prom_thresh == 0,
                 data_2D = img_stack(:,:,1); data = data_2D(:)';
                 figure
-                g = oghist(data,[min(data)-0.1 : 10 : max(data)],'Visible','off'); % better bins?
+                g = histogram(data,[min(data)-0.1 : 10 : max(max(data),100)],'Visible','off'); % better bins?
                 xBinEdge = g.BinEdges;
                 for i = 1:(size(xBinEdge,2)-1)
                     xdata(i) = (xBinEdge(i)+xBinEdge(i+1))/2;

@@ -62,7 +62,7 @@ classdef volumefilter < mia.creator
             uicontrol(uidefs.button,'position',[20 300 100  25],'string','OK', 'tag','OKButton','callback',['set(gcbo,''userdata'',1); uiresume;']);
             uicontrol(uidefs.button,'position',[20 270 100 25],'string','Cancel','tag','CancelButton','callback',['set(gcbo,''userdata'',1); uiresume;']);
 
-            handles.HistogramAxes = axes('units','pixels','position',[150 150 300 200],'tag','HistogramAxes');
+            HistogramAxes = axes('units','pixels','position',[150 150 300 200],'tag','HistogramAxes');
 
             % plot histogram
             L_in_file = mia_roi_editors_volumefilter_obj.mdir.getlabeledroifilename(input_itemname);
@@ -95,12 +95,6 @@ classdef volumefilter < mia.creator
             box off;
             ylabel('Counts');
             xlabel('ROI size (pixels)');
-
-            oldaxes = gca;
-            axes(handles.HistogramAxes);
-
-            axes(oldaxes);
-
         end % build_gui_parameterwindow()
 
         function success = process_gui_click(mia_roi_editors_volumefilter_obj, f)
@@ -130,12 +124,13 @@ classdef volumefilter < mia.creator
                     h = findobj(handles.HistogramAxes,'tag','histline');
                     if ishandle(h), delete(h); end;
                     oldaxes = gca;
-                    axes(handles.HistogramAxes);
+                    histogramaxes = findobj(gcf,'tag','HistogramAxes');
+                    axes(histogramaxes);
                     hold on;
                     a = axis;
                     plot([minvol minvol],[a(3) a(4)],'g-','tag','histline');
                     plot([maxvol maxvol],[a(3) a(4)],'g-','tag','histline');
-                    set(handles.HistogramAxes,'tag',['IMHistogramAxes']);
+                    set(histogramaxes,'tag',['HistogramAxes']);
                     axes(oldaxes);
                     set(findobj(gcf,'tag','MinVolumeEdit'),'userdata',0);
                     set(findobj(gcf,'tag','MaxVolumeEdit'),'userdata',0);
