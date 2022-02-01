@@ -1,7 +1,7 @@
-function out = tri_colocalization_centerofmass(mdir, input_itemname, output_itemname, parameters)
-% TRI_COLOCALIZATION_CENTEROFMASS - Estimate colocalization by center-of-mass distance, triple
+function out = tri_centerofmass(mdir, input_itemname, output_itemname, parameters)
+% TRI_CENTEROFMASS - Estimate colocalization by center-of-mass distance, triple
 % 
-%  OUT = MIA.COLOCALIZATION.MAKERS.TRI_COLOCALIZATION_CENTEROFMASS(MDIR, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.COLOCALIZATION.MAKERS.TRI_CENTEROFMASS(MDIR, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -23,17 +23,17 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = mia.colocalization.makers.tri_colocalization_centerofmass;
+			out_choice = mia.colocalization.makers.tri_centerofmass;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.colocalization.makers.tri_colocalization_centerofmass(mdir,input_itemname,output_itemname,buttonname);
+				out = mia.colocalization.makers.tri_centerofmass(mdir,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 		case 'choose_inputdlg',
-			out_p = mia.colocalization.makers.tri_colocalization_centerofmass;
+			out_p = mia.colocalization.makers.tri_centerofmass;
 			default_parameters.distance_threshold = 5;
 			default_parameters.distance_infinity = 50;
 			default_parameters.show_graphical_progress = 1;
@@ -88,7 +88,7 @@ if ischar(parameters),
 					end;
 				end;
 
-				out = mia.colocalization.makers.tri_colocalization_centerofmass(mdir,input_itemname,output_itemname,parameters);
+				out = mia.colocalization.makers.tri_centerofmass(mdir,input_itemname,output_itemname,parameters);
 			end;
 	end;
 	return;

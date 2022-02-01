@@ -1,25 +1,25 @@
-classdef colocalization_shiftxyz < mia.creator
+classdef shiftxyz < mia.creator
 
 	properties
 	end % properties
 
 	methods
-        function mia_colocalization_makers_colocalization_shiftxyz_obj = colocalization_shiftxyz(varargin)
-			mia_colocalization_makers_colocalization_shiftxyz_obj = mia_colocalization_makers_colocalization_shiftxyz_obj@mia.creator(varargin{:}); % call superclass constructor
-			mia_colocalization_makers_colocalization_shiftxyz_obj.input_types = {'ROIs'};
-			mia_colocalization_makers_colocalization_shiftxyz_obj.output_types = {'CLAs'}; 
-			mia_colocalization_makers_colocalization_shiftxyz_obj.iseditor = 0;
-			mia_colocalization_makers_colocalization_shiftxyz_obj.default_parameters = struct('shiftsX', -2:2, 'shiftsY', -2:2, 'shiftsZ', 0, 'threshold', 0.33, 'roi_set_2', ''); 
-			mia_colocalization_makers_colocalization_shiftxyz_obj.parameter_list = {'shiftsX','shiftsY','shiftsZ','threshold','roi_set_2'};
-			mia_colocalization_makers_colocalization_shiftxyz_obj.parameter_descriptions = {'Shifts in X to examine (such as [-2:2])',...
+        function mia_colocalization_makers_shiftxyz_obj = shiftxyz(varargin)
+			mia_colocalization_makers_shiftxyz_obj = mia_colocalization_makers_shiftxyz_obj@mia.creator(varargin{:}); % call superclass constructor
+			mia_colocalization_makers_shiftxyz_obj.input_types = {'ROIs'};
+			mia_colocalization_makers_shiftxyz_obj.output_types = {'CLAs'}; 
+			mia_colocalization_makers_shiftxyz_obj.iseditor = 0;
+			mia_colocalization_makers_shiftxyz_obj.default_parameters = struct('shiftsX', -2:2, 'shiftsY', -2:2, 'shiftsZ', 0, 'threshold', 0.33, 'roi_set_2', ''); 
+			mia_colocalization_makers_shiftxyz_obj.parameter_list = {'shiftsX','shiftsY','shiftsZ','threshold','roi_set_2'};
+			mia_colocalization_makers_shiftxyz_obj.parameter_descriptions = {'Shifts in X to examine (such as [-2:2])',...
                 'Shifts in Y to examine (such as [-2:2])',...
                 'Shifts in Z to examine (such as [-2:2])',...
 		        'Percent by which ROIs must overlap to be called ''colocalized''',...
 		        'Name of second ROI set with which to compute overlap (leave blank to choose)'};
-			mia_colocalization_makers_colocalization_shiftxyz_obj.parameter_selection_methods = {'choose_inputdlg'};
+			mia_colocalization_makers_shiftxyz_obj.parameter_selection_methods = {'choose_inputdlg'};
 		end % creator()
 
-        function b = make(mia_colocalization_makers_colocalization_shiftxyz_obj, parameters)
+        function b = make(mia_colocalization_makers_shiftxyz_obj, parameters)
             % MAKE - make the object requested from the parameters given
             %
             % B = mia.creator.make(MIA_CREATOR_OBJ, INPUT_NAME, OUTPUT_NAME, PARAMETERS)
@@ -28,18 +28,18 @@ classdef colocalization_shiftxyz < mia.creator
             %
             % B is 1 if the action succeeds, and 0 otherwise.
             %
-                input_itemname = mia_colocalization_makers_colocalization_shiftxyz_obj.input_name;
-                output_itemname = mia_colocalization_makers_colocalization_shiftxyz_obj.output_name;
+                input_itemname = mia_colocalization_makers_shiftxyz_obj.input_name;
+                output_itemname = mia_colocalization_makers_shiftxyz_obj.output_name;
     
                  % now actually do it
 
                  % step 1: load the data
     
-                rois{1} = mia_colocalization_makers_colocalization_shiftxyz_obj.mdir.getroifilename(input_itemname);
-                L{1} = mia_colocalization_makers_colocalization_shiftxyz_obj.mdir.getlabeledroifilename(input_itemname);
+                rois{1} = mia_colocalization_makers_shiftxyz_obj.mdir.getroifilename(input_itemname);
+                L{1} = mia_colocalization_makers_shiftxyz_obj.mdir.getlabeledroifilename(input_itemname);
                 
-                rois{2} = mia_colocalization_makers_colocalization_shiftxyz_obj.mdir.getroifilename(parameters.roi_set_2);
-                L{2} = mia_colocalization_makers_colocalization_shiftxyz_obj.mdir.getlabeledroifilename(parameters.roi_set_2);
+                rois{2} = mia_colocalization_makers_shiftxyz_obj.mdir.getroifilename(parameters.roi_set_2);
+                L{2} = mia_colocalization_makers_shiftxyz_obj.mdir.getlabeledroifilename(parameters.roi_set_2);
                 
                 rois_{1} = load(rois{1},'-mat');
                 L_{1} = load(L{1},'-mat');
@@ -61,23 +61,23 @@ classdef colocalization_shiftxyz < mia.creator
                 
                  % step 3: save and add history
                 
-                colocalizationdata_out_file = [mia_colocalization_makers_colocalization_shiftxyz_obj.mdir.getpathname() filesep 'CLAs' filesep output_itemname filesep output_itemname '_CLA' '.mat'];
+                colocalizationdata_out_file = [mia_colocalization_makers_shiftxyz_obj.mdir.getpathname() filesep 'CLAs' filesep output_itemname filesep output_itemname '_CLA' '.mat'];
                 
-                try, mkdir([mia_colocalization_makers_colocalization_shiftxyz_obj.mdir.getpathname() filesep 'CLAs' filesep output_itemname]); end;
+                try, mkdir([mia_colocalization_makers_shiftxyz_obj.mdir.getpathname() filesep 'CLAs' filesep output_itemname]); end;
                 save(colocalizationdata_out_file,'colocalization_data','-mat');
                 
                 overlapped_objects = sum(overlap_thresh(:));
                 
-                h = mia_colocalization_makers_colocalization_shiftxyz_obj.mdir.gethistory('images',input_itemname);
-                h(end+1) = struct('parent',input_itemname,'operation','mia.creator.colocalization.makers.colocalization_shiftxyz','parameters',parameters,...
+                h = mia_colocalization_makers_shiftxyz_obj.mdir.gethistory('images',input_itemname);
+                h(end+1) = struct('parent',input_itemname,'operation','mia.creator.colocalization.makers.shiftxyz','parameters',parameters,...
 	                'description',['Found ' int2str(overlapped_objects) ' CLs with threshold = ' num2str(parameters.threshold) ' of ROI ' input_itemname ' onto ROI ' parameters.roi_set_2 '.']);
                 
-                mia_colocalization_makers_colocalization_shiftxyz_obj.mdir.sethistory('CLAs',output_itemname,h);
+                mia_colocalization_makers_shiftxyz_obj.mdir.sethistory('CLAs',output_itemname,h);
                 
-                str2text([mia_colocalization_makers_colocalization_shiftxyz_obj.mdir.getpathname() filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
+                str2text([mia_colocalization_makers_shiftxyz_obj.mdir.getpathname() filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
         end % make()
 
-        function parameters = getuserparameters_choosedlg(mia_colocalization_makers_colocalization_shiftxyz_obj)
+        function parameters = getuserparameters_choosedlg(mia_colocalization_makers_shiftxyz_obj)
             % GETUSERPARAMETERS_CHOOSEDLG - obtain parameters through a standard dialog box
             %
             % PARAMETERS = mia.creator.getuserparameters_choosedlg(MIA_CREATOR_OBJ)
@@ -86,10 +86,10 @@ classdef colocalization_shiftxyz < mia.creator
             %
             % If the user clicks cancel, PARAMETERS is empty.
 
-                [plist,pdesc,psel] = mia_colocalization_makers_colocalization_shiftxyz_obj.parameter_details();
-                parameters = dlg2struct('Choose parameters',plist,pdesc,mia_colocalization_makers_colocalization_shiftxyz_obj.default_parameters);
+                [plist,pdesc,psel] = mia_colocalization_makers_shiftxyz_obj.parameter_details();
+                parameters = dlg2struct('Choose parameters',plist,pdesc,mia_colocalization_makers_shiftxyz_obj.default_parameters);
                 if isempty(parameters.roi_set_2),
-                    itemliststruct = mia_colocalization_makers_colocalization_shiftxyz_obj.mdir.getitems('ROIs');
+                    itemliststruct = mia_colocalization_makers_shiftxyz_obj.mdir.getitems('ROIs');
                     if ~isempty(itemliststruct),
                         itemlist_names = {itemliststruct.name};
                     else,
@@ -109,7 +109,7 @@ classdef colocalization_shiftxyz < mia.creator
                     end;
                 end;
 
-        end % getuserparameters_choosedlg(mia_colocalization_makers_tri_colocalization_shift_obj)
+        end % getuserparameters_choosedlg(mia_colocalization_makers_shiftxyz_obj)
 
     end % methods
     

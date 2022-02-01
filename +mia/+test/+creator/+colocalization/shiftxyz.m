@@ -1,4 +1,4 @@
-function colocalization_shiftxyz(dirname,graphical)
+function shiftxyz(dirname,graphical)
 % mia.test.creator.colocalization.centerofmass - test mia.creator.colocalization.centerofmass
 %
 % mia.test.creator.colocalization.centerofmass(DIRNAME, GRAPHICAL)

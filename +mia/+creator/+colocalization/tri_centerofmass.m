@@ -1,25 +1,25 @@
-classdef tri_colocalization_centerofmass < mia.creator
+classdef tri_centerofmass < mia.creator
 
 	properties
 	end % properties
 
 	methods
-        function mia_colocalization_makers_tri_colocalization_centerofmass_obj = tri_colocalization_centerofmass(varargin)
-			mia_colocalization_makers_tri_colocalization_centerofmass_obj = mia_colocalization_makers_tri_colocalization_centerofmass_obj@mia.creator(varargin{:}); % call superclass constructor
-			mia_colocalization_makers_tri_colocalization_centerofmass_obj.input_types = {'ROIs'};
-			mia_colocalization_makers_tri_colocalization_centerofmass_obj.output_types = {'CLAs'}; 
-			mia_colocalization_makers_tri_colocalization_centerofmass_obj.iseditor = 0;
-			mia_colocalization_makers_tri_colocalization_centerofmass_obj.default_parameters = struct('distance_threshold', 5, 'distance_infinity', 50, 'show_graphical_progress', 1, 'roi_set_2', '', 'roi_set_3', ''); 
-			mia_colocalization_makers_tri_colocalization_centerofmass_obj.parameter_list = {'distance_threshold','distance_infinity', 'show_graphical_progress', 'roi_set_2', 'roi_set_3'};
-			mia_colocalization_makers_tri_colocalization_centerofmass_obj.parameter_descriptions = {'Distance threshold (pixels) that determines when 2 ROIs will be considered colocalized.' , ...
+        function mia_colocalization_makers_tri_centerofmass_obj = tri_centerofmass(varargin)
+			mia_colocalization_makers_tri_centerofmass_obj = mia_colocalization_makers_tri_centerofmass_obj@mia.creator(varargin{:}); % call superclass constructor
+			mia_colocalization_makers_tri_centerofmass_obj.input_types = {'ROIs'};
+			mia_colocalization_makers_tri_centerofmass_obj.output_types = {'CLAs'}; 
+			mia_colocalization_makers_tri_centerofmass_obj.iseditor = 0;
+			mia_colocalization_makers_tri_centerofmass_obj.default_parameters = struct('distance_threshold', 5, 'distance_infinity', 50, 'show_graphical_progress', 1, 'roi_set_2', '', 'roi_set_3', ''); 
+			mia_colocalization_makers_tri_centerofmass_obj.parameter_list = {'distance_threshold','distance_infinity', 'show_graphical_progress', 'roi_set_2', 'roi_set_3'};
+			mia_colocalization_makers_tri_centerofmass_obj.parameter_descriptions = {'Distance threshold (pixels) that determines when 2 ROIs will be considered colocalized.' , ...
 		        'Distance at which ROIs are considered very far apart (saves memory)', ...
 		        '0/1 Should we show a progress bar?', ...
 		        'Name of second ROI set with which to compute overlap (leave blank to choose)', ...
 		        'Name of third ROI set with which to compute overlap (leave blank to choose)'};
-			mia_colocalization_makers_tri_colocalization_centerofmass_obj.parameter_selection_methods = {'choose_inputdlg'};
+			mia_colocalization_makers_tri_centerofmass_obj.parameter_selection_methods = {'choose_inputdlg'};
 		end % creator()
 
-        function b = make(mia_colocalization_makers_tri_colocalization_centerofmass_obj, parameters)
+        function b = make(mia_colocalization_makers_tri_centerofmass_obj, parameters)
             % MAKE - make the object requested from the parameters given
             %
             % B = mia.creator.make(MIA_CREATOR_OBJ, INPUT_NAME, OUTPUT_NAME, PARAMETERS)
@@ -28,8 +28,8 @@ classdef tri_colocalization_centerofmass < mia.creator
             %
             % B is 1 if the action succeeds, and 0 otherwise.
             %
-                input_itemname = mia_colocalization_makers_tri_colocalization_centerofmass_obj.input_name;
-                output_itemname = mia_colocalization_makers_tri_colocalization_centerofmass_obj.output_name;
+                input_itemname = mia_colocalization_makers_tri_centerofmass_obj.input_name;
+                output_itemname = mia_colocalization_makers_tri_centerofmass_obj.output_name;
     
                 % now actually do it
     
@@ -39,38 +39,38 @@ classdef tri_colocalization_centerofmass < mia.creator
     
                 if parameters.show_graphical_progress, progressbar('Setting up for ROI overlap calculation'); end;
     
-                rois{1} = mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir.getroifilename(input_itemname);
-                L{1} = mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir.getlabeledroifilename(input_itemname);
+                rois{1} = mia_colocalization_makers_tri_centerofmass_obj.mdir.getroifilename(input_itemname);
+                L{1} = mia_colocalization_makers_tri_centerofmass_obj.mdir.getlabeledroifilename(input_itemname);
                 try,
-                    roipfilename{1} = mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir.getroiparametersfilename(input_itemname);
+                    roipfilename{1} = mia_colocalization_makers_tri_centerofmass_obj.mdir.getroiparametersfilename(input_itemname);
                     if isempty(roipfilename{1}), error('filename is empty.'); end;
                 catch,
-                    mia.roi.functions.parameters(mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir,rois{1});
-                    roipfilename{1} = mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir.getroiparametersfilename(input_itemname);
+                    mia.roi.functions.parameters(mia_colocalization_makers_tri_centerofmass_obj.mdir,rois{1});
+                    roipfilename{1} = mia_colocalization_makers_tri_centerofmass_obj.mdir.getroiparametersfilename(input_itemname);
                 end;
     
                 if parameters.show_graphical_progress, progressbar(0.2); end;
     
-                rois{2} = mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir.getroifilename(parameters.roi_set_2);
-                L{2} = mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir.getlabeledroifilename(parameters.roi_set_2);
+                rois{2} = mia_colocalization_makers_tri_centerofmass_obj.mdir.getroifilename(parameters.roi_set_2);
+                L{2} = mia_colocalization_makers_tri_centerofmass_obj.mdir.getlabeledroifilename(parameters.roi_set_2);
                 try,
-                    roipfilename{2} = mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir.getroiparametersfilename(parameters.roi_set_2);
+                    roipfilename{2} = mia_colocalization_makers_tri_centerofmass_obj.mdir.getroiparametersfilename(parameters.roi_set_2);
                     if isempty(roipfilename{2}), error(['file is empty.']); end;
                 catch,
-                    mia.roi.functions.parameters(mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir,rois{2});
-                    roipfilename{2} = mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir.getroiparametersfilename(parameters.roi_set_2);
+                    mia.roi.functions.parameters(mia_colocalization_makers_tri_centerofmass_obj.mdir,rois{2});
+                    roipfilename{2} = mia_colocalization_makers_tri_centerofmass_obj.mdir.getroiparametersfilename(parameters.roi_set_2);
                 end
     
                 if parameters.show_graphical_progress, progressbar(0.3); end;
     
-                rois{3} = mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir.getroifilename(parameters.roi_set_3);
-                L{3} = mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir.getlabeledroifilename(parameters.roi_set_3);
+                rois{3} = mia_colocalization_makers_tri_centerofmass_obj.mdir.getroifilename(parameters.roi_set_3);
+                L{3} = mia_colocalization_makers_tri_centerofmass_obj.mdir.getlabeledroifilename(parameters.roi_set_3);
                 try,
-                    roipfilename{3} = mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir.getroiparametersfilename(parameters.roi_set_3);
+                    roipfilename{3} = mia_colocalization_makers_tri_centerofmass_obj.mdir.getroiparametersfilename(parameters.roi_set_3);
                     if isempty(roipfilename{3}), error(['file is empty.']); end;
                 catch,
                     mia.roi.functions.parameters(atd,rois{3});
-                    roipfilename{3} = mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir.getroiparametersfilename(parameters.roi_set_3);
+                    roipfilename{3} = mia_colocalization_makers_tri_centerofmass_obj.mdir.getroiparametersfilename(parameters.roi_set_3);
                 end
     
                 if parameters.show_graphical_progress, progressbar(0.4); end;
@@ -122,25 +122,25 @@ classdef tri_colocalization_centerofmass < mia.creator
     
                 % step 3: save and add history
     
-                colocalizationdata_out_file = [mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir.getpathname() filesep 'CLAs' filesep output_itemname filesep output_itemname '_CLA' '.mat'];
+                colocalizationdata_out_file = [mia_colocalization_makers_tri_centerofmass_obj.mdir.getpathname() filesep 'CLAs' filesep output_itemname filesep output_itemname '_CLA' '.mat'];
     
-                try, mkdir([mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir.getpathname() filesep 'CLAs' filesep output_itemname]); end;
+                try, mkdir([mia_colocalization_makers_tri_centerofmass_obj.mdir.getpathname() filesep 'CLAs' filesep output_itemname]); end;
                 save(colocalizationdata_out_file,'colocalization_data','-mat');
     
                 overlapped_objects = numel(find(overlap_thresh));
     
-                h = mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir.gethistory('images',input_itemname);
+                h = mia_colocalization_makers_tri_centerofmass_obj.mdir.gethistory('images',input_itemname);
                 h(end+1) = struct('parent',input_itemname,'operation','mia.colocalization.makers.tri_colocalization','parameters',parameters,...
                     'description',['Found ' int2str(overlapped_objects) ' CLs with distance threshold <= ' num2str(parameters.distance_threshold) ...
                     ' pixels of ROI ' input_itemname ' onto ROI ' parameters.roi_set_2 ' and ROI ' parameters.roi_set_3 '.']);
     
-                mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir.sethistory('CLAs',output_itemname,h);
+                mia_colocalization_makers_tri_centerofmass_obj.mdir.sethistory('CLAs',output_itemname,h);
     
-                str2text([mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir.getpathname() filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
+                str2text([mia_colocalization_makers_tri_centerofmass_obj.mdir.getpathname() filesep 'CLAs' filesep output_itemname filesep 'parent.txt'], input_itemname);
 
         end % make()
 
-        function parameters = getuserparameters_choosedlg(mia_colocalization_makers_tri_colocalization_centerofmass_obj)
+        function parameters = getuserparameters_choosedlg(mia_colocalization_makers_tri_centerofmass_obj)
             % GETUSERPARAMETERS_CHOOSEDLG - obtain parameters through a standard dialog box
             %
             % PARAMETERS = mia.creator.getuserparameters_choosedlg(MIA_CREATOR_OBJ)
@@ -149,10 +149,10 @@ classdef tri_colocalization_centerofmass < mia.creator
             %
             % If the user clicks cancel, PARAMETERS is empty.
 
-                [plist,pdesc,psel] = mia_colocalization_makers_tri_colocalization_centerofmass_obj.parameter_details();
-                parameters = dlg2struct('Choose parameters',plist,pdesc,mia_colocalization_makers_tri_colocalization_centerofmass_obj.default_parameters);
+                [plist,pdesc,psel] = mia_colocalization_makers_tri_centerofmass_obj.parameter_details();
+                parameters = dlg2struct('Choose parameters',plist,pdesc,mia_colocalization_makers_tri_centerofmass_obj.default_parameters);
                 if isempty(parameters.roi_set_2),
-                    itemliststruct = mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir.getitems('ROIs');
+                    itemliststruct = mia_colocalization_makers_tri_centerofmass_obj.mdir.getitems('ROIs');
                     if ~isempty(itemliststruct),
                         itemlist_names = {itemliststruct.name};
                     else,
@@ -173,7 +173,7 @@ classdef tri_colocalization_centerofmass < mia.creator
                     end;
                 end;
                 if isempty(parameters.roi_set_3),
-                    itemliststruct = mia_colocalization_makers_tri_colocalization_centerofmass_obj.mdir.getitems('ROIs');
+                    itemliststruct = mia_colocalization_makers_tri_centerofmass_obj.mdir.getitems('ROIs');
                     if ~isempty(itemliststruct),
                         itemlist_names = {itemliststruct.name};
                     else,
@@ -193,7 +193,7 @@ classdef tri_colocalization_centerofmass < mia.creator
                     end;
                 end;
                 
-        end % getuserparameters_choosedlg(mia_colocalization_makers_tri_colocalization_centerofmass_obj)
+        end % getuserparameters_choosedlg(mia_colocalization_makers_tri_centerofmass_obj)
 
     end % methods
     

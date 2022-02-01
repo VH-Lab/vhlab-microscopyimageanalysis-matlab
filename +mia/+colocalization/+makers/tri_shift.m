@@ -1,7 +1,7 @@
-function out = tri_colocalization_shift(mdir, input_itemname, output_itemname, parameters)
-% TRI_COLOCALIZATION_SHIFT - Calculate colocalized ROI triples
+function out = tri_shift(mdir, input_itemname, output_itemname, parameters)
+% TRI_SHIFT - Calculate colocalized ROI triples
 % 
-%  OUT = MIA.COLOCALIZATION.MAKERS.TRI_COLOCALIZATION_SHIFT(MDIR, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.COLOCALIZATION.MAKERS.TRI_SHIFT(MDIR, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -22,17 +22,17 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = mia.colocalization.makers.tri_colocalization_shift;
+			out_choice = mia.colocalization.makers.tri_shift;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.colocalization.makers.tri_colocalization_shift(mdir,input_itemname,output_itemname,buttonname);
+				out = mia.colocalization.makers.tri_shift(mdir,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
 		case 'choose_inputdlg',
-			out_p = mia.colocalization.makers.tri_colocalization_shift;
+			out_p = mia.colocalization.makers.tri_shift;
 			default_parameters.shifts= -2:2;
 			default_parameters.threshold = 0.33;
 			default_parameters.roi_set_2 = '';
@@ -86,7 +86,7 @@ if ischar(parameters),
 					end;
 				end;
 
-				out = mia.colocalization.makers.tri_colocalization_shift(mdir,input_itemname,output_itemname,parameters);
+				out = mia.colocalization.makers.tri_shift(mdir,input_itemname,output_itemname,parameters);
 			end;
 	end;
 	return;
@@ -134,7 +134,7 @@ save(colocalizationdata_out_file,'colocalization_data','-mat');
 overlapped_objects = sum(overlap_thresh(:));
 
 h = mdir.gethistory('images',input_itemname);
-h(end+1) = struct('parent',input_itemname,'operation','mia.colocalization.makers.tri_colocalization_shift','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','mia.colocalization.makers.tri_shift','parameters',parameters,...
 	'description',['Found ' int2str(overlapped_objects) ' CLs with threshold = ' num2str(parameters.threshold) ' of ROI ' input_itemname ' onto ROI set ' parameters.roi_set_2 ' and ROI set ' parameters.roi_set_3 '.']);
 
 mdir.sethistory('CLAs',output_itemname,h);

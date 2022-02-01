@@ -1,7 +1,7 @@
-function out = colocalization_shiftxyz(mdir, input_itemname, output_itemname, parameters)
-% COLOCALIZATION_SHIFTXYZ - Use BWCONNCOMP to compute ROIs from thresholded image
+function out = shiftxyz(mdir, input_itemname, output_itemname, parameters)
+% SHIFTXYZ - Use BWCONNCOMP to compute ROIs from thresholded image
 % 
-%  OUT = MIA.COLOCALIZATION.MAKERS.COLOCALIZATION_SHIFTXYZ(MDIR, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
+%  OUT = MIA.COLOCALIZATION.MAKERS.SHIFTXYZ(MDIR, INPUT_ITEMNAME, OUTPUT_ITEMNAME, PARAMETERS)
 %
 %  If the function is called with no arguments, then a description of the parameters
 %  is returned in OUT. OUT{1}{n} is the name of the nth parameter, and OUT{2}{n} is a
@@ -23,12 +23,12 @@ end;
 if ischar(parameters),
 	switch lower(parameters),
 		case 'choose',
-			out_choice = mia.colocalization.makers.colocalization_shiftxyz;
+			out_choice = mia.colocalization.makers.shiftxyz;
 			choices = cat(2,out_choice{3},'Cancel');
 			buttonname = questdlg('By which method should we choose parameters?',...
 				'Which method?', choices{:},'Cancel');
 			if ~strcmp(buttonname,'Cancel'),
-				out = mia.colocalization.makers.colocalization_shiftxyz(mdir,input_itemname,output_itemname,buttonname);
+				out = mia.colocalization.makers.shiftxyz(mdir,input_itemname,output_itemname,buttonname);
 			else,
 				out = [];
 			end;
@@ -65,7 +65,7 @@ if ischar(parameters),
 						return;
 					end;
 				end;
-				out = mia.colocalization.makers.colocalization_shiftxyz(mdir,input_itemname,output_itemname,parameters);
+				out = mia.colocalization.makers.shiftxyz(mdir,input_itemname,output_itemname,parameters);
 			end;
 	end;
 	return;
@@ -109,7 +109,7 @@ save(colocalizationdata_out_file,'colocalization_data','-mat');
 overlapped_objects = sum(overlap_thresh(:));
 
 h = mdir.gethistory('images',input_itemname);
-h(end+1) = struct('parent',input_itemname,'operation','mia.colocalization.makers.colocalization_shiftxyz','parameters',parameters,...
+h(end+1) = struct('parent',input_itemname,'operation','mia.colocalization.makers.shiftxyz','parameters',parameters,...
 	'description',['Found ' int2str(overlapped_objects) ' CLs with threshold = ' num2str(parameters.threshold) ' of ROI ' input_itemname ' onto ROI ' parameters.roi_set_2 '.']);
 
 mdir.sethistory('CLAs',output_itemname,h);
