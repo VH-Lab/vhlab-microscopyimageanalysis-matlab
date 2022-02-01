@@ -48,7 +48,7 @@ classdef xysizefilter < mia.creator
             save(roi_out_file,'CC','-mat');
             save(L_out_file,'L','-mat');
 
-            h = mia_roi_editors_xysizefilter_obj.mdir.gethistory('ROIs',input_itemname),
+            h = mia_roi_editors_xysizefilter_obj.mdir.gethistory('ROIs',input_itemname);
             h(end+1) = struct('parent',input_itemname,'operation','mia.creator.roi.editors.xysizefilter','parameters',parameters,...
                 'description',['Filtered all but ' int2str(CC.NumObjects) ' ROIs with Max XY size between ' num2str(parameters.size_minimum) ' and ' num2str(parameters.size_maximum) ' of ROIS ' input_itemname '.']);
             mia_roi_editors_xysizefilter_obj.mdir.sethistory('ROIs',output_itemname,h);

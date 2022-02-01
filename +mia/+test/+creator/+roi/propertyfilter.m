@@ -40,7 +40,7 @@ end;
 
 t = mia.creator.roi.propertyfilter(mdir, test_input_image, test_output_roi);
 
-parameters = struct('property_name','','min_property',Inf,'max_property',Inf);
+parameters = struct('property_name','Area2','min_property',-Inf,'max_property',Inf);
 
 t.make(parameters);
 
