@@ -119,8 +119,8 @@ classdef zspanfilter < mia.creator
                 try,
                     p = gui2parameters(mia_roi_editors_zspanfilter_obj,f)
                 catch,
-                    p.minzspan = 0;
-                    p.maxzspan = 1;
+                    p.z_span_minimum = 0;
+                    p.z_span_maximum = 1;
                     errordlg(['Error in setting minimum or maximum volume constraint: ' lasterr]);
                     set(findobj(gcf,'tag','OKButton'),'userdata',0);
                     set(findobj(gcf,'tag','MinZSpanEdit'),'userdata',0);
@@ -134,8 +134,8 @@ classdef zspanfilter < mia.creator
                     axes(HistogramAxes);
                     hold on;
                     a = axis;
-                    plot([p.minzspan p.minzspan],[a(3) a(4)],'g-','tag','histline');
-                    plot([p.maxzspan p.maxzspan],[a(3) a(4)],'g-','tag','histline');
+                    plot([p.z_span_minimum p.z_span_minimum],[a(3) a(4)],'g-','tag','histline');
+                    plot([p.z_span_maximum p.z_span_maximum],[a(3) a(4)],'g-','tag','histline');
                     set(HistogramAxes,'tag',['IMHistogramAxes']);
                     axes(oldaxes);
                     set(findobj(gcf,'tag','MinZSpanEdit'),'userdata',0);
