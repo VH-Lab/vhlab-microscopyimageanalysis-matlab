@@ -112,11 +112,6 @@ classdef zspanfilter < mia.creator
             minzspanedit = get(findobj(gcf,'tag','MinZSpanEdit'),'userdata');
             maxzspanedit = get(findobj(gcf,'tag','MaxZSpanEdit'),'userdata');
             HistogramAxes = findobj(gcf,'tag','HistogramAxes');
-            minzspanstring = get(findobj(gcf,'tag','MinZSpanEdit'),'string');
-            minzspan = eval([minzspanstring ';']);
-            if isempty(minzspan) | ~isnumeric(minzspan),
-                error(['Syntax error in minimum Z span: empty or not a number.']);
-            end;
             
             if cancel,
                 success = -1;
@@ -124,6 +119,8 @@ classdef zspanfilter < mia.creator
                 try,
                     p = gui2parameters(mia_roi_editors_zspanfilter_obj,f)
                 catch,
+                    p.minzspan = 0;
+                    p.maxzspan = 1;
                     errordlg(['Error in setting minimum or maximum volume constraint: ' lasterr]);
                     set(findobj(gcf,'tag','OKButton'),'userdata',0);
                     set(findobj(gcf,'tag','MinZSpanEdit'),'userdata',0);
@@ -137,8 +134,8 @@ classdef zspanfilter < mia.creator
                     axes(HistogramAxes);
                     hold on;
                     a = axis;
-                    plot([minzspan minzspan],[a(3) a(4)],'g-','tag','histline');
-                    plot([maxzspan maxzspan],[a(3) a(4)],'g-','tag','histline');
+                    plot([p.minzspan p.minzspan],[a(3) a(4)],'g-','tag','histline');
+                    plot([p.maxzspan p.maxzspan],[a(3) a(4)],'g-','tag','histline');
                     set(HistogramAxes,'tag',['IMHistogramAxes']);
                     axes(oldaxes);
                     set(findobj(gcf,'tag','MinZSpanEdit'),'userdata',0);
