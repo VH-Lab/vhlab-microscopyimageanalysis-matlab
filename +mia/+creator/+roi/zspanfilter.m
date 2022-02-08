@@ -112,6 +112,12 @@ classdef zspanfilter < mia.creator
             minzspanedit = get(findobj(gcf,'tag','MinZSpanEdit'),'userdata');
             maxzspanedit = get(findobj(gcf,'tag','MaxZSpanEdit'),'userdata');
             HistogramAxes = findobj(gcf,'tag','HistogramAxes');
+            minzspanstring = get(findobj(gcf,'tag','MinZSpanEdit'),'string');
+            minzspan = eval([minzspanstring ';']);
+            if isempty(minzspan) | ~isnumeric(minzspan),
+                error(['Syntax error in minimum Z span: empty or not a number.']);
+            end;
+            
             if cancel,
                 success = -1;
             elseif minzspanedit | maxzspanedit | ok,
