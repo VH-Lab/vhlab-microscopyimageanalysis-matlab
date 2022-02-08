@@ -77,7 +77,7 @@ classdef zspanfilter < mia.creator
             uicontrol(uidefs.button,'position',[20 300 100  25],'string','OK', 'tag','OKButton','callback',['set(gcbo,''userdata'',1); uiresume;']);
             uicontrol(uidefs.button,'position',[20 270 100 25],'string','Cancel','tag','CancelButton','callback',['set(gcbo,''userdata'',1); uiresume;']);
 
-            handles.HistogramAxes = axes('units','pixels','position',[150 150 300 200],'tag','HistogramAxes');
+            HistogramAxes = axes('units','pixels','position',[150 150 300 200],'tag','HistogramAxes');
 
             % plot histogram
             L_in_file = mia_roi_editors_zspanfilter_obj.mdir.getlabeledroifilename(input_itemname);
@@ -94,15 +94,11 @@ classdef zspanfilter < mia.creator
             bar(bin_centers,counts,1);
             set(gca,'yscale','linear','xscale','linear');
             a=axis;
-            axis([1 max(bin_centers) a(3) a(4)]);
+            axis([0 max(bin_centers) a(3) a(4)]);
             box off;
             ylabel('Counts');
             xlabel('ROI z span (pixels)');
-
-            oldaxes = gca;
-            axes(handles.HistogramAxes);
-
-            axes(oldaxes);
+            set(HistogramAxes,'tag','HistogramAxes');
         end % build_gui_parameterwindow()
 
         function success = process_gui_click(mia_roi_editors_zspanfilter_obj, f)
@@ -115,7 +111,7 @@ classdef zspanfilter < mia.creator
             ok = get(findobj(gcf,'tag','OKButton'),'userdata');
             minzspanedit = get(findobj(gcf,'tag','MinZSpanEdit'),'userdata');
             maxzspanedit = get(findobj(gcf,'tag','MaxZSpanEdit'),'userdata');
-
+            HistogramAxes = findobj(gcf,'tag','HistogramAxes');
             if cancel,
                 success = -1;
             elseif minzspanedit | maxzspanedit | ok,
@@ -129,15 +125,15 @@ classdef zspanfilter < mia.creator
                 end;
 
                 if minzspanedit | maxzspanedit,
-                    h = findobj(handles.HistogramAxes,'tag','histline');
+                    h = findobj(HistogramAxes,'tag','histline');
                     if ishandle(h), delete(h); end;
                     oldaxes = gca;
-                    axes(handles.HistogramAxes);
+                    axes(HistogramAxes);
                     hold on;
                     a = axis;
                     plot([minzspan minzspan],[a(3) a(4)],'g-','tag','histline');
                     plot([maxzspan maxzspan],[a(3) a(4)],'g-','tag','histline');
-                    set(handles.HistogramAxes,'tag',['IMHistogramAxes']);
+                    set(HistogramAxes,'tag',['IMHistogramAxes']);
                     axes(oldaxes);
                     set(findobj(gcf,'tag','MinZSpanEdit'),'userdata',0);
                     set(findobj(gcf,'tag','MaxZSpanEdit'),'userdata',0);
