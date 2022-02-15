@@ -129,10 +129,10 @@ classdef xysizefilter < mia.creator
                 end;
 
                 if minvoledit | maxvoledit,
+                    HistogramAxes = findobj(gcf,'tag','HistogramAxes');
                     h = findobj(HistogramAxes,'tag','histline');
                     if ishandle(h), delete(h); end;
                     oldaxes = gca;
-                    HistogramAxes = findobj(gcf,'tag','HistogramAxes');
                     axes(HistogramAxes);
                     hold on;
                     a = axis;
