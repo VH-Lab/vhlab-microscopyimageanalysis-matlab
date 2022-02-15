@@ -126,6 +126,8 @@ classdef xysizefilter < mia.creator
                     set(findobj(gcf,'tag','OKButton'),'userdata',0);
                     set(findobj(gcf,'tag','MinMaxXYSizeEdit'),'userdata',0);
                     set(findobj(gcf,'tag','MaxMaxXYSizeEdit'),'userdata',0);
+                    p.size_maximum = Inf;
+                    p.size_minimum = 1;
                 end;
 
                 if minvoledit | maxvoledit,
@@ -136,8 +138,8 @@ classdef xysizefilter < mia.creator
                     axes(HistogramAxes);
                     hold on;
                     a = axis;
-                    plot([minvol minvol],[a(3) a(4)],'g-','tag','histline');
-                    plot([maxvol maxvol],[a(3) a(4)],'g-','tag','histline');
+                    plot([p.size_minimum p.size_minimum],[a(3) a(4)],'g-','tag','histline');
+                    plot([p.size_maximum p.size_maximum],[a(3) a(4)],'g-','tag','histline');
                     set(HistogramAxes,'tag',['IMHistogramAxes']);
                     axes(oldaxes);
                     set(findobj(gcf,'tag','MinMaxXYSizeEdit'),'userdata',0);
