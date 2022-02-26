@@ -118,18 +118,21 @@ classdef volumefilter < mia.creator
                     set(findobj(gcf,'tag','OKButton'),'userdata',0);
                     set(findobj(gcf,'tag','MinVolumeEdit'),'userdata',0);
                     set(findobj(gcf,'tag','MaxVolumeEdit'),'userdata',0);
+                    p.volume_maximum = Inf;
+                    p.volume_minimum = 1;
                 end;
 
                 if minvoledit | maxvoledit,
-                    h = findobj(handles.HistogramAxes,'tag','histline');
+                    HistogramAxes = findobj(gcf,'tag','HistogramAxes');
+                    h = findobj(HistogramAxes,'tag','histline');
                     if ishandle(h), delete(h); end;
                     oldaxes = gca;
                     histogramaxes = findobj(gcf,'tag','HistogramAxes');
                     axes(histogramaxes);
                     hold on;
                     a = axis;
-                    plot([minvol minvol],[a(3) a(4)],'g-','tag','histline');
-                    plot([maxvol maxvol],[a(3) a(4)],'g-','tag','histline');
+                    plot([p.volume_minimum p.volume_minimum],[a(3) a(4)],'g-','tag','histline');
+                    plot([p.volume_maximum p.volume_maximum],[a(3) a(4)],'g-','tag','histline');
                     set(histogramaxes,'tag',['HistogramAxes']);
                     axes(oldaxes);
                     set(findobj(gcf,'tag','MinVolumeEdit'),'userdata',0);
