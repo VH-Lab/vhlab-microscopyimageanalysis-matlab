@@ -45,7 +45,7 @@ end
 end
 
 %% RUN THE PIPELINE
-function mia.utilities.automate.makefinalroi(mdir,threshed_img_name)
+function makefinalroi(mdir,threshed_img_name)
 % Goes through the steps for my ROI analysis as of early October 2020.
 % Requires input as a file name with the suffix _th (case sensitive).
 which_img = cell2mat(threshed_img_name);
@@ -58,7 +58,8 @@ disp(['Making original ROIs!'])
 clear p;
 p.connectivity = 6;
 S1_rois_output_name = [name_root '_auto_roi'];
-mia.roi.makers.connect(mdir, which_img, S1_rois_output_name, p);
+mia_creator_roi_connect_obj = mia.creator.roi.connect(mdir, which_img, S1_rois_output_name);
+mia_creator_roi_connect_obj.make(p);
 
 % Step 2: resegment ROIs
 disp(['Watershed resegmentation!'])
@@ -70,7 +71,8 @@ p.use_bwdist = 0;
 p.imagename = ''; % should use "default in history"
 p.assignborders = 1;
 S2_res_output_name = [name_root '_auto_res'];
-mia.roi.editors.resegment(mdir, S1_rois_output_name, S2_res_output_name, p);
+mia_creator_roi_resegment_obj = mia.creator.roi.resegment(mdir, S1_rois_output_name, S2_res_output_name);
+mia_creator_roi_resegment_obj.make(p);
 
 % Step 3: second threshold on ROIs
 disp(['Second threshold!'])
@@ -79,7 +81,8 @@ p.dist_cardinal = 50;
 p.CV_binsize = 5;
 p.imagename = '';
 S3_sth_output_name = [name_root '_auto_sth'];
-mia.roi.editors.secondthresh (mdir, S2_res_output_name, S3_sth_output_name, p)
+mia_creator_roi_secondthresh_obj = mia.creator.roi.secondthresh(mdir, S2_res_output_name, S3_sth_output_name)
+mia_creator_roi_secondthresh_obj.make(p);
 
 % Step 4: volume filter
 disp(['Volume filter!'])
@@ -106,7 +109,8 @@ else
     disp(['... but for now, defaulting to 8-512 pixel volume'])
 end
 S4_vf_output_name = [name_root '_auto_vf'];
-mia.roi.editors.volumefilter(mdir, S3_sth_output_name, S4_vf_output_name, p);
+mia_creator_roi_volumefilter_obj = mia.creator.roi.volumefilter(mdir, S3_sth_output_name, S4_vf_output_name);
+mia_creator_roi_volumefilter_obj.make(p);
 
 % Step 5: prominency filter
 disp(['Prominency filter!'])
@@ -116,6 +120,7 @@ p.dist_cardinal = 50;
 p.CV_binsize = 5;
 p.imagename = '';
 S5_pf_output_name = [name_root '_auto_pf'];
-mia.roi.editors.prominencyfilter(mdir, S4_vf_output_name, S5_pf_output_name, p);
+mia_creator_roi_prominencyfilter = mia.creator.roi.prominencyfilter(mdir, S4_vf_output_name, S5_pf_output_name);
+mia_creator_roi_prominencyfilter.make(p);
 
 end

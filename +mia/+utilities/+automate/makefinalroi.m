@@ -11,7 +11,8 @@ disp(['Making original ROIs!'])
 clear p;
 p.connectivity = 6;
 S1_rois_output_name = [name_root '_auto_roi'];
-mia.roi.makers.connect(mdir, which_img, S1_rois_output_name, p);
+mia_creator_roi_connect_obj = mia.creator.roi.connect(mdir, which_img, S1_rois_output_name);
+mia_creator_roi_connect_obj.make(p);
 
 % Step 2: resegment ROIs
 disp(['Watershed resegmentation!'])
@@ -23,7 +24,8 @@ p.use_bwdist = 0;
 p.imagename = ''; % should use "default in history"
 p.assignborders = 1;
 S2_res_output_name = [name_root '_auto_res'];
-mia.roi.editors.resegment(mdir, S1_rois_output_name, S2_res_output_name, p);
+mia_creator_roi_resegment_obj = mia.creator.roi.resegment(mdir, S1_rois_output_name, S2_res_output_name);
+mia_creator_roi_resegment_obj.make(p);
 
 % Step 3: volume filter
 disp(['Volume filter!'])
@@ -50,15 +52,17 @@ else
     disp(['... but for now, defaulting to 8-512 pixel volume'])
 end
 S3_vf_output_name = [name_root '_auto_vf'];
-mia.roi.editors.volumefilter(mdir, S2_res_output_name, S3_vf_output_name, p);
+mia_creator_roi_volumefilter_obj = mia.creator.roi.volumefilterr(mdir, S2_res_output_name, S3_vf_output_name);
+mia_creator_roi_volumefilter_obj.make(p);
 
-% Step 5: prominency filter
+% Step 5: squat filter
 disp(['Squat filter!'])
 clear p;
 p.prc_cut = 5;
 p.dist_cardinal = 15;
 p.imagename = '';
 S4_sf_output_name = [name_root '_auto_sf'];
-mia.roi.editors.squatfilter(mdir, S3_vf_output_name, S4_sf_output_name, p);
+mia_creator_roi_squatfilter_obj = mia.creator.roi.squatfilter(mdir, S3_vf_output_name, S4_sf_output_name);
+mia_creator_roi_squatfilter_obj.make(p);
 
 end
