@@ -1,5 +1,5 @@
 function s = editors_list
-% AT_COLOCALIZATION_COLOCALIZATION_LIST - List of available AT_COLOCALIZATION editor functions
+% AT_COLOCALIZATION_COLOCALIZATION_LIST - List of available MIA.CREATOR.COLOCALIZATION EDITORS functions
 %
 %  S = AT_COLOCALIZATION_EDITORS LIST
 %
@@ -7,15 +7,18 @@ function s = editors_list
 %  for editing CLA calculations in array tomography images
 %
 
-dirname = fileparts(which('mia.colocalization.editors.rethreshold')); %grab an example from the directory
+dirname = fileparts(which('mia.creator.colocalization.rethreshold')); %grab an example from the directory
 
 d = dir([dirname filesep '*.m']);
 
 s = {};
 
 for i=1:length(d),
-	if ~strcmp(lower(d(i).name),lower('mia.image.process.Contents.m')),
-		[dummy,s{end+1,1},ext] = fileparts(d(i).name);
-	end;
+    try,
+        [dummy,objname,ext] = fileparts(d(i).name);
+        eval(['myobj = mia.creator.colocalization.' objname '();'])
+        if myobj.iseditor == 1,
+            s{end+1,1} = ['mia.creator.colocalization.' objname];
+        end;
+    end;
 end;
-

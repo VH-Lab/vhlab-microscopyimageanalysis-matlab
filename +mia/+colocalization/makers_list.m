@@ -1,5 +1,5 @@
 function s = makers_list
-% MAKERS_LIST - List of available AT_COLOCALIZATION_MAKERS functions
+% MAKERS_LIST - List of available MIA.CREATOR.COLOCALIZATION MAKERS functions
 %
 %  S = MIA.COLOCALIZATION.MAKERS_LIST
 %
@@ -7,16 +7,20 @@ function s = makers_list
 %  for making COLOCALIZATION analyses in array tomography images
 %
 
-dirname = fileparts(which('mia.colocalization.makers.shift')); % grab an example from the directory
+dirname = fileparts(which('mia.creator.colocalization.shift')); %grab an example from the directory
 
 d = dir([dirname filesep '*.m']);
 
 s = {};
 
 for i=1:length(d),
-	if ~strcmp(lower(d(i).name),lower('mia.image.process.Contents.m')),
-		[dummy,s{end+1,1},ext] = fileparts(d(i).name);
-	end;
+    try,
+        [dummy,objname,ext] = fileparts(d(i).name);
+        eval(['myobj = mia.creator.colocalization.' objname '();'])
+        if myobj.iseditor == 0,
+            s{end+1,1} = ['mia.creator.colocalization.' objname];
+        end;
+    end;
 end;
 
 
