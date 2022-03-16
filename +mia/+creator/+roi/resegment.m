@@ -9,7 +9,7 @@ classdef resegment < mia.creator
             mia_roi_editors_resegment_obj.input_types = {'ROIs'};
             mia_roi_editors_resegment_obj.output_types = {'ROIs'};
             mia_roi_editors_resegment_obj.iseditor = 1;
-            mia_roi_editors_resegment_obj.default_parameters = struct('resegment_algorithm','watershed','connectivity',0,'values_outside_roi',0,'use_bwdist',0,'imagename','',assignborders',1);
+            mia_roi_editors_resegment_obj.default_parameters = struct('resegment_algorithm','watershed','connectivity',0,'values_outside_roi',0,'use_bwdist',0,'imagename','','assignborders',1);
             mia_roi_editors_resegment_obj.parameter_list = {'resegment_algorithm','connectivity','values_outside_roi','use_bwdist','imagename','assignborders'};
             mia_roi_editors_resegment_obj.parameter_descriptions = {'Algorithm to be used','connectivity (0 for default)', 'use values outside roi? 0/1', ...
     			'use thresholded image instead of raw (0/1)?',...
