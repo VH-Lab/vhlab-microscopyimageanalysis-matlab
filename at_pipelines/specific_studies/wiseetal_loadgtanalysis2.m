@@ -17,11 +17,15 @@ for i=1:numel(d),
 	% PSD first
 	if startsWith(d(i).name,'PSD_DEC_auto'),
 		stats = load([gtpath filesep d(i).name]);
-		s.PSD_DEC_auto = stats.stats;
+        f = strfind(d(i).name,'PSD_ROI_');
+        str = d(i).name(f+(8:9));
+        eval(['s.PSD.PSD_DEC_auto_' str '=stats.stats;'])
 	end;
 	if startsWith(d(i).name,'VG_DEC_auto'),
+        f = strfind(d(i).name,'VG_ROI_');
+        str = d(i).name(f+(7:8));
 		stats = load([gtpath filesep d(i).name]);
-		s.VG_DEC_auto = stats.stats;
+        eval(['s.VG.VG_DEC_auto_' str '=stats.stats;'])
 	end;
 end;
 
