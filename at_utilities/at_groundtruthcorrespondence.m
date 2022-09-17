@@ -117,7 +117,11 @@ if ~isempty(hist),
 
 	doublethreshname = hist(2).parent;
 	hh = gethistory(atd,'images',doublethreshname);
-	thresholdinfo = hh(end).parameters.thresholdinfo;
+    if ~isfield(hh(end).parameters,'thresholdinfo')
+        thresholdinfo = NaN;
+    else,
+    	thresholdinfo = hh(end).parameters.thresholdinfo;
+    end;
 
 	if isfield(hist(1).parameters,'threshold1'),
 		thresholds(end+1) = hist(1).parameters.threshold1;
@@ -146,8 +150,8 @@ N_overlaps_comp_onto_gt = zeros(N_comp_rois,N_overlap_comp_onto_gt_thresholds);
 N_overlaps_gt_onto_comp = zeros(N_groundtruth_rois,N_overlap_comp_onto_gt_thresholds);
 N_overlaps_comp_substantial_onto_gt = zeros(N_comp_rois_substantial,N_overlap_comp_onto_gt_thresholds);
 
-os = linspace(0,0.9,N_overlap_comp_onto_gt_thresholds);
 
+os = linspace(0,0.9,N_overlap_comp_onto_gt_thresholds);
 for i=1:length(os),
 	N_overlaps_comp_onto_gt(:,i) = [ full(sum(cla_comp_gt.colocalization_data.overlap_ba(comp_rois_with_some_mask,:)>os(i),2)) ];
 	N_overlaps_gt_onto_comp(:,i) = [ full(sum(cla_comp_gt.colocalization_data.overlap_ab(:,comp_rois_with_some_mask)>os(i),2)) ]';
