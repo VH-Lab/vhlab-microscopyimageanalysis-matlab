@@ -1,27 +1,23 @@
 % derek script
 
-d = at_findalldirs('/Volumes/van-hooser-lab/Users/Derek/Synaptic imaging/Hand-called')
+d = at_findalldirs('/Volumes/van-hooser-lab/Users/Derek/Synaptic imaging/Hand-called/Blinded re-thresh')
 
 s = wiseetal_summary(d);
 
-out = wiseetal_plotgtanalysis3(s)
+out3 = wiseetal_plotgtanalysis3(s);
+out2 = wiseetal_plotgtanalysis(s);
 
-disp(['PSD True positives'])
+algos_2 = [106 107 109 110 111];
 
-[out.psd_experindex'  out.psd_truepositives]
+for i=1:numel(algos_2)
 
-disp(['PSD false positives'])
+	subplot(3,2,i);
+	wiseetal_plotTPFP(out2,'psd',algos_2(i));
 
-[out.psd_experindex'  out.psd_falsepositives]
+end;
 
-disp(['Check out experiment 2 to see failure to detect:'])
+subplot(3,2,6)
 
-s(2).dirname
+wiseetal_plotTPFP(out3,'psd',0);
 
-disp(['VG True positives'])
 
-[out.vg_experindex'  out.vg_truepositives]
-
-disp(['VG false positives'])
-
-[out.vg_experindex'  out.vg_falsepositives]

@@ -95,7 +95,7 @@ function [stats] = at_groundtruthcorrespondence(atd, computer_rois, maskregion_r
 %    
 
 overlap_threshold_mask = 0.0;
-overlap_threshold_substantially_in_mask = 0.75; 
+overlap_threshold_substantially_in_mask = 0.5; 
 
 vlt.data.assign(varargin{:});
 
@@ -109,6 +109,13 @@ cla_comp_gt_fname = getcolocalizationfilename(atd, [groundtruth_rois '_x_' compu
 if isempty(cla_comp_gt_fname),
 	error(['No colocalization analysis ' [groundtruth_rois '_x_' computer_rois '_CLA'] ' found. It needs to be computed before running this function.']);
 end;
+
+cla_mask_gt_fname = getcolocalizationfilename(atd, [groundtruth_rois '_x_' maskregion_rois '_CLA']);
+if isempty(cla_mask_gt_fname),
+    cla_mask_ft_fname = '';
+	warning(['No colocalization analysis ' [groundtruth_rois '_x_' cla_mask_gt_fname '_CLA'] ' found.']);
+end;
+
 
 hist = gethistory(atd,'ROIs',computer_rois);
 
@@ -133,17 +140,33 @@ end;
 
 cla_comp_mask = load(cla_comp_mask_fname,'-mat');
 cla_comp_gt = load(cla_comp_gt_fname,'-mat');
+if ~isempty(cla_mask_gt_fname),
+	cla_mask_gt = load(cla_mask_gt_fname,'-mat');
+else,
+    cla_mask_gt = [];
+end;
+
+% which ROIs detected by the human have some overlap with the mask region?
+if ~isempty(cla_mask_gt),
+    [gt_rois_with_some_mask,J] = find(cla_mask_gt.colocalization_data.overlap_ba>0.1);
+else,
+    gt_rois_with_some_mask = 1:size(cla_comp_gt.colocalization_data.overlap_ab,1);
+end;
+
+disp('any reduction')
+numel(gt_rois_with_some_mask)
+size(cla_comp_gt.colocalization_data.overlap_ab,1)
 
 % which ROIs detected by the computer have some overlap with the masked region?
 [comp_rois_with_some_mask,J] = find(cla_comp_mask.colocalization_data.overlap_ba>overlap_threshold_mask);
 % which ROIs detected by the computer are substantially in the masked region?
-[comp_rois_substantially_in_mask,J] = find(cla_comp_mask.colocalization_data.overlap_ba>=0.5);
+[comp_rois_substantially_in_mask,J] = find(cla_comp_mask.colocalization_data.overlap_ba>=overlap_threshold_substantially_in_mask);
 
 % which ROIs detected by the computer substantially overlap the groundtruth ROIs?
 
 N_overlap_comp_onto_gt_thresholds = 10;
 N_comp_rois = numel(comp_rois_with_some_mask);
-N_groundtruth_rois = size(cla_comp_gt.colocalization_data.overlap_ab,1);
+N_groundtruth_rois = numel(gt_rois_with_some_mask);
 N_comp_rois_substantial = numel(comp_rois_substantially_in_mask);
 
 N_overlaps_comp_onto_gt = zeros(N_comp_rois,N_overlap_comp_onto_gt_thresholds);
@@ -153,9 +176,9 @@ N_overlaps_comp_substantial_onto_gt = zeros(N_comp_rois_substantial,N_overlap_co
 
 os = linspace(0,0.9,N_overlap_comp_onto_gt_thresholds);
 for i=1:length(os),
-	N_overlaps_comp_onto_gt(:,i) = [ full(sum(cla_comp_gt.colocalization_data.overlap_ba(comp_rois_with_some_mask,:)>os(i),2)) ];
-	N_overlaps_gt_onto_comp(:,i) = [ full(sum(cla_comp_gt.colocalization_data.overlap_ab(:,comp_rois_with_some_mask)>os(i),2)) ]';
-	N_overlaps_comp_substantial_onto_gt(:,i) = [ full(sum(cla_comp_gt.colocalization_data.overlap_ba(comp_rois_substantially_in_mask,:)>os(i),2)) ];
+	N_overlaps_comp_onto_gt(:,i) = [ full(sum(cla_comp_gt.colocalization_data.overlap_ba(comp_rois_with_some_mask,gt_rois_with_some_mask)>os(i),2)) ];
+	N_overlaps_gt_onto_comp(:,i) = [ full(sum(cla_comp_gt.colocalization_data.overlap_ab(gt_rois_with_some_mask,comp_rois_with_some_mask)>os(i),2)) ]';
+	N_overlaps_comp_substantial_onto_gt(:,i) = [ full(sum(cla_comp_gt.colocalization_data.overlap_ba(comp_rois_substantially_in_mask,gt_rois_with_some_mask)>os(i),2)) ];
 end;
 
 roi_comp_params_file = getroiparametersfilename(atd,cla_comp_gt.colocalization_data.parameters.roi_set_2);
@@ -165,11 +188,11 @@ roi_comp_params = load(roi_comp_params_file,'-mat');
 roi_gt_params = load(roi_gt_params_file,'-mat');
 
 vol_comp = [roi_comp_params.ROIparameters.params3d(comp_rois_with_some_mask).Volume];
-vol_gt = [roi_gt_params.ROIparameters.params3d(:).Volume];
+vol_gt = [roi_gt_params.ROIparameters.params3d(gt_rois_with_some_mask).Volume];
 vol_comp_substantial = [roi_comp_params.ROIparameters.params3d(comp_rois_substantially_in_mask).Volume];
 
 maxbright_comp = [roi_comp_params.ROIparameters.params3d(comp_rois_with_some_mask).MaxIntensity];
-maxbright_gt = [roi_gt_params.ROIparameters.params3d(:).MaxIntensity];
+maxbright_gt = [roi_gt_params.ROIparameters.params3d(gt_rois_with_some_mask).MaxIntensity];
 maxbright_comp_substantial = [roi_comp_params.ROIparameters.params3d(comp_rois_substantially_in_mask).MaxIntensity];
 
 full_parameters_gt = roi_gt_params_file;
@@ -204,5 +227,5 @@ stats = vlt.data.var2struct('N_overlaps_comp_onto_gt','N_overlaps_gt_onto_comp',
 	'thresholds','thresholdinfo','nonres_vol_gt','nonres_maxbright_gt',...
 	'full_parameters_gt','full_parameters_comp', ...
 	'comp_rois_with_some_mask','comp_rois_substantially_in_mask',...
-	'nonres_roi_gt_params','cla_comp_gt','cla_comp_mask');
+	'nonres_roi_gt_params','cla_comp_gt','cla_comp_mask','cla_mask_gt');
 

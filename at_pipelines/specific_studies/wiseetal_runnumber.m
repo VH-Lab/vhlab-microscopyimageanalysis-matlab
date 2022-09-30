@@ -94,10 +94,14 @@ for c=1:numel(channels),
 		end
 
 		if do_groundtruthanalysis,
+			if 0,
 			evalstr = ['vh_roicomparepipe(atd, ''' channels{c} '_ROI_'', ''' channels{c} '_DEC' label{n(ni)} '_roiresbf'');'],
 			if doit, at_foreachdirdo(d,evalstr); end;
 			evalstr = ['vh_roicomparepipe(atd, ''spine_ROI_'', ''' channels{c} '_DEC' label{n(ni)} '_roiresbf'',''useRes'',0);'],
 			if doit, at_foreachdirdo(d,evalstr); end;
+			end;
+
+			if 0,
 
 			evalstr = ['vh_groundtruthcompare(atd,''' channels{c} '_DEC' label{n(ni)} '_roiresbf'',''spine_ROI_DLW_ROI'',''' channels{c} '_ROI_'');']
 			if doit, at_foreachdirdo(d([1:10 12]),evalstr); end;
@@ -105,6 +109,33 @@ for c=1:numel(channels),
 			if doit, at_foreachdirdo(d([11 13:16]),evalstr); end;
 			evalstr = ['vh_groundtruthcompare(atd,''' channels{c} '_DEC' label{n(ni)} '_roiresbf'',''spine_ROI_KC_ROI'',''' channels{c} '_ROI_'');']
 			if doit, at_foreachdirdo(d([17:18]),evalstr); end;
+
+			end;
+
+			if 0,
+				evalstr = ['vh_roicomparepipe(atd, ''' channels{c} '_ROI_'', ''' channels{c} '_DEC' label{n(ni)} '_roiresbf'');'],
+				if doit, at_foreachdirdo(d,evalstr); end;
+				evalstr = ['vh_roicomparepipe(atd, ''spine_th_ROI_'', ''' channels{c} '_DEC' label{n(ni)} '_roiresbf'',''useRes'',0);'],
+				if doit, at_foreachdirdo(d,evalstr); end;
+				evalstr = ['vh_groundtruthcompare(atd,''' channels{c} '_DEC' label{n(ni)} '_roiresbf'',''spine_th_ROI_XX_ROI'',''' channels{c} '_ROI_'');']
+				if doit, at_foreachdirdo(d,evalstr); end;
+			end;
+			if 1,
+				evalstr = ['vh_roicomparepipe(atd, ''' channels{c} '_ROI_'', ''' channels{c} '_DEC' label{n(ni)} '_roiresbf'');'],
+				if doit, at_foreachdirdo(d,evalstr); end;
+				evalstr = ['vh_roicomparepipe(atd, ''spine_ROI_'', ''' channels{c} '_DEC' label{n(ni)} '_roiresbf'',''useRes'',0);'],
+				if doit, at_foreachdirdo(d,evalstr); end;
+				for k=1:numel(d),
+					disp(['working directory ' int2str(k) ' of ' int2str(numel(d)) '.']);
+					evalstr = ['vh_groundtruthcompare(atd,''' channels{c} '_DEC' label{n(ni)} '_roiresbf'',''spine_ROI_DLW_ROI'',''' channels{c} '_ROI_'');']
+					if doit, try, at_foreachdirdo(d(k),evalstr); end; end;
+					evalstr = ['vh_groundtruthcompare(atd,''' channels{c} '_DEC' label{n(ni)} '_roiresbf'',''spine_ROI_SG_ROI'',''' channels{c} '_ROI_'');']
+					if doit, try, at_foreachdirdo(d(k),evalstr); end; end;
+					evalstr = ['vh_groundtruthcompare(atd,''' channels{c} '_DEC' label{n(ni)} '_roiresbf'',''spine_ROI_KC_ROI'',''' channels{c} '_ROI_'');']
+					if doit, try, at_foreachdirdo(d(k),evalstr); end; end;
+				end;
+			end;
+		
 		end;
 	end;
 end
