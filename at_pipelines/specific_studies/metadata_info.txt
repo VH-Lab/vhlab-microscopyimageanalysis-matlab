@@ -1,0 +1,5 @@
+name	blind	prefix	path
+irrev_exc	irrev_exc.csv	Slice 	/Volumes/van-hooser-lab/Users/Derek/Synaptic Imaging/Steve and Derek Final Review/Irrev/excitatory/Blinded/
+irrev_inh	irrev_inh.csv		/Volumes/van-hooser-lab/Users/Derek/Synaptic Imaging/Steve and Derek Final Review/Irrev/inhibitory/Blinded/
+structure	struct.csv		/Volumes/van-hooser-lab/Users/Derek/Synaptic Imaging/Steve and Derek Final Review/Structure/P17 data/Blinded/
+handcalled	handcall.csv		/Volumes/van-hooser-lab/Users/Derek/Synaptic Imaging/Steve and Derek Final Review/Hand-called/Blinded re-thresh/
