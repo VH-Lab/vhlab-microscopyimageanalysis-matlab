@@ -35,7 +35,7 @@ if ~trans,
 	K = sum(cla.colocalization_data.overlap_ba'>0,1);
 else,
 	J = sum(cla.colocalization_data.overlap_ba'>0,2);
-	K = sum(cla.colocalization_data.overlap_ab'>0,1);
+	K = sum(cla.colocalization_data.overlap_ab>0,1);
 end;
 
 Jf = find(J);

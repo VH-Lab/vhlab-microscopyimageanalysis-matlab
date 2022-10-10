@@ -1,4 +1,4 @@
-function [a,number_coloc,volume_roi1,volume_roi2] = wiseetal_algorithm(fullpath, roi1, roi2)
+function [a,number_coloc,volume_roi1,volume_roi2] = wiseetal_algorithm(fullpath, roi1, roi2, exper_type)
 
 a = [];
 
@@ -31,16 +31,19 @@ end;
  % do we have algorithms 0 or 101..111 ?
 
 for i=[0 101:111],
+	spacer_here = spacer;
 	if i==0, 
 		postfix = '_auto_vf';
-		roi1name = [roi1 'DEC' postfix];
-		roi2name = [roi2 'DEC' postfix];
+		if any(strcmp(exper_type,{'irrev_inh','structure'})),
+			spacer_here = '';
+		end;
+		roi1name = [roi1 spacer_here 'DEC' postfix];
+		roi2name = [roi2 spacer_here 'DEC' postfix];
 	else,
-		postfix = ['sv' int2str(i-100) '_roiresbfvf']
+		postfix = ['sv' int2str(i-100) '_roiresbfvf'];
 		roi1name = [roi1 spacer 'DEC' postfix];
 		roi2name = [roi2 spacer 'DEC' postfix];
 	end;
-
 	I1 = find(strcmp(roi1name,{rois_here.name}));
 	I2 = find(strcmp(roi2name,{rois_here.name}));
 
@@ -48,11 +51,15 @@ for i=[0 101:111],
 		a(end+1) = i;
 
 		if i==0,
-			roi1name = [roi1 'DEC'];
-			roi2name = [roi2 'DEC'];
+			% necessary for inhib_exc
+			roi1name = [roi1 spacer_here 'DEC'];
+			roi2name = [roi2 spacer_here 'DEC'];
 		end;
+        try,
 		[number_coloc(end+1),volume_roi1(end+1),volume_roi2(end+1)] = ...
 			wiseetal_algocalcs(atd,i,roi1name,roi2name);
+        catch, keyboard;
+        end;
 	end;
 end;
 
