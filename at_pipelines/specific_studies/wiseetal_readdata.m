@@ -5,7 +5,7 @@ g = loadStructArray(metadata_file);
 
 exper_types = {'irrev_exc','irrev_inh','structure','handcalled'};
 
-info_struct = vlt.data.emptystruct('exper_type','slice_num','stack_num', 'algorithm','fullpath','drug','time','animal','roi1','roi2','number','volumeroi1','volumeroi2','volunion');
+info_struct = vlt.data.emptystruct('exper_type','slice_num','stack_num', 'algorithm','fullpath','drug','time','animal','roi1','roi2','number','volumeroi1','volumeroi2','volunion','blur_data');
 
 for i=1:4 % numel(exper_types),
 
@@ -38,6 +38,7 @@ for i=1:4 % numel(exper_types),
 		for k = 1:numel(d),
 			for r=1:numel(roi1),
 				fullpath = [fullpath_prefix filesep d(k).name filesep 'analysis'];
+				bd = wiseetal_load_blur_dta(fullpath,roi1{r});
 				[algorithm,numcoloc,vol_1,vol_2] = wiseetal_algorithm(fullpath, roi1{r}, roi2{r},exper_types{i});
 				for a = 1:numel(algorithm),
 					clear istruct;
@@ -58,6 +59,7 @@ for i=1:4 % numel(exper_types),
 					istruct.volumeroi1 = vol_1(a);
 					istruct.volumeroi2 = vol_2(a);
 					istruct.volunion = [];
+					istruct.blur_data = bd;
 					info_struct(end+1) = istruct;
 				end;
 			end;
