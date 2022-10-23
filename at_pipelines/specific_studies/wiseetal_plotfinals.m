@@ -24,6 +24,7 @@ group_ind{2} = find(strcmp('TTX',{s.drug}) & ([s.time]==5));
 group_ind{3} = find(strcmp('TTX',{s.drug}) & ([s.time]==10));
 
 grp_colors = [0 0 0 ; 1 0 0 ; 0 0 1];
+grp_colors_points = [0.3 0.3 0.3 ; 0.5 0 0 ; 0 0 0.5];
 
  % want to make a figure of synaptic number
 
@@ -38,16 +39,20 @@ for e=1:numel(exp_type),
 			gd_index{g} = intersect(intersect(group_ind{g},algos_here),exp_ind{e});
 			gd{g} = [s(gd_index{g}).number];
 			for z=1:numel(gd_index{g}),
-a				gd{g(z)} = s(gd_index{g(z)}).bd.total_in / ((72000e-6 * 72000e-6 * 200000e-6))
+				blur_data = s(gd_index{g}(z)).blur_data;
+				if isempty(blur_data),
+					blur_data.total_in = NaN;
+				end;
+				gd{g}(z) = gd{g}(z); % / (blur_data.total_in * ((72e-9 * 72e-9 * 200e-9)));
 			end;
 			mn(g) = nanmean(gd{g})
 			if numel(gd{g})>0,
-				h=bar(1+2*g,mn(g));
+				h=bar(1+1*g,mn(g));
 				set(h,'facecolor',grp_colors(g,:));
 				hold on;
-				plot(2+2*g,gd{g},'o','color',grp_colors(g,:));
+				plot(1+1*g+0.5*(rand(size(gd{g}))-0.5),gd{g},'o','color',grp_colors_points(g,:));
 				se = nanstderr(gd{g}(:));
-				plot(2+2*g*[1 1],mn(g)+se*[-1 1],'k-','linewidth',2);
+				plot(1+1*g*[1 1],mn(g)+se*[-1 1],'k-','linewidth',2);
 			end;
 		end;
 		title([exp_type{e} '-' roi_type1{e} ' N ' int2str(algos(a))],'interp','none');
@@ -72,14 +77,15 @@ for e=1:numel(exp_type),
 			else,
 				gd{g} = [s(gd_index{g}).volumeroi2];
 			end;
+			gd{g} = gd{g} * (72e-3 * 72e-3 * 200e-3);
 			mn(g) = nanmean(gd{g})
 			if numel(gd{g})>0,
-				h=bar(1+2*g,mn(g));
+				h=bar(1+1*g,mn(g));
 				set(h,'facecolor',grp_colors(g,:));
 				hold on;
-				plot(2+2*g,gd{g},'o','color',grp_colors(g,:));
+				plot(1+1*g+0.5*(rand(size(gd{g}))-0.5),gd{g},'o','color',grp_colors_points(g,:));
 				se = stderr(gd{g}(:));
-				plot(2+2*g*[1 1],mn(g)+se*[-1 1],'k-','linewidth',2);
+				plot(1+1*g*[1 1],mn(g)+se*[-1 1],'k-','linewidth',2);
 			end;
 		end;
 		title([exp_type{e} '-' roi_type1{e} ' V ' int2str(algos(a))],'interp','none');
