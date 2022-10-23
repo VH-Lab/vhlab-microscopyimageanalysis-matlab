@@ -38,7 +38,7 @@ for i=1:4 % numel(exper_types),
 		for k = 1:numel(d),
 			for r=1:numel(roi1),
 				fullpath = [fullpath_prefix filesep d(k).name filesep 'analysis'];
-				bd = wiseetal_load_blur_dta(fullpath,roi1{r});
+				bd = wiseetal_load_blur_data(fullpath,roi1{r},exper_types{i});
 				[algorithm,numcoloc,vol_1,vol_2] = wiseetal_algorithm(fullpath, roi1{r}, roi2{r},exper_types{i});
 				for a = 1:numel(algorithm),
 					clear istruct;

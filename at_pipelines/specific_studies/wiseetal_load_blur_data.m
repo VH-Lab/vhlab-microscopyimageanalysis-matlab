@@ -1,24 +1,35 @@
-function bd = wiseetal_load_blur_data(fullpath, channel)
+function bd = wiseetal_load_blur_data(fullpath, channel,exper_type)
 
 atd = atdir(fullpath);
 
-images_here = getitems(atd,'images');
+images_here = getitems(atd,'images')
 
-image_name_sp = [channel '_DECsv7_th2_blur_th'];
-image_name_nosp = [channel 'DECsv7_th2_blur_th'];
+if strcmp(exper_type,'structure')|strcmp(exper_type,'handcalled')
+    if strcmp(channel,'VG'),
+        channel = 'PSD';
+    end;
+end;
 
-match1 = strcmpi(image_name_sp,   images_here);
-match2 = strcmpi(image_name_nosp, images_here);
+image_name_sp = [channel '_DECsv7_th2_blur_th']
+image_name_nosp = [channel 'DECsv7_th2_blur_th']
+
+{images_here.name}'
+
+match1 = find(strcmpi(image_name_sp,   {images_here.name}))
+match2 = find(strcmpi(image_name_nosp, {images_here.name}))
 
 if ~isempty(match1),
 	image_name = image_name_sp;
 elseif ~isempty(match2),
 	image_name = image_name_nosp;
 else,
+	disp(['No blur information found.']);
+    bd = [];
+    return;
 	error(['No blur information found.']);
 end;
 
-filename = getimagefilename(atd,image_name);
+filename = getimagefilename(atd,image_name)
 
 imf = imfinfo(filename);
 

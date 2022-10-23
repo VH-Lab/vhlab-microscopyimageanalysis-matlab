@@ -23,7 +23,7 @@ group_ind{1} = find(strcmp('CONTROL',{s.drug}));
 group_ind{2} = find(strcmp('TTX',{s.drug}) & ([s.time]==5));
 group_ind{3} = find(strcmp('TTX',{s.drug}) & ([s.time]==10));
 
-grp_colors = [1 0 0 ; 0 1 0 ; 0 0 1];
+grp_colors = [0 0 0 ; 1 0 0 ; 0 0 1];
 
  % want to make a figure of synaptic number
 
@@ -37,6 +37,9 @@ for e=1:numel(exp_type),
 			algos_here = find([s.algorithm]==algos(a));
 			gd_index{g} = intersect(intersect(group_ind{g},algos_here),exp_ind{e});
 			gd{g} = [s(gd_index{g}).number];
+			for z=1:numel(gd_index{g}),
+a				gd{g(z)} = s(gd_index{g(z)}).bd.total_in / ((72000e-6 * 72000e-6 * 200000e-6))
+			end;
 			mn(g) = nanmean(gd{g})
 			if numel(gd{g})>0,
 				h=bar(1+2*g,mn(g));
