@@ -1,4 +1,4 @@
-# vhlab_mlapp_ArrayTomography
+# vhlab-microscopyimageanalysis-matlab
 Matlab app for analysis of high density imaging data like that from Array Tomography
 
 Requires http://www.github.com/VH-Lab/vhlab-toolbox-matlab
